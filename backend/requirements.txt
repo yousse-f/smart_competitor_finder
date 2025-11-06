@@ -12,11 +12,13 @@ pydantic-settings==2.1.0
 
 # --- Web Scraping & Automation ---
 playwright==1.40.0
-playwright-stealth # <--- NUOVA DIPENDENZA AGGIUNTA
+playwright-stealth # Correzione precedente ok
 beautifulsoup4==4.12.2
 requests==2.31.0
 aiofiles==23.2.1
 httpx==0.25.2
+aiohttp==3.9.1 # <--- NUOVA DIPENDENZA AGGIUNTA
+# Puoi anche usare solo 'aiohttp' per installare l'ultima versione, ma 3.9.1 è una scelta sicura.
 
 # --- Data Processing (Updated for Python 3.12 compatibility) ---
 numpy==1.26.4
