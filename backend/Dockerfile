@@ -1,7 +1,7 @@
 # Backend Dockerfile - Smart Competitor Finder
-# Using official Playwright image for Railway compatibility
+# Using official Playwright image from GitHub Container Registry (more stable on Railway)
 
-FROM mcr.microsoft.com/playwright/python:v1.46.0-jammy
+FROM ghcr.io/microsoft/playwright-python:v1.46.0-jammy
 
 # Set working directory
 WORKDIR /app
