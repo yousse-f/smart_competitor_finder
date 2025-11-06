@@ -273,7 +273,28 @@ project/
 - [x] ✅ Verificata struttura con `tree` command
 - [x] ✅ Verificati tutti i `__init__.py` con `find`
 - [x] ✅ Documentato il problema e la soluzione
+- [x] ✅ Corretto Playwright args in `scraping.py` per Railway
 - [x] ✅ Pronto per commit e deploy su Railway
+
+---
+
+## ⚠️ IMPORTANTE: Fix Aggiuntivo Playwright
+
+**Dopo aver risolto il `ModuleNotFoundError`, è emerso un secondo problema su Railway**:
+
+**Errore**: `TimeoutError: Navigation failed due to timeout` in `core/scraping.py`
+
+**Causa**: Playwright non configurato correttamente per container Docker (mancava `--no-sandbox`)
+
+**Soluzione**: Aggiunto argomenti critici per Docker in `backend/core/scraping.py`:
+```python
+browser = await p.chromium.launch(
+    headless=True,
+    args=['--no-sandbox', '--disable-setuid-sandbox', '--disable-dev-shm-usage', ...]
+)
+```
+
+**Dettagli completi**: Vedi `PLAYWRIGHT_RAILWAY_FIX.md` per analisi approfondita.
 
 ---
 
