@@ -1,46 +1,46 @@
 # ============================================
 # Smart Competitor Finder - Backend Dependencies
-# Compatible with Python 3.12 (Forced in Dockerfile)
+# Versione Flessibile (Fissa solo le librerie ML critiche + pydantic-settings)
 # ============================================
 
 # --- Core Framework ---
-fastapi==0.104.1
-uvicorn[standard]==0.24.0
-python-dotenv==1.0.0
+fastapi
+uvicorn[standard]
+python-dotenv
+pydantic
+pydantic-settings==2.1.0  # <--- Fissato per risolvere l'errore ModuleNotFoundError
 pydantic==2.5.0
-pydantic-settings==2.1.0
 
 # --- Web Scraping & Automation ---
-playwright==1.40.0
-playwright-stealth # Correzione precedente ok
-beautifulsoup4==4.12.2
-requests==2.31.0
-aiofiles==23.2.1
-httpx==0.25.2
-aiohttp==3.9.1 # <--- NUOVA DIPENDENZA AGGIUNTA
-# Puoi anche usare solo 'aiohttp' per installare l'ultima versione, ma 3.9.1 è una scelta sicura.
+playwright
+playwright-stealth 
+beautifulsoup4
+requests
+aiofiles
+httpx
+aiohttp # Aggiunto per risolvere ModuleNotFoundError precedente
 
-# --- Data Processing (Updated for Python 3.12 compatibility) ---
+# --- Data Processing (Fissate per compatibilità Docker) ---
 numpy==1.26.4
 pandas==2.1.4
-openpyxl==3.1.2
-nltk==3.8.1
+openpyxl
+nltk
 
-# --- ML Libraries (Updated with binary wheels) ---
+# --- ML Libraries (Fissate per compatibilità Docker) ---
 scikit-learn==1.3.2
-sentence-transformers==2.3.1
+sentence-transformers
 
 # --- Database (Future Caching) ---
-sqlalchemy==2.0.23
-alembic==1.12.1
+sqlalchemy
+alembic
 
 # --- Utilities & Logging ---
-structlog==23.2.0
-python-multipart==0.0.6
+structlog
+python-multipart
 
 # --- AI/ML APIs ---
-openai==1.3.0
+openai
 
 # --- Development & Testing ---
-pytest==7.4.3
-pytest-asyncio==0.21.1
+pytest
+pytest-asyncio
