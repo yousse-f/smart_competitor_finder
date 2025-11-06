@@ -1,5 +1,5 @@
 # ======================================================
-# ✅ Dockerfile ottimizzato con cache layers per Railway
+# ✅ Dockerfile ottimizzato per Railway + Playwright + FastAPI
 # ======================================================
 
 FROM python:3.11-slim
@@ -10,7 +10,7 @@ WORKDIR /app
 # Copia solo requirements per sfruttare la cache Docker
 COPY requirements.txt .
 
-# Installa solo le dipendenze base di sistema
+# Installa dipendenze di sistema (Chromium + librerie grafiche)
 RUN apt-get update && apt-get install -y \
     wget gnupg unzip curl xvfb chromium \
     libnss3 libxss1 libasound2 libatk1.0-0 libatk-bridge2.0-0 \
@@ -18,23 +18,26 @@ RUN apt-get update && apt-get install -y \
     fonts-liberation fonts-dejavu-core libx11-xcb1 libxtst6 libxshmfence1 && \
     apt-get clean && rm -rf /var/lib/apt/lists/*
 
-# Installa solo i pacchetti Python (usa cache Docker)
+# Installa pacchetti Python
 RUN pip install --upgrade pip && pip install -r requirements.txt --no-cache-dir
 
-# Installa solo Chromium (senza --with-deps per velocità)
+# Imposta path persistente per i browser Playwright (cache build)
+ENV PLAYWRIGHT_BROWSERS_PATH=/ms-playwright
+
+# Installa solo Chromium (headless)
 RUN playwright install chromium
 
-# Copia il resto del codice (questo layer cambia spesso, ma è veloce)
+# Copia il resto del codice sorgente
 COPY . .
 
-# Crea cartella reports
+# Crea directory per report
 RUN mkdir -p reports && chmod 777 reports
 
 # Variabili d'ambiente
-ENV PYTHONUNBUFFERED=1 \
-    PORT=8000
+ENV PYTHONUNBUFFERED=1
 
+# Espone la porta dinamica
 EXPOSE $PORT
 
-# Esegui FastAPI tramite Uvicorn con porta dinamica da Railway
+# Avvia FastAPI tramite Uvicorn
 CMD uvicorn main:app --host 0.0.0.0 --port $PORT
