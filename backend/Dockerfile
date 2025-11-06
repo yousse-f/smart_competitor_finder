@@ -1,34 +1,38 @@
 # ======================================================
-# ✅ Dockerfile ottimizzato per Railway + Playwright + FastAPI
+# ✅ Dockerfile compatibile Railway + Playwright + FastAPI
 # ======================================================
 
 FROM python:3.11-slim
 
-# Installa dipendenze di sistema necessarie per Playwright e Chromium
+# Evita interazioni durante installazioni apt
+ENV DEBIAN_FRONTEND=noninteractive
+
+# Installa dipendenze minime di sistema e Chromium
 RUN apt-get update && apt-get install -y \
     wget gnupg unzip curl xvfb \
     libnss3 libxss1 libasound2 libatk1.0-0 libatk-bridge2.0-0 \
     libxcomposite1 libxrandr2 libxdamage1 libgbm1 libpango-1.0-0 libcairo2 \
-    fonts-liberation libappindicator3-1 libx11-xcb1 libxtst6 libxshmfence1 \
+    fonts-liberation fonts-dejavu-core \
+    libappindicator3-1 libx11-xcb1 libxtst6 libxshmfence1 \
     chromium && \
     apt-get clean && rm -rf /var/lib/apt/lists/*
 
-# Installa Playwright e dipendenze Python
 WORKDIR /app
 
+# Installa le librerie Python
 COPY requirements.txt .
 RUN pip install --upgrade pip && pip install -r requirements.txt
 
-# Installa i browser necessari (Chromium headless)
-RUN playwright install --with-deps chromium
+# Installa solo Chromium (senza dipendenze obsolete)
+RUN playwright install chromium
 
 # Copia tutto il codice sorgente
 COPY . .
 
-# Crea directory reports con permessi corretti
+# Crea directory reports
 RUN mkdir -p reports && chmod 777 reports
 
-# Imposta l'ambiente
+# Imposta variabili d'ambiente
 ENV PYTHONUNBUFFERED=1
 ENV PORT=8000
 
