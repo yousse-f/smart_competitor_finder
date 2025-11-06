@@ -1,0 +1,148 @@
+from fastapi import APIRouter, HTTPException
+from pydantic import BaseModel, HttpUrl
+from typing import List, Optional, Literal
+import logging
+import os
+from datetime import datetime
+
+from core.keyword_extraction import extract_keywords
+from core.hybrid_scraper import HybridScraper
+from core.hybrid_scraper_v2 import hybrid_scraper_v2
+from core.hybrid_scraper import HybridScraper
+from core.hybrid_scraper_v2 import hybrid_scraper_v2
+
+router = APIRouter()
+
+# Request/Response models
+class AnalyzeSiteRequest(BaseModel):
+    url: HttpUrl
+    max_keywords: Optional[int] = 15
+    use_advanced_scraping: Optional[bool] = True
+
+class KeywordData(BaseModel):
+    keyword: str
+    frequency: int
+    relevance: Literal["high", "medium", "low"]
+    category: str
+
+class AnalyzeSiteResponse(BaseModel):
+    url: str
+    keywords: List[KeywordData]
+    total_keywords: int
+    status: str
+    title: str = ""
+    description: str = ""
+    content_length: Optional[int] = 0
+    scraping_method: Optional[str] = "basic"
+    performance_stats: Optional[dict] = None
+
+@router.post("/analyze-site", response_model=AnalyzeSiteResponse)
+async def analyze_site(request: AnalyzeSiteRequest):
+    """
+    🚀 Analyze a website URL to extract relevant keywords using advanced anti-bot scraping.
+    
+    Features:
+    - Hybrid scraping: ScrapingBee → Advanced Internal → Basic fallback
+    - Anti-bot detection bypass
+    - Real-time performance stats
+    - Intelligent keyword extraction and categorization
+    """
+    try:
+        url_str = str(request.url)
+        max_keywords = request.max_keywords or 15
+        
+        logging.info(f"🎯 Starting analysis for URL: {url_str} (max_keywords: {max_keywords})")
+        logging.info(f"🔧 Advanced scraping: {request.use_advanced_scraping}")
+        logging.info(f"🌐 Scraping mode: {os.getenv('SCRAPING_MODE', 'development')}")
+        
+        if request.use_advanced_scraping:
+            # 🚀 Use hybrid V2 ultra-stable scraper
+            result = await hybrid_scraper_v2.scrape_intelligent(url_str, max_keywords, use_advanced=True)
+            
+            # Format response from hybrid scraper result
+            return AnalyzeSiteResponse(
+                url=result['url'],
+                keywords=result.get('keywords', []),
+                total_keywords=result.get('total_keywords', 0),
+                status=result.get('status', 'unknown'),
+                title=result.get('title', ''),
+                description=result.get('description', ''),
+                content_length=result.get('content_length', 0),
+                scraping_method=result.get('scraping_method', 'hybrid_v2'),
+                performance_stats=await hybrid_scraper_v2.get_enhanced_stats()
+            )
+        else:
+            # 📡 Use basic extraction (backwards compatibility)
+            raw_keywords = await extract_keywords(url_str, max_keywords)
+            
+            # Convert to KeywordData format
+            keywords_data = []
+            for i, keyword in enumerate(raw_keywords):
+                relevance = "high" if i < len(raw_keywords) // 3 else "medium" if i < 2 * len(raw_keywords) // 3 else "low"
+                category = categorize_keyword(keyword)
+                frequency = max(1, 20 - i)
+                
+                keywords_data.append(KeywordData(
+                    keyword=keyword,
+                    frequency=frequency,
+                    relevance=relevance,
+                    category=category
+                ))
+            
+            return AnalyzeSiteResponse(
+                url=url_str,
+                keywords=keywords_data,
+                total_keywords=len(keywords_data),
+                status="success" if keywords_data else "no_content",
+                title="",
+                description="",
+                scraping_method="basic"
+            )
+        
+    except Exception as e:
+        logging.error(f"❌ Error analyzing site {request.url}: {str(e)}")
+        raise HTTPException(
+            status_code=500,
+            detail=f"Failed to analyze site: {str(e)}"
+        )
+
+def categorize_keyword(keyword: str) -> str:
+    """Categorizza una keyword basata sul contenuto"""
+    keyword_lower = keyword.lower()
+    
+    # Categorie business
+    business_terms = ["azienda", "società", "impresa", "business", "company"]
+    service_terms = ["servizio", "consulenza", "assistenza", "supporto", "service"]
+    product_terms = ["prodotto", "articolo", "materiale", "equipment", "strumento"]
+    tech_terms = ["tecnologia", "digitale", "software", "sistema", "tech", "innovation"]
+    industry_terms = ["industria", "industriale", "manifattura", "produzione", "manufacturing"]
+    
+    if any(term in keyword_lower for term in business_terms):
+        return "business"
+    elif any(term in keyword_lower for term in service_terms):
+        return "servizi"
+    elif any(term in keyword_lower for term in product_terms):
+        return "prodotti"
+    elif any(term in keyword_lower for term in tech_terms):
+        return "tecnologia"
+    elif any(term in keyword_lower for term in industry_terms):
+        return "industria"
+    else:
+        return "generale"
+
+@router.get("/scraping-stats")
+async def get_scraping_stats():
+    """
+    📊 Endpoint per statistiche performance scraping V2
+    """
+    try:
+        stats = await hybrid_scraper_v2.get_enhanced_stats()
+        return {
+            "performance_stats": stats,
+            "timestamp": datetime.utcnow().isoformat(),
+            "status": "operational",
+            "version": "v2_ultra_stable"
+        }
+    except Exception as e:
+        logging.error(f"Error getting scraping stats: {e}")
+        raise HTTPException(status_code=500, detail=str(e))
