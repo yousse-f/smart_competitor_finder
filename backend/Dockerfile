@@ -40,7 +40,7 @@ RUN pip install --no-cache-dir -r requirements.txt
 
 # 🆕 NUOVO STEP: Scarica i dati NLTK durante la build
 # Questo previene il crash dovuto al download durante l'avvio del container
-RUN python -c "import nltk; nltk.download('punkt'); nltk.download('stopwords')"
+RUN python -c "import nltk; nltk.download('punkt_tab'); nltk.download('stopwords')"
 
 # Installa Chromium per Playwright
 RUN playwright install chromium
