@@ -1,5 +1,4 @@
-# Backend .dockerignore
-# Exclude unnecessary files from Docker build context
+# Backend .dockerignore - Ottimizzato per build veloce
 
 # Python cache
 __pycache__/
@@ -26,13 +25,10 @@ ENV/
 .gitignore
 .gitattributes
 
-# Docker files (not needed inside container)
+# Docker
 docker-compose.yml
 
-# Documentation (keep README.md for reference)
-docs/
-
-# Tests (optional - include if you want to run tests in container)
+# Tests (non servono in produzione)
 .pytest_cache/
 .coverage
 
@@ -40,7 +36,7 @@ docs/
 *.log
 logs/
 
-# Reports (will be generated at runtime)
+# Reports generati (creati a runtime)
 reports/*.xlsx
 reports/*.pdf
 
@@ -53,3 +49,7 @@ tmp/
 temp/
 *.tmp
 *.bak
+
+# Sample files (non servono in produzione)
+sample_*.xlsx
+test_*.py
