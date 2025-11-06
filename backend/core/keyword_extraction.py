@@ -15,10 +15,10 @@ from nltk.tokenize import word_tokenize
 
 # Download required NLTK data (run once)
 try:
-    nltk.data.find('tokenizers/punkt')
+    nltk.data.find('tokenizers/punkt_tab')
     nltk.data.find('corpora/stopwords')
 except LookupError:
-    nltk.download('punkt')
+    nltk.download('punkt_tab')
     nltk.download('stopwords')
 
 # Configure logging
