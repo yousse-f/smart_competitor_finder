@@ -1,0 +1,525 @@
+"""
+🚀 Hybrid Scraper V2 - Browser Pool Integration
+Sistema ultra-stabile con pool di browser e timeout adattivi
+"""
+
+import asyncio
+import time
+import logging
+import os
+from typing import Dict, Any, Optional
+from dataclasses import dataclass
+
+from .browser_pool import browser_pool
+from .advanced_scraper import advanced_scraper
+from .keyword_extraction import extract_keywords_from_content
+from .ua_rotator import ua_rotator
+from .proxy_system import proxy_system
+from .domain_intelligence import should_skip_scraping, get_domain_config
+
+logger = logging.getLogger(__name__)
+
+@dataclass
+class ScrapingResult:
+    """Risultato operazione scraping"""
+    success: bool
+    content: str = ""
+    error: str = ""
+    method: str = ""
+    duration: float = 0.0
+    content_length: int = 0
+
+class HybridScraperV2:
+    """
+    🛡️ Sistema di scraping con resilienza estrema:
+    1. Browser Pool (Primario) - Ultra stabile
+    2. ScrapingBee (Secondario) - Cloud service 
+    3. Advanced Scraper (Terziario) - Fallback
+    4. Basic HTTP (Quaternario) - Last resort
+    """
+    
+    def __init__(self):
+        self.scrapingbee_api_key = os.getenv('SCRAPINGBEE_API_KEY')
+        self.scraping_mode = os.getenv('SCRAPING_MODE', 'development')
+        
+        # 📊 Statistiche performance dettagliate
+        self.stats = {
+            'browser_pool_success': 0,
+            'scrapingbee_success': 0,
+            'advanced_success': 0,
+            'basic_success': 0,
+            'total_requests': 0,
+            'total_failures': 0,
+            'average_duration': 0.0,
+            'success_rate': 0.0,
+            'method_distribution': {},
+            'error_types': {}
+        }
+    
+    async def scrape_intelligent(self, url: str, max_keywords: int = 20, use_advanced: bool = True) -> Dict[str, Any]:
+        """
+        🧠 Scraping super-intelligente con 4 layer di fallback
+        """
+        start_time = time.time()
+        self.stats['total_requests'] += 1
+        
+        logger.info(f"🎯 Starting ULTRA-INTELLIGENT scrape for: {url}")
+        
+        # 🥇 LAYER 1: Browser Pool (Più stabile)
+        if use_advanced:
+            result = await self._scrape_with_browser_pool(url)
+            if result.success:
+                keywords_data = await self._extract_keywords_smart(result.content, url, max_keywords)
+                self._update_stats('browser_pool_success', result.method, result.duration)
+                logger.info(f"✅ Browser Pool SUCCESS: {len(keywords_data.get('keywords', []))} keywords")
+                return keywords_data
+        
+        # 🥈 LAYER 2: ScrapingBee (Cloud service)
+        if self.scrapingbee_api_key:
+            result = await self._scrape_with_scrapingbee(url)
+            if result.success:
+                keywords_data = await self._extract_keywords_smart(result.content, url, max_keywords)
+                self._update_stats('scrapingbee_success', result.method, result.duration)
+                logger.info(f"✅ ScrapingBee SUCCESS: {len(keywords_data.get('keywords', []))} keywords")
+                return keywords_data
+        
+        # 🥉 LAYER 3: Advanced Scraper (Fallback)
+        if use_advanced:
+            result = await self._scrape_with_advanced(url)
+            if result.success:
+                keywords_data = await self._extract_keywords_smart(result.content, url, max_keywords)
+                self._update_stats('advanced_success', result.method, result.duration)
+                logger.info(f"✅ Advanced Scraper SUCCESS: {len(keywords_data.get('keywords', []))} keywords")
+                return keywords_data
+        
+        # 🏴 LAYER 4: Basic HTTP (Last resort) - FORZATO!
+        logger.info(f"🚨 TRYING BASIC HTTP for {url} - FORCED!")
+        result = await self._scrape_basic(url)
+        logger.info(f"🔍 Basic HTTP result: success={result.success}, error={getattr(result, 'error', 'None')}")
+        
+        if result.success:
+            keywords_data = await self._extract_keywords_smart(result.content, url, max_keywords)
+            self._update_stats('basic_success', result.method, result.duration)
+            logger.info(f"✅ Basic HTTP SUCCESS: {len(keywords_data.get('keywords', []))} keywords")
+            return keywords_data
+        else:
+            logger.error(f"❌ Basic HTTP FAILED: {getattr(result, 'error', 'Unknown error')}")
+        
+        # ❌ Tutti i metodi falliti
+        total_duration = time.time() - start_time
+        self.stats['total_failures'] += 1
+        self._update_error_stats(result.error)
+        
+        logger.error(f"❌ ALL METHODS FAILED for {url} after {total_duration:.2f}s")
+        return {
+            'url': url,
+            'keywords': [],
+            'status': 'failed',
+            'error': f"All scraping methods failed. Last error: {result.error}",
+            'scraping_method': 'none',
+            'duration': total_duration
+        }
+    
+    async def _scrape_with_browser_pool(self, url: str) -> ScrapingResult:
+        """🏊‍♂️ Scraping con Browser Pool - MASSIMA STABILITÀ con TIMEOUT INTELLIGENTE"""
+        start_time = time.time()
+        
+        try:
+            # Ottieni sessione dal pool
+            session = await browser_pool.get_session()
+            
+            if not session:
+                return ScrapingResult(
+                    success=False,
+                    error="Browser pool not available",
+                    method="browser_pool",
+                    duration=time.time() - start_time
+                )
+            
+            # Scraping con sessione pooled con TIMEOUT INTELLIGENTE (15s max)
+            content = await asyncio.wait_for(
+                browser_pool.scrape_with_session(session, url),
+                timeout=15.0  # 15s invece di 30s default
+            )
+            duration = time.time() - start_time
+            
+            if content and len(content) > 500:
+                return ScrapingResult(
+                    success=True,
+                    content=content,
+                    method="browser_pool",
+                    duration=duration,
+                    content_length=len(content)
+                )
+            else:
+                return ScrapingResult(
+                    success=False,
+                    error=f"Insufficient content: {len(content)} chars",
+                    method="browser_pool",
+                    duration=duration
+                )
+                
+        except asyncio.TimeoutError:
+            return ScrapingResult(
+                success=False,
+                error="Browser pool timeout (15s)",
+                method="browser_pool", 
+                duration=time.time() - start_time
+            )
+        except Exception as e:
+            return ScrapingResult(
+                success=False,
+                error=str(e),
+                method="browser_pool",
+                duration=time.time() - start_time
+            )
+    
+    async def _scrape_with_scrapingbee(self, url: str) -> ScrapingResult:
+        """🐝 Scraping con ScrapingBee API"""
+        import aiohttp
+        
+        start_time = time.time()
+        
+        try:
+            params = {
+                'api_key': self.scrapingbee_api_key,
+                'url': url,
+                'render_js': 'true',
+                'premium_proxy': 'true',
+                'country_code': 'IT',
+                'wait': '3000',
+                'window_width': '1366',
+                'window_height': '768',
+                'block_ads': 'true'
+            }
+            
+            async with aiohttp.ClientSession(timeout=aiohttp.ClientTimeout(total=60)) as session:
+                async with session.get('https://app.scrapingbee.com/api/v1/', params=params) as response:
+                    duration = time.time() - start_time
+                    
+                    if response.status == 200:
+                        content = await response.text()
+                        return ScrapingResult(
+                            success=True,
+                            content=content,
+                            method="scrapingbee",
+                            duration=duration,
+                            content_length=len(content)
+                        )
+                    else:
+                        error_text = await response.text()
+                        return ScrapingResult(
+                            success=False,
+                            error=f"ScrapingBee HTTP {response.status}: {error_text}",
+                            method="scrapingbee",
+                            duration=duration
+                        )
+        
+        except Exception as e:
+            return ScrapingResult(
+                success=False,
+                error=str(e),
+                method="scrapingbee",
+                duration=time.time() - start_time
+            )
+    
+    async def _scrape_with_advanced(self, url: str) -> ScrapingResult:
+        """🥷 Advanced Scraper con stealth + TIMEOUT INTELLIGENTE"""
+        start_time = time.time()
+        
+        try:
+            # Advanced scraper con timeout intelligente (20s max)
+            content = await asyncio.wait_for(
+                advanced_scraper.intelligent_scrape(url, max_retries=1),  # Reduced retries
+                timeout=20.0  # 20s invece di 30s default
+            )
+            duration = time.time() - start_time
+            
+            if content and len(content) > 500:
+                return ScrapingResult(
+                    success=True,
+                    content=content,
+                    method="advanced",
+                    duration=duration,
+                    content_length=len(content)
+                )
+            else:
+                return ScrapingResult(
+                    success=False,
+                    error=f"Insufficient content: {len(content)} chars",
+                    method="advanced",
+                    duration=duration
+                )
+                
+        except asyncio.TimeoutError:
+            return ScrapingResult(
+                success=False,
+                error="Advanced scraper timeout (20s)",
+                method="advanced", 
+                duration=time.time() - start_time
+            )
+        except Exception as e:
+            return ScrapingResult(
+                success=False,
+                error=str(e),
+                method="advanced",
+                duration=time.time() - start_time
+            )
+    
+    async def _scrape_basic(self, url: str) -> ScrapingResult:
+        """📡 Basic HTTP scraping con DEBUG DETTAGLIATO"""
+        import aiohttp
+        
+        start_time = time.time()
+        logger.info(f"🚀 Basic HTTP starting for: {url}")
+        
+        try:
+            # PROFESSIONAL UA ROTATION - Anti-WAF Defense
+            headers = ua_rotator.get_complete_headers()
+            logger.info(f"🎭 Using rotated UA: {headers['User-Agent'][:50]}...")
+            
+            # EXPERT TIMEOUT CONFIGURATION - Granular control
+            timeout = aiohttp.ClientTimeout(
+                total=5.0,        # 5s total instead of 20s
+                connect=2.0,      # 2s for connection establishment  
+                sock_read=3.0     # 3s for reading response
+            )
+            logger.info(f"🔧 Basic HTTP: Creating session with EXPERT timeouts (5s total)")
+            
+            # First try with SSL verification, then fallback to SSL bypass
+            connectors = [
+                aiohttp.TCPConnector(ssl=None),  # Normal SSL verification
+                aiohttp.TCPConnector(ssl=False)   # SSL bypass for problematic sites
+            ]
+            
+            for i, connector in enumerate(connectors):
+                try:
+                    logger.info(f"🌐 Basic HTTP: Attempt {i+1}/2 - Making request to {url}")
+                    async with aiohttp.ClientSession(timeout=timeout, connector=connector) as session:
+                        # FOLLOW REDIRECTS - CRUCIAL for sites like mondo-convenienza.it!
+                        async with session.get(url, headers=headers, allow_redirects=True, max_redirects=5) as response:
+                            duration = time.time() - start_time
+                            logger.info(f"📊 Basic HTTP: Got response status {response.status}")
+                            
+                            if response.status == 200:
+                                content = await response.text()
+                                content_length = len(content)
+                                logger.info(f"✅ Basic HTTP SUCCESS: {content_length} characters received")
+                                return ScrapingResult(
+                                    success=True,
+                                    content=content,
+                                    method="basic",
+                                    duration=duration,
+                                    content_length=content_length
+                                )
+                            else:
+                                error_msg = f"HTTP {response.status}"
+                                logger.error(f"❌ Basic HTTP: Bad status code {response.status}")
+                                if i == len(connectors) - 1:  # Last attempt
+                                    return ScrapingResult(
+                                        success=False,
+                                        error=error_msg,
+                                        method="basic",
+                                        duration=duration
+                                    )
+                                continue  # Try next connector
+                except aiohttp.ClientConnectorSSLError as e:
+                    logger.warning(f"🔒 SSL Error on attempt {i+1}: {str(e)}")
+                    if i == len(connectors) - 1:
+                        raise e
+                    continue  # Try next connector (SSL bypass)
+                except aiohttp.ClientConnectorError as e:
+                    logger.warning(f"🌐 Connection Error on attempt {i+1}: {str(e)}")
+                    if i == len(connectors) - 1:
+                        raise e
+                    continue
+                except asyncio.TimeoutError as e:
+                    logger.warning(f"⏰ Timeout on attempt {i+1}: {str(e)}")
+                    if i == len(connectors) - 1:
+                        raise e
+                    continue
+                except Exception as e:
+                    error_msg = f"Attempt {i+1} failed: {type(e).__name__}: {str(e)}"
+                    logger.warning(f"⚠️ {error_msg}")
+                    if i == len(connectors) - 1:  # Last attempt failed
+                        raise e
+                    continue  # Try next connector
+            
+            # All HTTP connector methods failed - return failure
+            return ScrapingResult(
+                success=False,
+                error="All HTTP connector methods failed",
+                method="basic",
+                duration=time.time() - start_time
+            )
+        
+        except Exception as e:
+            error_msg = str(e)
+            error_type = type(e).__name__
+            logger.error(f"💥 Basic HTTP EXCEPTION: {error_type}: {error_msg}")
+            logger.error(f"🔍 Exception details: {repr(e)}")
+            
+            # Try to get more info about the exception
+            if hasattr(e, 'args') and e.args:
+                logger.error(f"📝 Exception args: {e.args}")
+            
+            # 🌍 CRITICAL FIX: Proxy fallback when HTTP methods fail with exceptions
+            logger.info("🚨 All HTTP methods failed with exceptions - trying PROXY FALLBACK")
+            if proxy_system.should_use_proxy(url):
+                try:
+                    logger.info("🌍 Attempting ScraperAPI fallback after HTTP failure")
+                    headers = ua_rotator.get_complete_headers()
+                    timeout = aiohttp.ClientTimeout(
+                        total=120.0,     # 120s total for ScraperAPI - premium service needs time
+                        connect=30.0,    # 30s to connect
+                        sock_read=90.0   # 90s to read response
+                    )
+                    
+                    proxy_content = await proxy_system.scrape_with_proxy(url, headers, timeout)
+                    
+                    if proxy_content and len(proxy_content) > 500:
+                        logger.info(f"✅ ScraperAPI SUCCESS after HTTP failure: {len(proxy_content)} chars")
+                        return ScrapingResult(
+                            success=True,
+                            content=proxy_content,
+                            method="scraperapi_fallback",
+                            duration=time.time() - start_time,
+                            content_length=len(proxy_content)
+                        )
+                    else:
+                        logger.error("❌ ScraperAPI returned insufficient content")
+                except Exception as proxy_e:
+                    logger.error(f"💥 ScraperAPI fallback also failed: {proxy_e}")
+            else:
+                logger.info("🚫 Site not in proxy whitelist - skipping ScraperAPI")
+            
+            return ScrapingResult(
+                success=False,
+                error=f"{error_type}: {error_msg}" if error_msg else f"{error_type}: Unknown error",
+                method="basic",
+                duration=time.time() - start_time
+            )
+    
+    async def _extract_keywords_smart(self, content: str, url: str, max_keywords: int) -> Dict[str, Any]:
+        """🧠 Estrazione keywords intelligente"""
+        from bs4 import BeautifulSoup
+        from .keyword_extraction import KeywordExtractor
+        
+        try:
+            # Parse HTML
+            soup = BeautifulSoup(content, 'html.parser')
+            
+            # Rimuovi elementi non necessari
+            for element in soup(["script", "style", "meta", "link", "nav", "footer"]):
+                element.decompose()
+            
+            # Estrai testo pulito
+            text = soup.get_text()
+            lines = (line.strip() for line in text.splitlines())
+            chunks = (phrase.strip() for line in lines for phrase in line.split("  "))
+            clean_text = ' '.join(chunk for chunk in chunks if chunk)
+            
+            # Metadata sito
+            title = soup.find('title')
+            title_text = title.get_text().strip() if title else ""
+            
+            meta_desc = soup.find('meta', attrs={'name': 'description'})
+            description = meta_desc.get('content', '').strip() if meta_desc else ""
+            
+            # Estrai keywords
+            extractor = KeywordExtractor()
+            keywords = extractor._process_text(clean_text)
+            
+            # Formato risultato
+            return {
+                'url': url,
+                'keywords': [
+                    {
+                        'keyword': kw,
+                        'frequency': max(1, 25 - i),
+                        'relevance': 'high' if i < 5 else 'medium' if i < 12 else 'low',
+                        'category': 'prodotto' if any(term in kw.lower() for term in ['mobili', 'arredamento', 'cucina', 'divano', 'letto']) else 'generale'
+                    }
+                    for i, kw in enumerate(keywords[:max_keywords])
+                ],
+                'total_keywords': len(keywords),
+                'status': 'success',
+                'title': title_text,
+                'description': description,
+                'content_length': len(clean_text),
+                'scraping_method': 'hybrid_v2'
+            }
+            
+        except Exception as e:
+            logger.error(f"Keyword extraction failed: {e}")
+            return {
+                'url': url,
+                'keywords': [],
+                'status': 'extraction_failed',
+                'error': str(e),
+                'scraping_method': 'hybrid_v2'
+            }
+    
+    def _update_stats(self, success_type: str, method: str, duration: float):
+        """📊 Aggiorna statistiche performance"""
+        self.stats[success_type] += 1
+        
+        # Aggiorna durata media
+        current_avg = self.stats['average_duration']
+        total_requests = self.stats['total_requests']
+        self.stats['average_duration'] = (current_avg * (total_requests - 1) + duration) / total_requests
+        
+        # Distribuzione metodi
+        if method not in self.stats['method_distribution']:
+            self.stats['method_distribution'][method] = 0
+        self.stats['method_distribution'][method] += 1
+        
+        # Success rate
+        total_success = sum(self.stats[key] for key in ['browser_pool_success', 'scrapingbee_success', 'advanced_success', 'basic_success'])
+        self.stats['success_rate'] = (total_success / total_requests) * 100 if total_requests > 0 else 0
+    
+    def _update_error_stats(self, error: str):
+        """📊 Aggiorna statistiche errori"""
+        error_type = 'unknown'
+        
+        if 'timeout' in error.lower():
+            error_type = 'timeout'
+        elif 'ssl' in error.lower() or 'certificate' in error.lower():
+            error_type = 'ssl'
+        elif 'cloudflare' in error.lower():
+            error_type = 'cloudflare'
+        elif 'connection' in error.lower():
+            error_type = 'connection'
+        elif 'forbidden' in error.lower() or '403' in error:
+            error_type = 'blocked'
+        
+        if error_type not in self.stats['error_types']:
+            self.stats['error_types'][error_type] = 0
+        self.stats['error_types'][error_type] += 1
+    
+    async def get_enhanced_stats(self) -> Dict[str, Any]:
+        """📊 Statistiche dettagliate sistema"""
+        pool_stats = await browser_pool.get_pool_stats()
+        
+        return {
+            'performance': self.stats,
+            'browser_pool': pool_stats,
+            'health_status': 'excellent' if self.stats['success_rate'] > 85 else 'good' if self.stats['success_rate'] > 70 else 'needs_attention',
+            'recommendation': self._get_performance_recommendation()
+        }
+    
+    def _get_performance_recommendation(self) -> str:
+        """💡 Raccomandazioni performance"""
+        success_rate = self.stats['success_rate']
+        
+        if success_rate > 95:
+            return "🎉 Sistema perfetto! Performance eccellenti."
+        elif success_rate > 85:
+            return "✅ Sistema stabile, considera ScrapingBee per scaling."
+        elif success_rate > 70:
+            return "⚠️ Performance buone, verifica proxy pool per miglioramenti."
+        else:
+            return "🚨 Performance basse, necessario intervento immediato. Verifica configurazione."
+
+# 🌐 Istanza globale V2
+hybrid_scraper_v2 = HybridScraperV2()
