@@ -26,19 +26,13 @@ ENV/
 .gitignore
 .gitattributes
 
-# Docker
-Dockerfile
-.dockerignore
+# Docker files (not needed inside container)
 docker-compose.yml
 
-# Documentation
-*.md
+# Documentation (keep README.md for reference)
 docs/
 
-# Tests
-tests/
-test_*.py
-*_test.py
+# Tests (optional - include if you want to run tests in container)
 .pytest_cache/
 .coverage
 
@@ -46,20 +40,16 @@ test_*.py
 *.log
 logs/
 
-# Reports (will be mounted as volume)
+# Reports (will be generated at runtime)
 reports/*.xlsx
 reports/*.pdf
 
-# Environment
-.env.example
-.env.local
-.env.*.local
-
-# OS
+# OS files
 .DS_Store
 Thumbs.db
 
-# Temporary
+# Temporary files
 tmp/
 temp/
 *.tmp
+*.bak
