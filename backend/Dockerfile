@@ -1,7 +1,7 @@
 # =====================================================
 # ✅ Smart Competitor Finder - Dockerfile (Railway-ready)
 # =====================================================
-FROM python:3.11-slim
+FROM python:3.12-slim-bookworm
 
 ENV DEBIAN_FRONTEND=noninteractive
 WORKDIR /app
