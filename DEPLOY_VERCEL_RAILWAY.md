@@ -1,4 +1,4 @@
-# 🚀 Deploy Smart Competitor Finder su Vercel + Railway
+    # 🚀 Deploy Smart Competitor Finder su Vercel + Railway
 
 ## 📊 Architettura Finale
 
