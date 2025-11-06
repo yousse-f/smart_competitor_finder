@@ -135,7 +135,17 @@ class BulkScraper:
     async def _scrape_site_content(self, url: str) -> Dict[str, str]:
         """Scrape content from a single website."""
         async with async_playwright() as p:
-            browser = await p.chromium.launch(headless=True)
+            browser = await p.chromium.launch(
+                headless=True,
+                args=[
+                    '--no-sandbox',
+                    '--disable-setuid-sandbox',
+                    '--disable-dev-shm-usage',
+                    '--disable-gpu',
+                    '--no-first-run',
+                    '--no-zygote'
+                ]
+            )
             page = await browser.new_page()
             
             try:
