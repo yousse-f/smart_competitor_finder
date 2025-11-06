@@ -31,9 +31,10 @@ COPY . .
 RUN mkdir -p reports && chmod 777 reports
 
 # Variabili d'ambiente
-ENV PYTHONUNBUFFERED=1
+ENV PYTHONUNBUFFERED=1 \
+    PORT=8000
 
-EXPOSE 8000
+EXPOSE $PORT
 
-# Esegui FastAPI tramite Uvicorn
-CMD ["uvicorn", "main:app", "--host", "0.0.0.0", "--port", "8000"]
+# Esegui FastAPI tramite Uvicorn con porta dinamica da Railway
+CMD uvicorn main:app --host 0.0.0.0 --port $PORT
