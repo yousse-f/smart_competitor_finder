@@ -1,8 +1,8 @@
 # =====================================================
-# ✅ Smart Competitor Finder - Dockerfile (Railway Root)
+# ✅ Smart Competitor Finder - Dockerfile (Backend Directory)
 # =====================================================
-# Questo Dockerfile è nella ROOT del progetto per forzare Railway a usare Docker
-# invece di Nixpacks/Railpack, risolvendo i problemi di compatibilità pandas.
+# Questo Dockerfile è in /backend per essere rilevato da Railway
+# con Root Directory = /backend
 
 FROM python:3.12-slim-bookworm
 
@@ -11,13 +11,8 @@ ENV DEBIAN_FRONTEND=noninteractive
 # WORKDIR di base
 WORKDIR /app
 
-# ----------------------------------------------------------------------
-# IMPORTANTE: I percorsi sono relativi alla root del progetto!
-# Tutti i file devono essere copiati dalla sottocartella backend/
-# ----------------------------------------------------------------------
-
-# Copia requirements.txt dalla cartella backend
-COPY backend/requirements.txt .
+# Copia requirements.txt (ora nella stessa directory del Dockerfile)
+COPY requirements.txt .
 
 # Installa librerie di sistema richieste da Playwright e Pandas
 RUN apt-get update && apt-get install -y \
@@ -43,11 +38,8 @@ RUN pip install --no-cache-dir -r requirements.txt
 # Installa Chromium per Playwright
 RUN playwright install chromium
 
-# Copia tutto il contenuto della cartella backend nel container
-COPY backend/ backend/
-
-# Cambia WORKDIR alla cartella backend dove si trova main.py
-WORKDIR /app/backend
+# Copia tutto il contenuto della cartella corrente (backend/)
+COPY . .
 
 # Crea la cartella reports
 RUN mkdir -p reports && chmod 777 reports
