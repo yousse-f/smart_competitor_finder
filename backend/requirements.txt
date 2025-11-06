@@ -12,7 +12,7 @@ pydantic-settings==2.1.0
 
 # --- Web Scraping & Automation ---
 playwright==1.40.0
-playwright-stealth==2.4.2  # <--- NUOVA DIPENDENZA AGGIUNTA
+playwright-stealth # <--- NUOVA DIPENDENZA AGGIUNTA
 beautifulsoup4==4.12.2
 requests==2.31.0
 aiofiles==23.2.1
