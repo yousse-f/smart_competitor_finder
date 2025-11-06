@@ -26,13 +26,17 @@ RUN apt-get update && apt-get install -y \
 # Installa pip e setuptools aggiornati
 RUN pip install --upgrade pip setuptools wheel
 
-# Installa dipendenze scientifiche PRIMA con binary wheels
+# ⚠️ CRITICO: Installa SOLO binary wheels per numpy, pandas, scikit-learn
+# Questo evita compilazione con Python 3.13 headers di Railway che causa:
+# "error: too few arguments to function '_PyLong_AsByteArray'"
+# --only-binary :all: forza l'uso di wheel pre-compilati per Python 3.12
 RUN pip install --no-cache-dir --only-binary :all: \
     numpy==1.26.4 \
     pandas==2.1.4 \
     scikit-learn==1.3.2
 
-# Installa il resto delle dipendenze
+# Installa il resto delle dipendenze da requirements.txt
+# (numpy, pandas, scikit-learn già esclusi dal file)
 RUN pip install --no-cache-dir -r requirements.txt
 
 # Installa Chromium per Playwright

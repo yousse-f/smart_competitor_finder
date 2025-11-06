@@ -17,14 +17,14 @@ requests==2.31.0
 aiofiles==23.2.1
 httpx==0.25.2
 
-# --- Data Processing (Updated for Python 3.11 compatibility) ---
-numpy==1.26.4
-pandas==2.1.4
+# --- Data Processing (Updated for Python 3.12 compatibility) ---
+# NOTA: numpy, pandas e scikit-learn sono installati come binary wheels nel Dockerfile
+# per evitare problemi di compilazione con Python 3.13 di Railway
 openpyxl==3.1.2
 nltk==3.8.1
 
-# --- ML Libraries (Updated with binary wheels) ---
-scikit-learn==1.3.2
+# --- ML Libraries ---
+# NOTA: scikit-learn installato nel Dockerfile come binary wheel
 sentence-transformers==2.3.1
 
 # --- Database (Future Caching) ---
