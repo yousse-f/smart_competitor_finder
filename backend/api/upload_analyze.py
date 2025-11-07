@@ -44,27 +44,53 @@ async def upload_and_analyze(
                 df = pd.read_csv(io.StringIO(contents.decode('utf-8')))
                 # Extract URLs from first column
                 first_column = df.iloc[:, 0].dropna()
-                urls = [str(url).strip() for url in first_column if str(url).startswith('http')]
+                # Accept URLs with or without protocol
+                for url in first_column:
+                    url_str = str(url).strip()
+                    if url_str and url_str.lower() not in ['nan', 'none', '']:
+                        # Add https:// if missing protocol
+                        if not url_str.startswith(('http://', 'https://')):
+                            url_str = 'https://' + url_str
+                        urls.append(url_str)
                 
             elif file.filename and (file.filename.endswith('.xlsx') or file.filename.endswith('.xls')):
                 # Read Excel
                 df = pd.read_excel(io.BytesIO(contents))
                 # Extract URLs from first column
                 first_column = df.iloc[:, 0].dropna()
-                urls = [str(url).strip() for url in first_column if str(url).startswith('http')]
+                # Accept URLs with or without protocol
+                for url in first_column:
+                    url_str = str(url).strip()
+                    if url_str and url_str.lower() not in ['nan', 'none', '']:
+                        # Add https:// if missing protocol
+                        if not url_str.startswith(('http://', 'https://')):
+                            url_str = 'https://' + url_str
+                        urls.append(url_str)
                 
             else:
                 # Assume plain text with URLs separated by newlines
                 text_content = contents.decode('utf-8')
                 lines = [line.strip() for line in text_content.split('\n') if line.strip()]
-                urls = [line for line in lines if line.startswith('http')]
+                # Accept URLs with or without protocol
+                for line in lines:
+                    if line and line.lower() not in ['nan', 'none', '']:
+                        # Add https:// if missing protocol
+                        if not line.startswith(('http://', 'https://')):
+                            line = 'https://' + line
+                        urls.append(line)
                 
         except Exception as file_error:
             # Fallback: try to parse as plain text
             try:
                 text_content = contents.decode('utf-8')
                 lines = [line.strip() for line in text_content.split('\n') if line.strip()]
-                urls = [line for line in lines if line.startswith('http')]
+                # Accept URLs with or without protocol
+                for line in lines:
+                    if line and line.lower() not in ['nan', 'none', '']:
+                        # Add https:// if missing protocol
+                        if not line.startswith(('http://', 'https://')):
+                            line = 'https://' + line
+                        urls.append(line)
             except Exception as text_error:
                 raise HTTPException(
                     status_code=400, 
