@@ -14,12 +14,20 @@ from nltk.corpus import stopwords
 from nltk.tokenize import word_tokenize
 
 # Download required NLTK data (run once)
+# Test actual functionality instead of checking paths (more robust)
 try:
-    nltk.data.find('tokenizers/punkt_tab')
-    nltk.data.find('corpora/stopwords')
-except LookupError:
-    nltk.download('punkt_tab')
-    nltk.download('stopwords')
+    # Try to use the tokenizer - if it works, data is available
+    from nltk.tokenize import word_tokenize
+    from nltk.corpus import stopwords
+    # Quick test
+    _ = word_tokenize("test")
+    _ = stopwords.words('italian')
+except (LookupError, OSError):
+    # Download if anything fails
+    print("📦 Downloading NLTK data...")
+    nltk.download('punkt_tab', quiet=True)
+    nltk.download('stopwords', quiet=True)
+    print("✅ NLTK data downloaded successfully")
 
 # Configure logging
 logging.basicConfig(level=logging.INFO)
