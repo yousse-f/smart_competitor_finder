@@ -20,6 +20,7 @@ aiofiles
 httpx
 aiohttp # Aggiunto per risolvere ModuleNotFoundError precedente
 fake-useragent # FIX: Missing dependency causing Railway crash
+brotli # FIX: Support Brotli compression for modern websites
 
 # --- Data Processing (Fissate per compatibilità Docker) ---
 numpy==1.26.4
