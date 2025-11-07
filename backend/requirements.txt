@@ -18,9 +18,10 @@ beautifulsoup4
 requests
 aiofiles
 httpx
-aiohttp # Aggiunto per risolvere ModuleNotFoundError precedente
+aiohttp[speedups] # Con speedups include automaticamente brotli
 fake-useragent # FIX: Missing dependency causing Railway crash
 brotli # FIX: Support Brotli compression for modern websites
+brotlicffi # Alternative Brotli implementation (more compatible)
 
 # --- Data Processing (Fissate per compatibilità Docker) ---
 numpy==1.26.4
