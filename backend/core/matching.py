@@ -17,13 +17,89 @@ class KeywordMatcher:
         self.ignore_words = {
             'the', 'and', 'or', 'but', 'in', 'on', 'at', 'to', 'for', 'of', 'with', 'by',
             'il', 'la', 'le', 'lo', 'gli', 'un', 'una', 'dei', 'delle', 'del', 'della',
-            'che', 'con', 'per', 'da', 'di', 'su', 'tra', 'fra', 'come', 'quando', 'dove'
+            'che', 'con', 'per', 'da', 'di', 'su', 'tra', 'fra', 'come', 'quando', 'dove',
+            'it', 'e', 'è', 'a', 'o', 'si', 'se', 'ne', 'ci', 'vi', 'sono', 'hanno',
+            'questa', 'questo', 'questi', 'queste', 'all', 'alla', 'alle', 'allo', 'agli'
         }
+        
+        # ⭐ NEW: Keyword Quality Weighting
+        # Generic keywords (too common across sectors) - LOW weight
+        self.generic_keywords = {
+            'soluzioni', 'solutions', 'innovazione', 'innovation', 'sviluppo', 'development',
+            'tecnologia', 'technology', 'servizi', 'services', 'qualità', 'quality',
+            'efficienza', 'efficiency', 'esperienza', 'experience', 'professionale', 'professional',
+            'azienda', 'company', 'impresa', 'business', 'prodotto', 'product', 'cliente', 'customer',
+            'team', 'gruppo', 'group', 'Italia', 'italy', 'mondo', 'world', 'mercato', 'market'
+        }
+        
+        # Sector-specific keywords (high value) - HIGH weight
+        self.high_value_keywords = {
+            # IT/Digital
+            'software', 'cloud', 'cybersecurity', 'api', 'database', 'frontend', 'backend',
+            'informatica', 'digitale', 'app', 'mobile', 'web', 'sviluppatori', 'programmazione',
+            'devops', 'agile', 'scrum', 'microservizi', 'kubernetes', 'docker', 'react', 'angular',
+            # Manufacturing
+            'meccanica', 'metalworking', 'carpenteria', 'cnc', 'tornio', 'fresatura',
+            'lamiera', 'saldatura', 'assemblaggio', 'officina', 'prototipazione', 'stampi',
+            # Construction
+            'edilizia', 'costruzioni', 'cantiere', 'ristrutturazione', 'cemento', 'mattoni',
+            # Consulting specific
+            'consulenza', 'advisory', 'strategia', 'strategy', 'management', 'governance'
+        }
+        
+        # Weight multipliers
+        self.generic_weight = 0.3  # Generic keywords count 30%
+        self.normal_weight = 1.0   # Normal keywords count 100%
+        self.high_value_weight = 1.5  # High-value keywords count 150%
         
         # Semantic analysis configuration
         self.semantic_enabled = os.getenv("SEMANTIC_ANALYSIS_ENABLED", "true").lower() == "true"
         self.keyword_weight = float(os.getenv("KEYWORD_WEIGHT", "0.4"))
         self.semantic_weight = float(os.getenv("SEMANTIC_WEIGHT", "0.6"))
+    
+    def _split_keywords_to_words(self, keywords: List[str]) -> List[str]:
+        """
+        Split compound keywords into individual words for better matching.
+        
+        Examples:
+            Input: ["Consulenza informatica", "Sviluppo di soluzioni IT"]
+            Output: ["consulenza", "informatica", "sviluppo", "soluzioni", "it"]
+        
+        Args:
+            keywords: List of keywords (can be phrases or single words)
+            
+        Returns:
+            List of individual words, lowercase, without stopwords and duplicates
+        """
+        individual_words = []
+        
+        for keyword in keywords:
+            # Split by spaces and commas
+            words = re.split(r'[\s,]+', keyword.lower().strip())
+            
+            for word in words:
+                # Clean the word
+                clean_word = re.sub(r'[^a-zA-ZÀ-ÿ]', '', word)
+                
+                # Filter: min 2 chars, not in stopwords/ignore list
+                if (len(clean_word) >= 2 and 
+                    clean_word not in self.ignore_words and
+                    clean_word not in self.generic_keywords):  # Don't filter generic, just flag them
+                    individual_words.append(clean_word)
+        
+        # Remove duplicates while preserving order
+        seen = set()
+        result = []
+        for word in individual_words:
+            if word not in seen:
+                seen.add(word)
+                result.append(word)
+        
+        logger.info(f"🔍 Keyword splitting: {len(keywords)} phrases → {len(result)} words")
+        logger.debug(f"   Original: {keywords}")
+        logger.debug(f"   Splitted: {result}")
+        
+        return result
     
     async def calculate_match_score(
         self, 
@@ -39,7 +115,7 @@ class KeywordMatcher:
         Combines traditional keyword matching with AI semantic analysis and sector relevance.
         
         Args:
-            target_keywords: List of keywords to search for
+            target_keywords: List of keywords to search for (can be phrases or single words)
             site_content: Full text content from the scraped site
             business_context: Optional business context for better semantic analysis
             site_title: Page title for sector analysis
@@ -50,6 +126,12 @@ class KeywordMatcher:
             Dictionary with comprehensive match score, analysis details, and relevance classification
         """
         try:
+            # 🎯 NEW: Split compound keywords into individual words
+            original_keywords = target_keywords.copy()
+            target_keywords = self._split_keywords_to_words(target_keywords)
+            
+            logger.info(f"📊 Matching analysis: {len(original_keywords)} original keywords → {len(target_keywords)} words")
+            
             # Clean and prepare content for searching
             content_lower = site_content.lower()
             content_words = self._extract_words(content_lower)
@@ -170,34 +252,73 @@ class KeywordMatcher:
         }
     
     def _calculate_keyword_score(self, target_keywords: List[str], matches: Dict) -> Dict:
-        """Calculate the keyword-based match score."""
+        """Calculate the keyword-based match score with quality weighting."""
         if not target_keywords:
             return {'score': 0, 'method': 'no_keywords'}
         
         total_target_keywords = len(target_keywords)
-        unique_matches = len(matches['found_keywords'])
-        total_occurrences = matches['total_occurrences']
+        found_keywords = matches['found_keywords']
+        keyword_counts = matches['keyword_counts']
         
-        if unique_matches == 0:
+        if len(found_keywords) == 0:
             return {'score': 0, 'method': 'no_matches'}
         
-        # Base score: percentage of keywords found
-        base_score = (unique_matches / total_target_keywords) * 100
+        # ⭐ NEW: Calculate weighted matches
+        weighted_matches = 0.0
+        weighted_total_keywords = 0.0
+        generic_count = 0
+        high_value_count = 0
+        normal_count = 0
         
-        # Frequency bonus: more occurrences = higher score
-        frequency_multiplier = min(1.5, 1 + (total_occurrences - unique_matches) * 0.1)
+        # Calculate total weighted keywords (denominator)
+        for keyword in target_keywords:
+            keyword_lower = keyword.lower().strip()
+            if keyword_lower in self.generic_keywords:
+                weighted_total_keywords += self.generic_weight
+            elif keyword_lower in self.high_value_keywords:
+                weighted_total_keywords += self.high_value_weight
+            else:
+                weighted_total_keywords += self.normal_weight
         
-        # Final score with frequency bonus
-        final_score = min(100, base_score * frequency_multiplier)
+        # Calculate weighted found keywords (numerator)
+        for keyword in found_keywords:
+            keyword_lower = keyword.lower().strip()
+            count = keyword_counts.get(keyword, 1)
+            
+            if keyword_lower in self.generic_keywords:
+                # Generic keywords count less
+                weighted_matches += self.generic_weight
+                generic_count += 1
+            elif keyword_lower in self.high_value_keywords:
+                # High-value keywords count more + frequency bonus
+                weighted_matches += self.high_value_weight * min(1.5, 1 + (count - 1) * 0.1)
+                high_value_count += 1
+            else:
+                # Normal keywords with frequency bonus
+                weighted_matches += self.normal_weight * min(1.5, 1 + (count - 1) * 0.1)
+                normal_count += 1
+        
+        # Calculate weighted score
+        if weighted_total_keywords > 0:
+            weighted_score = (weighted_matches / weighted_total_keywords) * 100
+        else:
+            weighted_score = 0
+        
+        # Cap at 100
+        final_score = min(100, weighted_score)
         
         return {
             'score': round(final_score, 1),
-            'method': 'frequency_weighted',
-            'base_score': round(base_score, 1),
-            'frequency_multiplier': round(frequency_multiplier, 2),
-            'unique_matches': unique_matches,
+            'method': 'quality_weighted',
+            'weighted_matches': round(weighted_matches, 2),
+            'weighted_total': round(weighted_total_keywords, 2),
+            'unique_matches': len(found_keywords),
             'total_target': total_target_keywords,
-            'total_occurrences': total_occurrences
+            'breakdown': {
+                'generic_keywords': generic_count,
+                'high_value_keywords': high_value_count,
+                'normal_keywords': normal_count
+            }
         }
     
     def _calculate_combined_score(self, keyword_data: Dict, semantic_data: Dict) -> Dict:

@@ -112,24 +112,29 @@ class ReportGenerator:
         ws['A1'].font = Font(bold=True, size=16, color='366092')
         ws.merge_cells('A1:F1')
         
+        # 🆕 Data + Ora nel report
+        current_datetime = datetime.now().strftime('%d/%m/%Y %H:%M:%S')
+        
         ws['A3'] = f"Client Website: {client_url}"
-        ws['A4'] = f"Analysis Date: {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}"
+        ws['A4'] = f"Report generato il: {current_datetime}"
         ws['A5'] = f"Keywords Analyzed: {', '.join(client_keywords)}"
         ws['A6'] = f"Total Competitors Analyzed: {len(analysis_results)}"
         
-        # Summary statistics
-        relevant_competitors = [r for r in analysis_results if r.get('is_relevant', True)]
-        high_match_competitors = [r for r in relevant_competitors if r.get('total_score', 0) >= 0.5]
+        # Summary statistics basate su KPI classification
+        direct_competitors = [r for r in analysis_results if r.get('competitor_status', {}).get('category') == 'DIRECT']
+        potential_competitors = [r for r in analysis_results if r.get('competitor_status', {}).get('category') == 'POTENTIAL']
+        non_competitors = [r for r in analysis_results if r.get('competitor_status', {}).get('category') == 'NON_COMPETITOR']
         
-        ws['A8'] = "ANALYSIS SUMMARY"
+        ws['A8'] = "ANALISI PER CATEGORIA KPI"
         ws['A8'].font = Font(bold=True, size=14, color='366092')
         
         summary_data = [
-            ["Metric", "Value"],
-            ["Relevant Competitors Found", len(relevant_competitors)],
-            ["High Match Competitors (≥50%)", len(high_match_competitors)],
-            ["Average Match Score", f"{sum(r.get('total_score', 0) for r in relevant_competitors) / len(relevant_competitors) * 100:.1f}%" if relevant_competitors else "0%"],
-            ["Best Match Score", f"{max(r.get('total_score', 0) for r in relevant_competitors) * 100:.1f}%" if relevant_competitors else "0%"]
+            ["Categoria", "Numero", "Percentuale"],
+            ["🟢 Competitor Diretti (≥60%)", len(direct_competitors), f"{len(direct_competitors) / len(analysis_results) * 100:.1f}%" if analysis_results else "0%"],
+            ["🟡 Da Valutare (40-59%)", len(potential_competitors), f"{len(potential_competitors) / len(analysis_results) * 100:.1f}%" if analysis_results else "0%"],
+            ["🔴 Non Competitor (<40%)", len(non_competitors), f"{len(non_competitors) / len(analysis_results) * 100:.1f}%" if analysis_results else "0%"],
+            ["", "", ""],
+            ["Score Medio", f"{sum(r.get('score', 0) for r in analysis_results) / len(analysis_results):.1f}%" if analysis_results else "0%", ""],
         ]
         
         for row_idx, row_data in enumerate(summary_data, 10):
@@ -141,18 +146,18 @@ class ReportGenerator:
                     cell.alignment = self.styles['header']['alignment']
                 cell.border = self.styles['border']
         
-        # Top 10 competitors
-        ws['A16'] = "TOP 10 COMPETITORS"
+        # Top 10 competitors ordinati per score con classe KPI
+        ws['A16'] = "TOP 10 COMPETITOR PER CATEGORIA"
         ws['A16'].font = Font(bold=True, size=14, color='366092')
         
-        # Sort by total score and take top 10
+        # Sort by score and take top 10
         top_competitors = sorted(
-            relevant_competitors,
-            key=lambda x: x.get('total_score', 0),
+            analysis_results,
+            key=lambda x: x.get('score', 0),
             reverse=True
         )[:10]
         
-        headers = ["Rank", "Website", "Match Score", "Sector", "Relevance"]
+        headers = ["Rank", "Website", "Score", "Categoria KPI", "Azione Consigliata"]
         for col_idx, header in enumerate(headers, 1):
             cell = ws.cell(row=18, column=col_idx, value=header)
             cell.font = self.styles['header']['font']
@@ -161,12 +166,13 @@ class ReportGenerator:
             cell.border = self.styles['border']
         
         for row_idx, competitor in enumerate(top_competitors, 19):
+            status = competitor.get('competitor_status', {})
             row_data = [
                 row_idx - 18,
                 competitor.get('url', 'N/A'),
-                f"{competitor.get('total_score', 0) * 100:.1f}%",
-                competitor.get('sector', 'Unknown'),
-                "Yes" if competitor.get('is_relevant', True) else "No"
+                f"{competitor.get('score', 0):.1f}%",
+                f"{status.get('emoji', '⚪')} {status.get('label', 'Non classificato')}",
+                status.get('action', 'N/A')
             ]
             
             for col_idx, value in enumerate(row_data, 1):
@@ -175,22 +181,25 @@ class ReportGenerator:
                 cell.alignment = self.styles['data']['alignment']
                 cell.border = self.styles['border']
                 
-                # Special formatting for match score
-                if col_idx == 3:
-                    cell.alignment = self.styles['number']['alignment']
+                # Colora riga in base a categoria
+                if status.get('color') == 'green':
+                    cell.fill = PatternFill(start_color='E6F9E6', end_color='E6F9E6', fill_type='solid')
+                elif status.get('color') == 'yellow':
+                    cell.fill = PatternFill(start_color='FFF9E6', end_color='FFF9E6', fill_type='solid')
+                elif status.get('color') == 'red':
+                    cell.fill = PatternFill(start_color='FFE6E6', end_color='FFE6E6', fill_type='solid')
         
         # Auto-adjust column widths
         self._auto_adjust_columns(ws)
     
     def _create_detailed_results_sheet(self, analysis_results: List[Dict]):
-        """Create detailed results sheet with all competitor data"""
+        """Create detailed results sheet with all competitor data and KPI classification"""
         ws = self.workbook.create_sheet("Detailed Results")
         
-        # Headers
+        # Headers con classificazione KPI (senza Score %)
         headers = [
-            "URL", "Total Score", "Keyword Score", "Semantic Score",
-            "Sector", "Is Relevant", "Keywords Found", "Keyword Count",
-            "Semantic Similarity", "Relevance Label", "Analysis Notes"
+            "URL", "Categoria KPI", "Azione", 
+            "Keywords Found", "Keyword Count", "Title"
         ]
         
         for col_idx, header in enumerate(headers, 1):
@@ -200,78 +209,55 @@ class ReportGenerator:
             cell.alignment = self.styles['header']['alignment']
             cell.border = self.styles['border']
         
-        # Data rows
+        # Data rows con classificazione KPI (senza Score %)
         for row_idx, result in enumerate(analysis_results, 2):
+            status = result.get('competitor_status', {})
             row_data = [
                 result.get('url', 'N/A'),
-                result.get('total_score', 0),
-                result.get('keyword_score', 0),
-                result.get('semantic_score', 0),
-                result.get('sector', 'Unknown'),
-                "Yes" if result.get('is_relevant', True) else "No",
+                f"{status.get('emoji', '⚪')} {status.get('label', 'Non classificato')}",
+                status.get('action', 'N/A'),
                 ', '.join(result.get('keywords_found', [])),
                 len(result.get('keywords_found', [])),
-                result.get('semantic_similarity', 0),
-                result.get('relevance_label', 'Unknown'),
-                result.get('analysis_notes', '')
+                result.get('title', 'N/A')
             ]
             
             for col_idx, value in enumerate(row_data, 1):
                 cell = ws.cell(row=row_idx, column=col_idx, value=value)
                 cell.border = self.styles['border']
                 
-                # Apply specific formatting based on column type
-                if col_idx in [2, 3, 4, 9]:  # Score columns
-                    cell.number_format = '0.0%'
-                    cell.alignment = self.styles['number']['alignment']
-                elif col_idx == 8:  # Count column
+                # Applica colore di sfondo in base a categoria KPI
+                if status.get('color') == 'green':
+                    cell.fill = PatternFill(start_color='E6F9E6', end_color='E6F9E6', fill_type='solid')
+                elif status.get('color') == 'yellow':
+                    cell.fill = PatternFill(start_color='FFF9E6', end_color='FFF9E6', fill_type='solid')
+                elif status.get('color') == 'red':
+                    cell.fill = PatternFill(start_color='FFE6E6', end_color='FFE6E6', fill_type='solid')
+                
+                # Formatting specifico per colonne (senza Score %)
+                if col_idx == 5:  # Count column (ora colonna 5 invece di 6)
                     cell.alignment = Alignment(horizontal='center')
                 else:
                     cell.font = self.styles['data']['font']
                     cell.alignment = self.styles['data']['alignment']
         
-        # Apply conditional formatting for scores
-        score_range = f"B2:B{len(analysis_results) + 1}"
-        color_scale = ColorScaleRule(
-            start_type='min', start_color='F8696B',
-            mid_type='percentile', mid_value=50, mid_color='FFEB9C',
-            end_type='max', end_color='63BE7B'
-        )
-        ws.conditional_formatting.add(score_range, color_scale)
-        
         # Auto-adjust column widths
         self._auto_adjust_columns(ws)
     
     def _create_sector_analysis_sheet(self, analysis_results: List[Dict]):
-        """Create sector analysis breakdown sheet"""
-        ws = self.workbook.create_sheet("Sector Analysis")
+        """Create KPI category distribution analysis sheet"""
+        ws = self.workbook.create_sheet("Analisi KPI")
         
-        # Count competitors by sector
-        sector_counts = {}
-        sector_avg_scores = {}
+        # Raggruppa per categoria KPI
+        direct = [r for r in analysis_results if r.get('competitor_status', {}).get('category') == 'DIRECT']
+        potential = [r for r in analysis_results if r.get('competitor_status', {}).get('category') == 'POTENTIAL']
+        non_comp = [r for r in analysis_results if r.get('competitor_status', {}).get('category') == 'NON_COMPETITOR']
         
-        for result in analysis_results:
-            sector = result.get('sector', 'Unknown')
-            if sector not in sector_counts:
-                sector_counts[sector] = 0
-                sector_avg_scores[sector] = []
-            
-            sector_counts[sector] += 1
-            if result.get('total_score'):
-                sector_avg_scores[sector].append(result['total_score'])
-        
-        # Calculate average scores
-        for sector in sector_avg_scores:
-            if sector_avg_scores[sector]:
-                sector_avg_scores[sector] = sum(sector_avg_scores[sector]) / len(sector_avg_scores[sector])
-            else:
-                sector_avg_scores[sector] = 0
-        
-        # Create sector summary table
-        ws['A1'] = "SECTOR DISTRIBUTION ANALYSIS"
+        # Create KPI summary table
+        ws['A1'] = "ANALISI DISTRIBUZIONE PER CATEGORIA KPI"
         ws['A1'].font = Font(bold=True, size=14, color='366092')
+        ws.merge_cells('A1:E1')
         
-        headers = ["Sector", "Count", "Avg Score", "Relevance"]
+        headers = ["Categoria", "Emoji", "Numero", "Percentuale", "Score Medio"]
         for col_idx, header in enumerate(headers, 1):
             cell = ws.cell(row=3, column=col_idx, value=header)
             cell.font = self.styles['header']['font']
@@ -279,30 +265,73 @@ class ReportGenerator:
             cell.alignment = self.styles['header']['alignment']
             cell.border = self.styles['border']
         
+        total = len(analysis_results) if analysis_results else 1
+        
+        categories_data = [
+            ("Competitor Diretti (≥60%)", "🟢", direct, 'E6F9E6'),
+            ("Da Valutare (40-59%)", "🟡", potential, 'FFF9E6'),
+            ("Non Competitor (<40%)", "🔴", non_comp, 'FFE6E6')
+        ]
+        
         row_idx = 4
-        for sector in sorted(sector_counts.keys()):
-            relevant_count = len([r for r in analysis_results 
-                                if r.get('sector') == sector and r.get('is_relevant', True)])
+        for category_name, emoji, competitors, bg_color in categories_data:
+            count = len(competitors)
+            percentage = (count / total) * 100
+            avg_score = sum(c.get('score', 0) for c in competitors) / count if count > 0 else 0
             
             row_data = [
-                sector,
-                sector_counts[sector],
-                sector_avg_scores[sector],
-                f"{relevant_count}/{sector_counts[sector]}"
+                category_name,
+                emoji,
+                count,
+                f"{percentage:.1f}%",
+                f"{avg_score:.1f}%"
             ]
             
             for col_idx, value in enumerate(row_data, 1):
                 cell = ws.cell(row=row_idx, column=col_idx, value=value)
                 cell.border = self.styles['border']
-                
-                if col_idx == 3:  # Average score
-                    cell.number_format = '0.0%'
-                    cell.alignment = self.styles['number']['alignment']
-                else:
-                    cell.font = self.styles['data']['font']
-                    cell.alignment = self.styles['data']['alignment']
+                cell.fill = PatternFill(start_color=bg_color, end_color=bg_color, fill_type='solid')
+                cell.font = self.styles['data']['font']
+                cell.alignment = self.styles['data']['alignment']
             
             row_idx += 1
+        
+        # Aggiungi lista dettagliata per ogni categoria
+        row_idx += 2
+        
+        for category_name, emoji, competitors, bg_color in categories_data:
+            if not competitors:
+                continue
+                
+            ws.cell(row=row_idx, column=1, value=f"{emoji} {category_name}").font = Font(bold=True, size=12)
+            row_idx += 1
+            
+            # Headers per lista
+            sub_headers = ["URL", "Score", "Keywords"]
+            for col_idx, header in enumerate(sub_headers, 1):
+                cell = ws.cell(row=row_idx, column=col_idx, value=header)
+                cell.font = Font(bold=True, size=10)
+                cell.fill = PatternFill(start_color=bg_color, end_color=bg_color, fill_type='solid')
+                cell.border = self.styles['border']
+            
+            row_idx += 1
+            
+            # Competitor list
+            for comp in sorted(competitors, key=lambda x: x.get('score', 0), reverse=True)[:10]:  # Top 10
+                cell_data = [
+                    comp.get('url', 'N/A'),
+                    f"{comp.get('score', 0):.1f}%",
+                    ', '.join(comp.get('keywords_found', []))[:50] + "..."
+                ]
+                
+                for col_idx, value in enumerate(cell_data, 1):
+                    cell = ws.cell(row=row_idx, column=col_idx, value=value)
+                    cell.border = self.styles['border']
+                    cell.font = Font(size=9)
+                
+                row_idx += 1
+            
+            row_idx += 1  # Spazio tra categorie
         
         # Auto-adjust column widths
         self._auto_adjust_columns(ws)

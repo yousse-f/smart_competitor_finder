@@ -12,6 +12,7 @@ from api.analyze_site import router as analyze_site_router
 from api.upload_file import router as upload_file_router
 from api.analyze_bulk import router as analyze_bulk_router
 from api.upload_analyze import router as upload_analyze_router
+from api.analyze_stream import router as analyze_stream_router
 from api.report import router as report_router
 from api.site_summary import router as site_summary_router
 
@@ -40,6 +41,7 @@ app.include_router(analyze_site_router, prefix="/api", tags=["analysis"])
 app.include_router(upload_file_router, prefix="/api", tags=["file-processing"])
 app.include_router(analyze_bulk_router, prefix="/api", tags=["bulk-analysis"])
 app.include_router(upload_analyze_router, prefix="/api", tags=["upload-analysis"])
+app.include_router(analyze_stream_router, prefix="/api", tags=["streaming-analysis"])
 app.include_router(report_router, prefix="/api", tags=["reports"])
 app.include_router(site_summary_router, prefix="/api", tags=["ai-analysis"])
 

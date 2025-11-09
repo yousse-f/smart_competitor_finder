@@ -7,6 +7,10 @@ from sklearn.metrics.pairwise import cosine_similarity
 from openai import AsyncOpenAI
 import hashlib
 import json
+from dotenv import load_dotenv
+
+# Load environment variables before initializing OpenAI client
+load_dotenv()
 
 logger = logging.getLogger(__name__)
 

@@ -9,6 +9,44 @@ from core.keyword_extraction import extract_keywords_bulk
 
 router = APIRouter()
 
+def classify_competitor_status(score: float) -> dict:
+    """
+    Classifica competitor in base allo score con sistema KPI a 3 colori.
+    
+    Returns:
+        dict con category, label, color, priority
+    """
+    if score >= 60:
+        return {
+            "category": "DIRECT",
+            "label": "Competitor Diretto",
+            "label_en": "Direct Competitor",
+            "color": "green",
+            "emoji": "🟢",
+            "priority": 1,
+            "action": "Monitora attentamente"
+        }
+    elif score >= 40:
+        return {
+            "category": "POTENTIAL",
+            "label": "Da Valutare",
+            "label_en": "Potential Competitor",
+            "color": "yellow",
+            "emoji": "🟡",
+            "priority": 2,
+            "action": "Valuta caso per caso"
+        }
+    else:
+        return {
+            "category": "NON_COMPETITOR",
+            "label": "Non Competitor",
+            "label_en": "Not a Competitor",
+            "color": "red",
+            "emoji": "🔴",
+            "priority": 3,
+            "action": "Ignora"
+        }
+
 class CompetitorMatch:
     def __init__(self, url: str, score: int, keywords_found: List[str], title: str = "", description: str = ""):
         self.url = url
@@ -16,6 +54,8 @@ class CompetitorMatch:
         self.keywords_found = keywords_found
         self.title = title
         self.description = description
+        # Aggiungi classificazione KPI automatica
+        self.status = classify_competitor_status(score)
 
 @router.post("/upload-and-analyze")
 async def upload_and_analyze(
@@ -109,10 +149,15 @@ async def upload_and_analyze(
         total_competitors = len(matches)
         average_score = sum(match.score for match in matches) / len(matches) if matches else 0
         
+        # Calcola statistiche per categoria KPI
+        direct_competitors = [m for m in matches if m.status['category'] == 'DIRECT']
+        potential_competitors = [m for m in matches if m.status['category'] == 'POTENTIAL']
+        non_competitors = [m for m in matches if m.status['category'] == 'NON_COMPETITOR']
+        
         # Generate report ID
         report_id = f"RPT_{datetime.now().strftime('%Y%m%d_%H%M%S')}"
         
-        # Format response for frontend
+        # Format response for frontend con classificazione KPI
         response = {
             "status": "success",
             "total_competitors": total_competitors,
@@ -122,13 +167,32 @@ async def upload_and_analyze(
                     "score": match.score,
                     "keywords_found": match.keywords_found,
                     "title": match.title,
-                    "description": match.description
+                    "description": match.description,
+                    "competitor_status": match.status  # 🆕 Aggiungi status KPI
                 }
                 for match in matches
             ],
             "average_score": round(average_score, 1),
             "report_id": report_id,
-            "message": f"Analyzed {total_competitors} competitors successfully"
+            "message": f"Analyzed {total_competitors} competitors successfully",
+            # 🆕 Aggiungi summary per categoria
+            "summary_by_status": {
+                "direct": {
+                    "count": len(direct_competitors),
+                    "label": "Competitor Diretti",
+                    "emoji": "🟢"
+                },
+                "potential": {
+                    "count": len(potential_competitors),
+                    "label": "Da Valutare",
+                    "emoji": "🟡"
+                },
+                "non_competitor": {
+                    "count": len(non_competitors),
+                    "label": "Non Competitor",
+                    "emoji": "🔴"
+                }
+            }
         }
         
         logging.info(f"Bulk analysis completed: {total_competitors} competitors, avg score: {average_score:.1f}")
@@ -143,47 +207,82 @@ async def upload_and_analyze(
         )
 
 async def analyze_competitors_bulk(urls: List[str], keywords: List[str]) -> List[CompetitorMatch]:
-    """Analyze multiple competitor URLs against target keywords."""
+    """
+    🎯 REAL ANALYSIS with keyword quality weighting system.
+    Uses the actual matching engine with semantic analysis and sector relevance.
+    """
+    from core.hybrid_scraper_v2 import hybrid_scraper_v2
+    from core.matching import keyword_matcher
+    from bs4 import BeautifulSoup
+    import aiohttp
+    import ssl
     
     matches = []
     
-    # Limit to first 10 URLs for demo (remove in production)
-    urls_to_process = urls[:10] if len(urls) > 10 else urls
+    # Process all URLs (no artificial limit)
+    logging.info(f"🚀 Starting REAL analysis for {len(urls)} competitors with {len(keywords)} target keywords")
     
-    for i, url in enumerate(urls_to_process):
+    for i, url in enumerate(urls):
         try:
-            # Simulate analysis delay
-            import asyncio
-            await asyncio.sleep(0.5)  # Small delay to simulate processing
+            logging.info(f"📊 Processing {i+1}/{len(urls)}: {url}")
             
-            # For demo purposes, generate realistic fake results
-            # In production, this would call the real extraction function
+            # 1. Scrape competitor site content
+            scrape_result = await hybrid_scraper_v2.scrape_intelligent(url, max_keywords=20, use_advanced=True)
             
-            # Simulate keyword matches
-            import random
-            num_matches = random.randint(0, min(len(keywords), 8))
-            found_keywords = random.sample(keywords, num_matches) if num_matches > 0 else []
+            if not scrape_result.get('status') == 'success':
+                logging.warning(f"⚠️ Scraping failed for {url}, skipping...")
+                continue
             
-            # Calculate score based on matches
-            score = min(100, (num_matches / len(keywords)) * 100 + random.randint(-10, 10))
-            score = max(0, int(score))
+            # Extract text content from scraping result
+            # The scraper returns keywords as dicts, but we need the full text for matching
+            try:
+                ssl_context = ssl.create_default_context()
+                ssl_context.check_hostname = False
+                ssl_context.verify_mode = ssl.CERT_NONE
+                
+                timeout = aiohttp.ClientTimeout(total=10)
+                async with aiohttp.ClientSession(timeout=timeout) as session:
+                    async with session.get(url, ssl=ssl_context) as response:
+                        if response.status == 200:
+                            html_content = await response.text()
+                            soup = BeautifulSoup(html_content, 'html.parser')
+                            for element in soup(["script", "style", "meta", "link"]):
+                                element.decompose()
+                            full_text = soup.get_text()
+                            full_text = ' '.join(full_text.split())  # Clean whitespace
+                        else:
+                            full_text = ""
+            except Exception as text_error:
+                logging.warning(f"Could not extract full text from {url}: {text_error}")
+                full_text = ""
             
-            # Generate realistic titles
-            domain = url.replace('https://', '').replace('http://', '').split('/')[0]
-            title = f"Competitor Analysis - {domain.replace('www.', '').title()}"
+            # 2. Calculate match score using REAL matching engine with quality weighting
+            match_results = await keyword_matcher.calculate_match_score(
+                target_keywords=keywords,
+                site_content=full_text,
+                business_context=None,
+                site_title=scrape_result.get('title', ''),
+                meta_description=scrape_result.get('description', ''),
+                client_sector_data=None
+            )
+            
+            # 3. Create match object with real data
+            score = int(match_results['match_score'])
+            found_keywords = match_results['found_keywords']
             
             matches.append(CompetitorMatch(
                 url=url,
                 score=score,
                 keywords_found=found_keywords,
-                title=title,
-                description=f"Competitor analysis for {domain}"
+                title=scrape_result.get('title', ''),
+                description=scrape_result.get('description', '')
             ))
             
-            logging.info(f"Analyzed {url}: {score}% match with {len(found_keywords)} keywords")
+            logging.info(f"✅ {url}: {score}% match ({len(found_keywords)} keywords found)")
+            logging.info(f"   Quality breakdown: {match_results.get('score_details', {})}")
             
         except Exception as e:
-            logging.error(f"Error analyzing {url}: {str(e)}")
+            logging.error(f"❌ Error processing {url}: {str(e)}")
             # Add error entry
             matches.append(CompetitorMatch(
                 url=url,
@@ -195,5 +294,7 @@ async def analyze_competitors_bulk(urls: List[str], keywords: List[str]) -> List
     
     # Sort by score (highest first)
     matches.sort(key=lambda x: x.score, reverse=True)
+    
+    logging.info(f"🎉 Analysis complete: {len(matches)}/{len(urls)} competitors successfully analyzed")
     
     return matches
