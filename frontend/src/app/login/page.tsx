@@ -4,7 +4,7 @@ import React, { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { useForm } from 'react-hook-form';
 import { motion } from 'framer-motion';
-import { Activity, Mail, Lock, Eye, EyeOff } from 'lucide-react';
+import { Activity, Mail, Lock, Eye, EyeOff, AlertCircle, ExternalLink } from 'lucide-react';
 import { Button, Input, Card, CardContent } from '@/components/ui';
 
 interface LoginForm {
@@ -89,6 +89,44 @@ const LoginPage: React.FC = () => {
                 Accesso riservato ai consulenti registrati
               </p>
             </div>
+
+            {/* Info Box - Richiesta Accesso */}
+            <motion.div
+              initial={{ opacity: 0, y: 10 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.3 }}
+              className="mb-6 p-4 bg-blue-500/10 border border-blue-500/20 rounded-lg"
+            >
+              <div className="flex items-start gap-3">
+                <AlertCircle className="w-5 h-5 text-blue-400 flex-shrink-0 mt-0.5" />
+                <div className="flex-1">
+                  <h3 className="text-sm font-semibold text-blue-300 mb-2">
+                    Non hai ancora le credenziali di accesso?
+                  </h3>
+                  <p className="text-xs text-slate-300 mb-3">
+                    Contatta Studio Innovativo per richiedere l'attivazione del tuo account e scoprire come Smart Competitor Finder può aiutarti.
+                  </p>
+                  <div className="space-y-2">
+                    <a 
+                      href="mailto:info@studioinnovativo.it"
+                      className="flex items-center gap-2 text-xs text-cyan-400 hover:text-cyan-300 transition-colors"
+                    >
+                      <Mail className="w-3 h-3" />
+                      info@studioinnovativo.it
+                    </a>
+                    <a 
+                      href="https://www.studioinnovativo.it"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="flex items-center gap-2 text-xs text-cyan-400 hover:text-cyan-300 transition-colors"
+                    >
+                      <ExternalLink className="w-3 h-3" />
+                      Visita il sito per maggiori informazioni
+                    </a>
+                  </div>
+                </div>
+              </div>
+            </motion.div>
 
             {/* Login Form */}
             <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
