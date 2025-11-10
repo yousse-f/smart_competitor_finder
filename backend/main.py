@@ -15,6 +15,7 @@ from api.upload_analyze import router as upload_analyze_router
 from api.analyze_stream import router as analyze_stream_router
 from api.report import router as report_router
 from api.site_summary import router as site_summary_router
+from api.list_analyses import router as list_analyses_router
 
 # Initialize FastAPI app
 app = FastAPI(
@@ -44,6 +45,7 @@ app.include_router(upload_analyze_router, prefix="/api", tags=["upload-analysis"
 app.include_router(analyze_stream_router, prefix="/api", tags=["streaming-analysis"])
 app.include_router(report_router, prefix="/api", tags=["reports"])
 app.include_router(site_summary_router, prefix="/api", tags=["ai-analysis"])
+app.include_router(list_analyses_router, tags=["analysis-management"])
 
 @app.get("/")
 async def root():
