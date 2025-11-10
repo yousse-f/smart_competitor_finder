@@ -10,6 +10,13 @@ from datetime import datetime
 
 from core.keyword_extraction import extract_keywords_bulk
 from .upload_analyze import classify_competitor_status, CompetitorMatch, analyze_competitors_bulk
+from .analysis_manager import (
+    create_analysis_id,
+    create_analysis_file,
+    update_analysis_progress,
+    complete_analysis,
+    fail_analysis
+)
 
 router = APIRouter()
 
@@ -83,9 +90,25 @@ async def upload_and_analyze_stream(
         if not urls:
             raise HTTPException(status_code=400, detail="No valid URLs found in the file")
         
+        # 🆕 Generate analysis ID and create persistent file
+        analysis_id = create_analysis_id()
+        client_url = "bulk_analysis"  # For bulk analysis, we don't have a single client URL
+        
+        try:
+            create_analysis_file(
+                analysis_id=analysis_id,
+                client_url=client_url,
+                client_keywords=keywords_list,
+                total_sites=len(urls)
+            )
+            logging.info(f"✅ Created analysis file: {analysis_id}")
+        except Exception as create_error:
+            logging.error(f"❌ Failed to create analysis file: {create_error}")
+            # Continue anyway - analysis will work but won't be persistent
+        
         # Return SSE stream
         return StreamingResponse(
-            stream_analysis_progress(urls, keywords_list),
+            stream_analysis_progress(urls, keywords_list, analysis_id),
             media_type="text/event-stream",
             headers={
                 "Cache-Control": "no-cache",
@@ -99,11 +122,13 @@ async def upload_and_analyze_stream(
         raise HTTPException(status_code=500, detail=f"Failed to process file: {str(e)}")
 
 
-async def stream_analysis_progress(urls: List[str], keywords: List[str]):
+async def stream_analysis_progress(urls: List[str], keywords: List[str], analysis_id: str):
     """
     🎯 Generator that yields SSE events for each analyzed competitor.
+    🆕 Now saves progress to persistent JSON file
     
     Event format:
+    data: {"event": "started", "analysis_id": "...", "total": 10}
     data: {"event": "progress", "url": "...", "current": 1, "total": 10, "percentage": 10}
     data: {"event": "result", "url": "...", "score": 75, "keywords_found": [...]}
     data: {"event": "complete", "matches": [...], "summary": {...}}
@@ -117,139 +142,171 @@ async def stream_analysis_progress(urls: List[str], keywords: List[str]):
     matches = []
     total_urls = len(urls)
     
-    # Send initial event
-    yield f"data: {json.dumps({'event': 'start', 'total': total_urls})}\n\n"
+    # 🆕 Send initial event with analysis_id
+    yield f"data: {json.dumps({'event': 'started', 'analysis_id': analysis_id, 'total': total_urls, 'message': 'Analisi avviata con successo'})}\n\n"
     
-    for i, url in enumerate(urls):
-        current_index = i + 1
-        percentage = int((current_index / total_urls) * 100)
-        
-        # Send progress event
-        yield f"data: {json.dumps({'event': 'progress', 'url': url, 'current': current_index, 'total': total_urls, 'percentage': percentage})}\n\n"
-        
-        try:
-            logging.info(f"📊 Streaming analysis {current_index}/{total_urls}: {url}")
+    try:
+        for i, url in enumerate(urls):
+            current_index = i + 1
+            percentage = int((current_index / total_urls) * 100)
             
-            # 1. Scrape competitor site
-            scrape_result = await hybrid_scraper_v2.scrape_intelligent(url, max_keywords=20, use_advanced=True)
+            # Send progress event
+            yield f"data: {json.dumps({'event': 'progress', 'url': url, 'current': current_index, 'total': total_urls, 'percentage': percentage})}\n\n"
             
-            if not scrape_result.get('status') == 'success':
-                logging.warning(f"⚠️ Scraping failed for {url}")
-                # Send error event
-                yield f"data: {json.dumps({'event': 'error', 'url': url, 'message': 'Scraping failed'})}\n\n"
-                continue
-            
-            # Extract full text
             try:
-                ssl_context = ssl.create_default_context()
-                ssl_context.check_hostname = False
-                ssl_context.verify_mode = ssl.CERT_NONE
+                logging.info(f"📊 Streaming analysis {current_index}/{total_urls}: {url}")
                 
-                timeout = aiohttp.ClientTimeout(total=10)
-                async with aiohttp.ClientSession(timeout=timeout) as session:
-                    async with session.get(url, ssl=ssl_context) as response:
-                        if response.status == 200:
-                            html_content = await response.text()
-                            soup = BeautifulSoup(html_content, 'html.parser')
-                            for element in soup(["script", "style", "meta", "link"]):
-                                element.decompose()
-                            full_text = soup.get_text()
-                            full_text = ' '.join(full_text.split())
-                        else:
-                            full_text = ""
-            except Exception:
-                full_text = ""
-            
-            # 2. Calculate match score
-            match_results = await keyword_matcher.calculate_match_score(
-                target_keywords=keywords,
-                site_content=full_text,
-                business_context=None,
-                site_title=scrape_result.get('title', ''),
-                meta_description=scrape_result.get('description', ''),
-                client_sector_data=None
-            )
-            
-            score = int(match_results['match_score'])
-            found_keywords = match_results['found_keywords']
-            
-            match = CompetitorMatch(
-                url=url,
-                score=score,
-                keywords_found=found_keywords,
-                title=scrape_result.get('title', ''),
-                description=scrape_result.get('description', '')
-            )
-            matches.append(match)
-            
-            # Send result event
-            yield f"data: {json.dumps({'event': 'result', 'url': url, 'score': score, 'keywords_found': found_keywords, 'title': match.title})}\n\n"
-            
-            logging.info(f"✅ {url}: {score}% match")
-            
-        except Exception as e:
-            logging.error(f"❌ Error processing {url}: {str(e)}")
-            # Send error event but continue
-            yield f"data: {json.dumps({'event': 'error', 'url': url, 'message': str(e)})}\n\n"
-            
-            matches.append(CompetitorMatch(
-                url=url,
-                score=0,
-                keywords_found=[],
-                title=f"Error: {url}",
-                description=f"Analysis failed: {str(e)}"
-            ))
-    
-    # Sort by score
-    matches.sort(key=lambda x: x.score, reverse=True)
-    
-    # Calculate summary
-    total_competitors = len(matches)
-    average_score = sum(match.score for match in matches) / len(matches) if matches else 0
-    
-    direct_competitors = [m for m in matches if m.status['category'] == 'DIRECT']
-    potential_competitors = [m for m in matches if m.status['category'] == 'POTENTIAL']
-    non_competitors = [m for m in matches if m.status['category'] == 'NON_COMPETITOR']
-    
-    report_id = f"RPT_{datetime.now().strftime('%Y%m%d_%H%M%S')}"
-    
-    # Send completion event with full results
-    final_response = {
-        "event": "complete",
-        "status": "success",
-        "total_competitors": total_competitors,
-        "matches": [
-            {
-                "url": match.url,
-                "score": match.score,
-                "keywords_found": match.keywords_found,
-                "title": match.title,
-                "description": match.description,
-                "competitor_status": match.status
-            }
-            for match in matches
-        ],
-        "average_score": round(average_score, 1),
-        "report_id": report_id,
-        "summary_by_status": {
-            "direct": {
-                "count": len(direct_competitors),
-                "label": "Competitor Diretti",
-                "emoji": "🟢"
-            },
-            "potential": {
-                "count": len(potential_competitors),
-                "label": "Da Valutare",
-                "emoji": "🟡"
-            },
-            "non_competitor": {
-                "count": len(non_competitors),
-                "label": "Non Competitor",
-                "emoji": "🔴"
+                # 1. Scrape competitor site
+                scrape_result = await hybrid_scraper_v2.scrape_intelligent(url, max_keywords=20, use_advanced=True)
+                
+                if not scrape_result.get('status') == 'success':
+                    logging.warning(f"⚠️ Scraping failed for {url}")
+                    # Send error event
+                    yield f"data: {json.dumps({'event': 'error', 'url': url, 'message': 'Scraping failed'})}\n\n"
+                    continue
+                
+                # Extract full text
+                try:
+                    ssl_context = ssl.create_default_context()
+                    ssl_context.check_hostname = False
+                    ssl_context.verify_mode = ssl.CERT_NONE
+                    
+                    timeout = aiohttp.ClientTimeout(total=10)
+                    async with aiohttp.ClientSession(timeout=timeout) as session:
+                        async with session.get(url, ssl=ssl_context) as response:
+                            if response.status == 200:
+                                html_content = await response.text()
+                                soup = BeautifulSoup(html_content, 'html.parser')
+                                for element in soup(["script", "style", "meta", "link"]):
+                                    element.decompose()
+                                full_text = soup.get_text()
+                                full_text = ' '.join(full_text.split())
+                            else:
+                                full_text = ""
+                except Exception:
+                    full_text = ""
+                
+                # 2. Calculate match score
+                match_results = await keyword_matcher.calculate_match_score(
+                    target_keywords=keywords,
+                    site_content=full_text,
+                    business_context=None,
+                    site_title=scrape_result.get('title', ''),
+                    meta_description=scrape_result.get('description', ''),
+                    client_sector_data=None
+                )
+                
+                score = int(match_results['match_score'])
+                found_keywords = match_results['found_keywords']
+                
+                match = CompetitorMatch(
+                    url=url,
+                    score=score,
+                    keywords_found=found_keywords,
+                    title=scrape_result.get('title', ''),
+                    description=scrape_result.get('description', '')
+                )
+                matches.append(match)
+                
+                # Send result event
+                yield f"data: {json.dumps({'event': 'result', 'url': url, 'score': score, 'keywords_found': found_keywords, 'title': match.title})}\n\n"
+                
+                logging.info(f"✅ {url}: {score}% match")
+                
+                # 💾 Save progress to file
+                update_analysis_progress(
+                    analysis_id=analysis_id,
+                    processed_sites=current_index,
+                    result={
+                        'url': url,
+                        'score': score,
+                        'keywords_found': found_keywords,
+                        'title': match.title,
+                        'description': match.description,
+                        'status': match.status
+                    }
+                )
+                
+            except Exception as e:
+                logging.error(f"❌ Error processing {url}: {str(e)}")
+                # Send error event but continue
+                yield f"data: {json.dumps({'event': 'error', 'url': url, 'message': str(e)})}\n\n"
+                
+                matches.append(CompetitorMatch(
+                    url=url,
+                    score=0,
+                    keywords_found=[],
+                    title=f"Error: {url}",
+                    description=f"Analysis failed: {str(e)}"
+                ))
+        
+        # Sort by score
+        matches.sort(key=lambda x: x.score, reverse=True)
+        
+        # 💾 Mark analysis as complete
+        complete_analysis(analysis_id)
+        
+        # Calculate summary
+        total_competitors = len(matches)
+        average_score = sum(match.score for match in matches) / len(matches) if matches else 0
+        
+        direct_competitors = [m for m in matches if m.status['category'] == 'DIRECT']
+        potential_competitors = [m for m in matches if m.status['category'] == 'POTENTIAL']
+        non_competitors = [m for m in matches if m.status['category'] == 'NON_COMPETITOR']
+        
+        report_id = f"RPT_{datetime.now().strftime('%Y%m%d_%H%M%S')}"
+        
+        # Send completion event with full results
+        final_response = {
+            "event": "complete",
+            "status": "success",
+            "total_competitors": total_competitors,
+            "matches": [
+                {
+                    "url": match.url,
+                    "score": match.score,
+                    "keywords_found": match.keywords_found,
+                    "title": match.title,
+                    "description": match.description,
+                    "competitor_status": match.status
+                }
+                for match in matches
+            ],
+            "average_score": round(average_score, 1),
+            "report_id": report_id,
+            "summary_by_status": {
+                "direct": {
+                    "count": len(direct_competitors),
+                    "label": "Competitor Diretti",
+                    "emoji": "🟢"
+                },
+                "potential": {
+                    "count": len(potential_competitors),
+                    "label": "Da Valutare",
+                    "emoji": "🟡"
+                },
+                "non_competitor": {
+                    "count": len(non_competitors),
+                    "label": "Non Competitor",
+                    "emoji": "🔴"
+                }
             }
         }
-    }
+        
+        yield f"data: {json.dumps(final_response)}\n\n"
+        
+        logging.info(f"🎉 Streaming analysis complete: {total_competitors} competitors")
     
-    yield f"data: {json.dumps(final_response)}\n\n"
-    
-    logging.info(f"🎉 Streaming analysis complete: {total_competitors} competitors")
+    except Exception as e:
+        # 💾 Mark analysis as failed
+        fail_analysis(analysis_id, str(e))
+        
+        logging.error(f"❌ Critical error in analysis {analysis_id}: {str(e)}")
+        
+        # Send error event
+        error_response = {
+            "event": "error",
+            "status": "failed",
+            "message": f"Analisi fallita: {str(e)}"
+        }
+        yield f"data: {json.dumps(error_response)}\n\n"
