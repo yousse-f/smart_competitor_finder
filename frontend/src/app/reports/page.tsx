@@ -57,6 +57,12 @@ export default function ReportsPage() {
   const [viewReportId, setViewReportId] = useState<string | null>(null);
   const [liveAnalyses, setLiveAnalyses] = useState<any[]>([]);
   const [isLoadingLiveAnalyses, setIsLoadingLiveAnalyses] = useState(true);
+  
+  // 🆕 Stati per streaming live
+  const [streamingAnalysisId, setStreamingAnalysisId] = useState<string | null>(null);
+  const [streamProgress, setStreamProgress] = useState(0);
+  const [streamCurrentUrl, setStreamCurrentUrl] = useState('');
+  const [streamResults, setStreamResults] = useState<any[]>([]);
 
   // Get URL search params client-side
   useEffect(() => {
@@ -116,6 +122,40 @@ export default function ReportsPage() {
   const loadLiveAnalyses = async () => {
     try {
       const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000';
+      
+      // 🔍 Controlla se c'è un'analisi in corso nel localStorage
+      const currentAnalysisId = localStorage.getItem('current_analysis_id');
+      const analysisStartedAt = localStorage.getItem('analysis_started_at');
+      
+      if (currentAnalysisId) {
+        console.log('🔍 Trovata analisi in localStorage:', currentAnalysisId);
+        
+        // Carica i dettagli dell'analisi specifica
+        try {
+          const analysisResponse = await fetch(`${API_BASE_URL}/api/analyses/${currentAnalysisId}`);
+          if (analysisResponse.ok) {
+            const analysisData = await analysisResponse.json();
+            
+            // Se l'analisi è completata o fallita, rimuovi dal localStorage
+            if (analysisData.metadata.status === 'completed' || analysisData.metadata.status === 'failed') {
+              console.log('✅ Analisi terminata, rimuovo da localStorage');
+              localStorage.removeItem('current_analysis_id');
+              localStorage.removeItem('analysis_started_at');
+            } else {
+              console.log('📊 Analisi ancora in corso:', analysisData.metadata.progress + '%');
+            }
+          } else if (analysisResponse.status === 404) {
+            // Analisi non trovata, rimuovi dal localStorage
+            console.log('⚠️ Analisi non trovata, rimuovo da localStorage');
+            localStorage.removeItem('current_analysis_id');
+            localStorage.removeItem('analysis_started_at');
+          }
+        } catch (error) {
+          console.error('❌ Errore nel recupero analisi specifica:', error);
+        }
+      }
+      
+      // Carica tutte le analisi
       const response = await fetch(`${API_BASE_URL}/api/analyses?limit=50`);
       
       if (response.ok) {
@@ -152,6 +192,86 @@ export default function ReportsPage() {
     
     return () => clearInterval(intervalId);
   }, []); // Remove reports from dependencies
+
+  // 🆕 Funzione per riconnettersi allo stream di un'analisi
+  const reconnectToStream = async (analysisId: string) => {
+    try {
+      const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000';
+      setStreamingAnalysisId(analysisId);
+      setStreamResults([]);
+      setStreamProgress(0);
+      
+      console.log('🔄 Reconnecting to stream:', analysisId);
+      
+      const response = await fetch(`${API_BASE_URL}/api/analyses/${analysisId}/stream`);
+      
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+      
+      const reader = response.body?.getReader();
+      const decoder = new TextDecoder();
+      
+      if (!reader) {
+        throw new Error('No response body reader available');
+      }
+      
+      let buffer = '';
+      
+      while (true) {
+        const { done, value } = await reader.read();
+        
+        if (done) break;
+        
+        buffer += decoder.decode(value, { stream: true });
+        const lines = buffer.split('\n');
+        buffer = lines.pop() || '';
+        
+        for (const line of lines) {
+          if (line.startsWith('data: ')) {
+            const data = JSON.parse(line.slice(6));
+            
+            console.log('📨 Stream event:', data.event);
+            
+            switch (data.event) {
+              case 'reconnected':
+                console.log('🔄 Reconnected:', data.status);
+                if (data.current && data.total) {
+                  setStreamProgress(Math.round((data.current / data.total) * 100));
+                }
+                break;
+                
+              case 'result':
+                console.log('✅ Result:', data.url, data.score);
+                setStreamResults(prev => [...prev, data]);
+                break;
+                
+              case 'complete':
+                console.log('🎉 Stream complete');
+                setStreamProgress(100);
+                // Ricarica le analisi per aggiornare lo stato
+                setTimeout(() => {
+                  loadLiveAnalyses();
+                  setStreamingAnalysisId(null);
+                }, 2000);
+                break;
+                
+              case 'error':
+                console.error('❌ Stream error:', data.message);
+                alert(`Errore: ${data.message}`);
+                setStreamingAnalysisId(null);
+                break;
+            }
+          }
+        }
+      }
+      
+    } catch (error) {
+      console.error('❌ Error reconnecting to stream:', error);
+      alert('Errore nella riconnessione allo stream');
+      setStreamingAnalysisId(null);
+    }
+  };
 
   // Separate useEffect for handling specific report view
   useEffect(() => {
@@ -812,23 +932,39 @@ export default function ReportsPage() {
             <div className="space-y-3">
               {liveAnalyses
                 .filter(a => a.status === 'in_progress')
-                .map((analysis) => (
+                .map((analysis) => {
+                  // 🔍 Controlla se questa è l'analisi corrente da localStorage
+                  const currentAnalysisId = localStorage.getItem('current_analysis_id');
+                  const isCurrentAnalysis = analysis.id === currentAnalysisId;
+                  
+                  return (
                   <div
                     key={analysis.id}
-                    className="p-4 bg-slate-800/50 rounded-lg border border-blue-500/20 hover:border-blue-500/40 transition-colors"
+                    className={`p-4 bg-slate-800/50 rounded-lg border transition-colors ${
+                      isCurrentAnalysis 
+                        ? 'border-green-500/40 bg-green-500/5' 
+                        : 'border-blue-500/20 hover:border-blue-500/40'
+                    }`}
                   >
                     <div className="flex items-center justify-between mb-3">
                       <div className="flex-1">
-                        <p className="text-slate-100 font-medium mb-1">
-                          Analisi {analysis.id}
-                        </p>
+                        <div className="flex items-center gap-2 mb-1">
+                          <p className="text-slate-100 font-medium">
+                            Analisi {analysis.id}
+                          </p>
+                          {isCurrentAnalysis && (
+                            <Badge className="bg-green-500/20 text-green-400 border-green-500/30 text-xs px-2 py-0.5">
+                              🔴 LIVE
+                            </Badge>
+                          )}
+                        </div>
                         <p className="text-sm text-slate-400">
                           Avviata: {new Date(analysis.started_at).toLocaleString('it-IT')}
                         </p>
                       </div>
                       <div className="text-right">
                         <p className="text-2xl font-bold text-blue-400">
-                          {analysis.progress}%
+                          {streamingAnalysisId === analysis.id ? streamProgress : analysis.progress}%
                         </p>
                         <p className="text-xs text-slate-400">
                           {analysis.processed_sites}/{analysis.total_sites} siti
@@ -840,28 +976,27 @@ export default function ReportsPage() {
                     <div className="w-full bg-slate-700/50 rounded-full h-2 mb-3 overflow-hidden">
                       <div 
                         className="bg-gradient-to-r from-blue-500 to-purple-500 h-2 rounded-full transition-all duration-500"
-                        style={{ width: `${analysis.progress}%` }}
+                        style={{ width: `${streamingAnalysisId === analysis.id ? streamProgress : analysis.progress}%` }}
                       ></div>
                     </div>
                     
                     <div className="flex items-center justify-between">
                       <Badge className="badge-info">
-                        In Corso
+                        {streamingAnalysisId === analysis.id ? '🔴 Streaming Live' : 'In Corso'}
                       </Badge>
                       <Button
-                        onClick={() => {
-                          // TODO: Implementare riconnessione stream
-                          alert('Riconnessione allo stream in arrivo!');
-                        }}
+                        onClick={() => reconnectToStream(analysis.id)}
                         variant="secondary"
                         size="sm"
+                        disabled={streamingAnalysisId === analysis.id}
                       >
                         <Eye className="w-4 h-4 mr-2" />
-                        Visualizza
+                        {streamingAnalysisId === analysis.id ? 'Connesso' : 'Visualizza Live'}
                       </Button>
                     </div>
                   </div>
-                ))}
+                );
+              })}
             </div>
           </motion.div>
         )}
