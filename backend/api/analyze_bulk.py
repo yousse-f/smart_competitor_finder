@@ -160,21 +160,31 @@ async def list_analyses():
 
 @router.delete("/analyze-bulk/{analysis_id}")
 async def delete_analysis(analysis_id: str):
-    """Delete a specific analysis from memory."""
+    """Delete a specific analysis from memory. Supports partial ID matching."""
     try:
-        if analysis_id not in analysis_status:
-            raise HTTPException(status_code=404, detail="Analysis not found")
+        # Try exact match first
+        if analysis_id in analysis_status:
+            target_id = analysis_id
+        else:
+            # Try to find ID that contains the provided ID (for legacy formats)
+            matching_ids = [aid for aid in analysis_status.keys() if analysis_id in aid or aid in analysis_id]
+            if not matching_ids:
+                logging.warning(f"Analysis not found: {analysis_id}. Available IDs: {list(analysis_status.keys())}")
+                raise HTTPException(status_code=404, detail=f"Analysis not found: {analysis_id}")
+            target_id = matching_ids[0]
+            logging.info(f"Found matching analysis: {target_id} for request: {analysis_id}")
         
         # Remove from both dictionaries
-        del analysis_status[analysis_id]
-        if analysis_id in analysis_results:
-            del analysis_results[analysis_id]
+        del analysis_status[target_id]
+        if target_id in analysis_results:
+            del analysis_results[target_id]
         
-        logging.info(f"Deleted analysis {analysis_id}")
+        logging.info(f"Deleted analysis {target_id}")
         
         return {
             'status': 'success',
-            'message': f'Analysis {analysis_id} deleted successfully'
+            'message': f'Analysis {target_id} deleted successfully',
+            'deleted_id': target_id
         }
         
     except HTTPException:
