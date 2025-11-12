@@ -170,6 +170,57 @@ export default function ReportsPage() {
     }
   };
 
+  // 🆕 Funzione per eliminare analisi vecchie dal backend
+  const cleanupOldAnalyses = async (daysOld: number = 1) => {
+    if (!confirm(`Vuoi eliminare tutte le analisi più vecchie di ${daysOld} ${daysOld === 1 ? 'giorno' : 'giorni'}?`)) {
+      return;
+    }
+    
+    try {
+      const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000';
+      const response = await fetch(`${API_BASE_URL}/api/analyze-bulk?days_old=${daysOld}`, {
+        method: 'DELETE'
+      });
+      
+      if (response.ok) {
+        const data = await response.json();
+        alert(`✅ Eliminate ${data.deleted_count} analisi vecchie. Rimangono ${data.remaining_analyses} analisi.`);
+        // Ricarica le analisi
+        loadLiveAnalyses();
+      } else {
+        throw new Error('Errore nella pulizia delle analisi');
+      }
+    } catch (error) {
+      console.error('❌ Error cleaning up analyses:', error);
+      alert('Errore durante la pulizia delle analisi');
+    }
+  };
+
+  // 🆕 Funzione per eliminare una singola analisi
+  const deleteSingleAnalysis = async (analysisId: string) => {
+    if (!confirm(`Vuoi eliminare l'analisi ${analysisId}?`)) {
+      return;
+    }
+    
+    try {
+      const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000';
+      const response = await fetch(`${API_BASE_URL}/api/analyze-bulk/${analysisId}`, {
+        method: 'DELETE'
+      });
+      
+      if (response.ok) {
+        alert(`✅ Analisi ${analysisId} eliminata con successo`);
+        // Ricarica le analisi
+        loadLiveAnalyses();
+      } else {
+        throw new Error('Errore nell\'eliminazione dell\'analisi');
+      }
+    } catch (error) {
+      console.error('❌ Error deleting analysis:', error);
+      alert('Errore durante l\'eliminazione dell\'analisi');
+    }
+  };
+
   // Load reports from localStorage on component mount
   useEffect(() => {
     try {
@@ -919,14 +970,25 @@ export default function ReportsPage() {
                   Analisi in Corso ({liveAnalyses.filter(a => a.status === 'in_progress').length})
                 </h3>
               </div>
-              <Button
-                onClick={loadLiveAnalyses}
-                variant="secondary"
-                size="sm"
-              >
-                <RefreshCw className="w-4 h-4 mr-2" />
-                Aggiorna
-              </Button>
+              <div className="flex gap-2">
+                <Button
+                  onClick={() => cleanupOldAnalyses(1)}
+                  variant="secondary"
+                  size="sm"
+                  className="text-red-400 hover:text-red-300"
+                >
+                  <Trash2 className="w-4 h-4 mr-2" />
+                  Pulisci Vecchie
+                </Button>
+                <Button
+                  onClick={loadLiveAnalyses}
+                  variant="secondary"
+                  size="sm"
+                >
+                  <RefreshCw className="w-4 h-4 mr-2" />
+                  Aggiorna
+                </Button>
+              </div>
             </div>
             
             <div className="space-y-3">
@@ -984,15 +1046,25 @@ export default function ReportsPage() {
                       <Badge className="badge-info">
                         {streamingAnalysisId === analysis.id ? '🔴 Streaming Live' : 'In Corso'}
                       </Badge>
-                      <Button
-                        onClick={() => reconnectToStream(analysis.id)}
-                        variant="secondary"
-                        size="sm"
-                        disabled={streamingAnalysisId === analysis.id}
-                      >
-                        <Eye className="w-4 h-4 mr-2" />
-                        {streamingAnalysisId === analysis.id ? 'Connesso' : 'Visualizza Live'}
-                      </Button>
+                      <div className="flex gap-2">
+                        <Button
+                          onClick={() => deleteSingleAnalysis(analysis.id)}
+                          variant="ghost"
+                          size="sm"
+                          className="text-red-400 hover:text-red-300"
+                        >
+                          <Trash2 className="w-4 h-4" />
+                        </Button>
+                        <Button
+                          onClick={() => reconnectToStream(analysis.id)}
+                          variant="secondary"
+                          size="sm"
+                          disabled={streamingAnalysisId === analysis.id}
+                        >
+                          <Eye className="w-4 h-4 mr-2" />
+                          {streamingAnalysisId === analysis.id ? 'Connesso' : 'Visualizza Live'}
+                        </Button>
+                      </div>
                     </div>
                   </div>
                 );

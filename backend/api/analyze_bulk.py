@@ -158,6 +158,81 @@ async def list_analyses():
             detail=f"Failed to list analyses: {str(e)}"
         )
 
+@router.delete("/analyze-bulk/{analysis_id}")
+async def delete_analysis(analysis_id: str):
+    """Delete a specific analysis from memory."""
+    try:
+        if analysis_id not in analysis_status:
+            raise HTTPException(status_code=404, detail="Analysis not found")
+        
+        # Remove from both dictionaries
+        del analysis_status[analysis_id]
+        if analysis_id in analysis_results:
+            del analysis_results[analysis_id]
+        
+        logging.info(f"Deleted analysis {analysis_id}")
+        
+        return {
+            'status': 'success',
+            'message': f'Analysis {analysis_id} deleted successfully'
+        }
+        
+    except HTTPException:
+        raise
+    except Exception as e:
+        logging.error(f"Error deleting analysis {analysis_id}: {str(e)}")
+        raise HTTPException(
+            status_code=500,
+            detail=f"Failed to delete analysis: {str(e)}"
+        )
+
+@router.delete("/analyze-bulk")
+async def cleanup_old_analyses(days_old: int = 7, status_filter: str = None):
+    """
+    Delete old analyses from memory.
+    
+    - days_old: Delete analyses older than N days (default: 7)
+    - status_filter: Only delete analyses with specific status (optional: 'completed', 'error', 'started')
+    """
+    try:
+        from datetime import timedelta
+        cutoff_date = datetime.now() - timedelta(days=days_old)
+        
+        deleted_ids = []
+        
+        for analysis_id, status_info in list(analysis_status.items()):
+            # Check if analysis is old enough
+            start_time = datetime.fromisoformat(status_info['start_time'])
+            
+            # Apply filters
+            should_delete = start_time < cutoff_date
+            
+            if status_filter:
+                should_delete = should_delete and status_info['status'] == status_filter
+            
+            if should_delete:
+                # Remove from both dictionaries
+                del analysis_status[analysis_id]
+                if analysis_id in analysis_results:
+                    del analysis_results[analysis_id]
+                deleted_ids.append(analysis_id)
+        
+        logging.info(f"Cleaned up {len(deleted_ids)} old analyses")
+        
+        return {
+            'status': 'success',
+            'deleted_count': len(deleted_ids),
+            'deleted_ids': deleted_ids,
+            'remaining_analyses': len(analysis_status)
+        }
+        
+    except Exception as e:
+        logging.error(f"Error cleaning up analyses: {str(e)}")
+        raise HTTPException(
+            status_code=500,
+            detail=f"Failed to cleanup analyses: {str(e)}"
+        )
+
 async def run_bulk_analysis(analysis_id: str, sites_data: List[Dict], target_keywords: List[str], client_url: str = None):
     """Background task to run the actual bulk analysis with sector relevance."""
     try:
