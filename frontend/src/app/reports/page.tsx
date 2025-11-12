@@ -156,7 +156,7 @@ export default function ReportsPage() {
       }
       
       // Carica tutte le analisi
-      const response = await fetch(`${API_BASE_URL}/api/analyses?limit=50`);
+      const response = await fetch(`${API_BASE_URL}/api/analyze-bulk`);
       
       if (response.ok) {
         const data = await response.json();
