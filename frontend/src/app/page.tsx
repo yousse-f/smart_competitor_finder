@@ -199,7 +199,12 @@ export default function LandingPage() {
                         animate={{ opacity: 1 }}
                         transition={{ delay: 1.2 }}
                       >
-                        <Button variant="primary" size="sm" className="w-full">
+                        <Button 
+                          variant="primary" 
+                          size="sm" 
+                          className="w-full opacity-60 cursor-not-allowed"
+                          disabled
+                        >
                           <Download className="w-4 h-4 mr-2" />
                           Scarica Report Excel
                         </Button>
