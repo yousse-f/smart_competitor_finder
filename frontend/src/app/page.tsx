@@ -36,16 +36,9 @@ export default function LandingPage() {
               animate={{ opacity: 1, x: 0 }}
               className="flex items-center gap-3"
             >
-              <div className="w-10 h-10 bg-gradient-to-br from-blue-500 to-cyan-400 rounded-xl flex items-center justify-center shadow-lg shadow-blue-500/25 relative">
-                {/* Globe */}
-                <svg viewBox="0 0 24 24" className="w-5 h-5 text-white absolute" fill="none" stroke="currentColor">
-                  <circle cx="12" cy="12" r="9" strokeWidth="1.8"/>
-                  <ellipse cx="12" cy="12" rx="9" ry="4" strokeWidth="1.2"/>
-                  <path d="M 12 3 Q 15 12 12 21" strokeWidth="1.2"/>
-                  <path d="M 12 3 Q 9 12 12 21" strokeWidth="1.2"/>
-                </svg>
-                {/* Magnifying glass */}
-                <Search className="w-3 h-3 text-white absolute" style={{ transform: 'translate(50%, 50%)' }} />
+              <div className="w-10 h-10 bg-gradient-to-br from-blue-500 to-cyan-400 rounded-xl flex items-center justify-center shadow-lg shadow-blue-500/25">
+                {/* Magnifying glass solo */}
+                <Search className="w-5 h-5 text-white" />
               </div>
               <span className="text-xl font-bold bg-gradient-to-r from-blue-400 to-cyan-300 bg-clip-text text-transparent">
                 Smart Competitor Finder
@@ -59,42 +52,7 @@ export default function LandingPage() {
               transition={{ delay: 0.1 }}
               className="hidden md:flex items-center gap-3"
             >
-              <Button 
-                variant="ghost" 
-                size="sm"
-                onClick={() => {
-                  console.log('Navigating to /account');
-                  router.push('/account');
-                }}
-                className="text-slate-300 hover:text-white hover:bg-slate-800/50 transition-all"
-              >
-                <User className="w-4 h-4 mr-2" />
-                Utente
-              </Button>
-              <Button 
-                variant="ghost" 
-                size="sm"
-                onClick={() => {
-                  console.log('Navigating to /dashboard');
-                  router.push('/dashboard');
-                }}
-                className="text-slate-300 hover:text-white hover:bg-slate-800/50 transition-all"
-              >
-                <BarChart3 className="w-4 h-4 mr-2" />
-                Consulente
-              </Button>
-              <Button 
-                variant="ghost" 
-                size="sm"
-                onClick={() => {
-                  console.log('Navigating to /account (settings)');
-                  router.push('/account');
-                }}
-                className="text-slate-300 hover:text-white hover:bg-slate-800/50 transition-all"
-              >
-                <Settings className="w-4 h-4 mr-2" />
-                Impostazioni
-              </Button>
+              {/* Bottoni di navigazione rimossi - solo per utenti loggati nella sidebar */}
             </motion.div>
 
             <motion.div
@@ -308,36 +266,182 @@ export default function LandingPage() {
       <section id="video-demo" className="relative z-10 py-20 px-4 sm:px-6 lg:px-8 bg-slate-900/50">
         <div className="max-w-5xl mx-auto">
           <div className="text-center mb-12">
-            <h2 className="text-4xl font-bold mb-4">
-              🎥 Guarda l'AI al Lavoro
-            </h2>
-            <p className="text-xl text-slate-400 max-w-2xl mx-auto">
+            <div className="flex items-center justify-center gap-3 mb-4">
+              <h2 className="text-4xl font-bold">
+                🎥 Guarda l'AI al Lavoro
+              </h2>
+              <Badge className="bg-gradient-to-r from-yellow-500/20 to-orange-500/20 text-yellow-400 border-yellow-500/30 text-sm px-3 py-1">
+                <Sparkles className="w-3 h-3 mr-1" />
+                Coming Soon
+              </Badge>
+            </div>
+            <p className="text-xl text-slate-400 max-w-2xl mx-auto mb-2">
+              Demo Reale - Sistema in azione step-by-step
+            </p>
+            <p className="text-base text-slate-500">
               Come l'AI identifica i tuoi competitor reali in pochi secondi
             </p>
           </div>
 
           <div className="relative">
-            {/* Video Placeholder */}
-            <div className="relative aspect-video rounded-2xl overflow-hidden border-2 border-slate-700/50 shadow-2xl shadow-blue-500/10">
-              {/* Glow Effect */}
-              <div className="absolute inset-0 bg-gradient-to-r from-blue-500/10 to-cyan-400/10 blur-2xl" />
+            {/* Video Placeholder - Modern Design */}
+            <div className="relative aspect-video rounded-2xl overflow-hidden border border-slate-700/30 shadow-2xl backdrop-blur-sm">
+              {/* Modern Gradient Background */}
+              <div className="absolute inset-0 bg-gradient-to-br from-slate-900 via-blue-950/30 to-slate-900">
+                {/* Animated Grid Pattern */}
+                <motion.div
+                  animate={{
+                    opacity: [0.03, 0.08, 0.03],
+                  }}
+                  transition={{
+                    duration: 4,
+                    repeat: Infinity,
+                    ease: "easeInOut"
+                  }}
+                  className="absolute inset-0"
+                  style={{
+                    backgroundImage: `linear-gradient(rgba(56, 189, 248, 0.1) 1px, transparent 1px),
+                                     linear-gradient(90deg, rgba(56, 189, 248, 0.1) 1px, transparent 1px)`,
+                    backgroundSize: '50px 50px'
+                  }}
+                />
+                
+                {/* Smooth Gradient Orbs */}
+                <motion.div
+                  animate={{
+                    scale: [1, 1.2, 1],
+                    opacity: [0.15, 0.25, 0.15],
+                  }}
+                  transition={{
+                    duration: 8,
+                    repeat: Infinity,
+                    ease: "easeInOut"
+                  }}
+                  className="absolute top-0 left-0 w-96 h-96 bg-gradient-to-br from-blue-500/20 to-transparent rounded-full blur-3xl"
+                />
+                <motion.div
+                  animate={{
+                    scale: [1, 1.3, 1],
+                    opacity: [0.15, 0.25, 0.15],
+                  }}
+                  transition={{
+                    duration: 10,
+                    repeat: Infinity,
+                    ease: "easeInOut",
+                    delay: 2
+                  }}
+                  className="absolute bottom-0 right-0 w-96 h-96 bg-gradient-to-tl from-cyan-500/20 to-transparent rounded-full blur-3xl"
+                />
+              </div>
               
-              {/* Placeholder Content */}
-              <div className="relative w-full h-full bg-gradient-to-br from-slate-800 to-slate-900 flex items-center justify-center">
-                <div className="text-center space-y-6">
-                  <div className="w-24 h-24 mx-auto bg-gradient-to-br from-blue-500 to-cyan-400 rounded-full flex items-center justify-center shadow-2xl shadow-blue-500/30">
-                    <svg className="w-12 h-12 text-white" fill="currentColor" viewBox="0 0 24 24">
+              {/* Content Container */}
+              <div className="relative w-full h-full flex items-center justify-center backdrop-blur-[1px]">
+                {/* Floating Process Cards */}
+                <div className="absolute inset-0 flex items-center justify-around px-12 opacity-20">
+                  <motion.div
+                    animate={{
+                      y: [0, -15, 0],
+                      opacity: [0.2, 0.4, 0.2]
+                    }}
+                    transition={{
+                      duration: 5,
+                      repeat: Infinity,
+                      ease: "easeInOut"
+                    }}
+                    className="flex flex-col items-center gap-2"
+                  >
+                    <div className="w-16 h-16 rounded-2xl bg-gradient-to-br from-blue-500 to-cyan-400 flex items-center justify-center shadow-lg">
+                      <Search className="w-8 h-8 text-white" />
+                    </div>
+                    <div className="text-xs text-slate-400 font-medium">Analizza</div>
+                  </motion.div>
+                  
+                  <motion.div
+                    animate={{
+                      y: [0, -15, 0],
+                      opacity: [0.2, 0.4, 0.2]
+                    }}
+                    transition={{
+                      duration: 5,
+                      repeat: Infinity,
+                      ease: "easeInOut",
+                      delay: 1
+                    }}
+                    className="flex flex-col items-center gap-2"
+                  >
+                    <div className="w-16 h-16 rounded-2xl bg-gradient-to-br from-cyan-400 to-blue-500 flex items-center justify-center shadow-lg">
+                      <Brain className="w-8 h-8 text-white" />
+                    </div>
+                    <div className="text-xs text-slate-400 font-medium">Confronta</div>
+                  </motion.div>
+                  
+                  <motion.div
+                    animate={{
+                      y: [0, -15, 0],
+                      opacity: [0.2, 0.4, 0.2]
+                    }}
+                    transition={{
+                      duration: 5,
+                      repeat: Infinity,
+                      ease: "easeInOut",
+                      delay: 2
+                    }}
+                    className="flex flex-col items-center gap-2"
+                  >
+                    <div className="w-16 h-16 rounded-2xl bg-gradient-to-br from-teal-400 to-green-400 flex items-center justify-center shadow-lg">
+                      <FileSpreadsheet className="w-8 h-8 text-white" />
+                    </div>
+                    <div className="text-xs text-slate-400 font-medium">Genera Report</div>
+                  </motion.div>
+                </div>
+
+                {/* Center Content */}
+                <div className="relative z-10 text-center space-y-6 px-8">
+                  {/* Modern Play Button */}
+                  <motion.div
+                    animate={{
+                      scale: [1, 1.05, 1],
+                    }}
+                    transition={{
+                      duration: 2,
+                      repeat: Infinity,
+                      ease: "easeInOut"
+                    }}
+                    className="w-28 h-28 mx-auto bg-gradient-to-br from-blue-500 via-cyan-400 to-blue-500 rounded-full flex items-center justify-center shadow-2xl shadow-blue-500/50 relative group cursor-pointer"
+                  >
+                    {/* Pulse Ring */}
+                    <motion.div
+                      animate={{
+                        scale: [1, 1.4],
+                        opacity: [0.5, 0],
+                      }}
+                      transition={{
+                        duration: 2,
+                        repeat: Infinity,
+                        ease: "easeOut"
+                      }}
+                      className="absolute inset-0 rounded-full bg-cyan-400/30"
+                    />
+                    <svg className="w-14 h-14 text-white relative z-10" fill="currentColor" viewBox="0 0 24 24">
                       <path d="M8 5v14l11-7z"/>
                     </svg>
-                  </div>
+                  </motion.div>
+                  
                   <div>
-                    <div className="text-2xl font-bold text-slate-200 mb-2">Demo Reale</div>
-                    <div className="text-slate-400">Sistema in azione step-by-step</div>
+                    <div className="text-3xl font-bold text-white mb-3">Demo Reale</div>
+                    <div className="text-lg text-slate-300 mb-4">Sistema in azione step-by-step</div>
+                    <Badge className="bg-gradient-to-r from-yellow-500/30 to-orange-500/30 text-yellow-300 border-yellow-500/40 backdrop-blur-sm px-4 py-1.5">
+                      <Sparkles className="w-4 h-4 mr-2" />
+                      In Preparazione
+                    </Badge>
                   </div>
-                  <Badge className="bg-cyan-500/10 text-cyan-400 border-cyan-500/20">
-                    <Clock className="w-3 h-3 mr-1" />
-                    60 secondi
-                  </Badge>
+                  
+                  <div className="pt-2">
+                    <Badge className="bg-cyan-500/20 text-cyan-300 border-cyan-500/30 backdrop-blur-sm">
+                      <Clock className="w-4 h-4 mr-2" />
+                      Durata: 60 secondi
+                    </Badge>
+                  </div>
                 </div>
               </div>
             </div>

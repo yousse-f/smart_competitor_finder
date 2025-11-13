@@ -77,7 +77,7 @@ export default function AccountPage() {
     avatar: '',
     registrationDate: '2024-01-15',
     licenseType: 'Professional License – Consultant Access',
-    licenseValidUntil: '2026-11-14',
+    licenseValidUntil: '2025-12-31',
     licenseUsers: 1,
     analysesThisMonth: 8,
     totalReports: 12,
@@ -186,6 +186,30 @@ export default function AccountPage() {
       ...prev,
       [field]: value
     }));
+  };
+
+  // 📧 Funzione per gestire richieste di upgrade/gestione licenza via email
+  const handleContactForUpgrade = (action: string) => {
+    const subject = encodeURIComponent(`Richiesta ${action} - Smart Competitor Finder`);
+    const body = encodeURIComponent(`
+Salve Studio Innovativo,
+
+Sono interessato a: ${action}
+
+Dettagli account:
+- Nome: ${profile.firstName}
+- Email: ${profile.email}
+- Azienda: ${profile.company}
+- Licenza attuale: ${profile.licenseType}
+- Scadenza licenza: ${new Date(profile.licenseValidUntil).toLocaleDateString('it-IT')}
+
+Vi prego di contattarmi per maggiori informazioni e preventivo.
+
+Cordiali saluti,
+${profile.firstName}
+    `.trim());
+    
+    window.location.href = `mailto:info@studioinnovativo.it?subject=${subject}&body=${body}`;
   };
 
   const handleSaveProfile = () => {
@@ -538,24 +562,36 @@ export default function AccountPage() {
             <div className="border-t border-slate-700 pt-6">
               <h4 className="text-lg font-semibold text-slate-100 mb-4">Gestione Licenza</h4>
               <div className="flex flex-wrap gap-3">
-                <Button variant="primary" size="md">
+                <Button 
+                  variant="primary" 
+                  size="md"
+                  onClick={() => handleContactForUpgrade('Gestione Licenza')}
+                >
                   <Settings className="w-4 h-4 mr-2" />
                   Gestisci Licenza
                 </Button>
-                <Button variant="secondary" size="md">
+                <Button 
+                  variant="secondary" 
+                  size="md"
+                  onClick={() => handleContactForUpgrade('Aggiunta Utenti Team/Agenzia')}
+                >
                   <Users className="w-4 h-4 mr-2" />
                   Aggiungi Utenti
                   <span className="ml-2 text-xs text-slate-400">(per team e agenzie)</span>
                 </Button>
-                <Button variant="secondary" size="md">
+                <Button 
+                  variant="secondary" 
+                  size="md"
+                  onClick={() => handleContactForUpgrade('Upgrade Piano Superiore')}
+                >
                   <Crown className="w-4 h-4 mr-2" />
                   Richiedi Upgrade
                 </Button>
               </div>
               
-              <div className="mt-4 p-3 bg-slate-800/50 rounded-lg border border-slate-700/50">
-                <p className="text-xs text-slate-400">
-                  <span className="text-slate-300 font-medium">ℹ️ Nota:</span> Le licenze professionali sono personalizzate in base al volume di analisi e al numero di utenti.
+              <div className="mt-4 p-3 bg-blue-500/10 rounded-lg border border-blue-500/20">
+                <p className="text-xs text-blue-300">
+                  <span className="font-medium">📧 Info:</span> Cliccando sui pulsanti si aprirà il tuo client email con una richiesta pre-compilata per Studio Innovativo.
                 </p>
               </div>
             </div>

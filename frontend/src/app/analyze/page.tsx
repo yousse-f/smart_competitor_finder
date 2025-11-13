@@ -569,17 +569,17 @@ export default function AnalyzePage() {
 
   return (
     <DashboardLayout>
-      <div className="max-w-4xl mx-auto space-y-8">
-        {/* Header */}
+      <div className="max-w-full px-6 space-y-6">
+        {/* Header - Compatto */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           className="text-center"
         >
-          <h1 className="text-3xl font-bold text-slate-100 mb-4">
+          <h1 className="text-2xl font-bold text-slate-100 mb-2">
             Analisi Competitiva AI
           </h1>
-          <p className="text-slate-400 text-lg">
+          <p className="text-slate-400">
             Estrai keywords, analizza competitors e genera report dettagliati
           </p>
         </motion.div>
@@ -618,89 +618,124 @@ export default function AnalyzePage() {
 
         {/* Step Content */}
         <AnimatePresence mode="wait">
-          {/* Step 1: URL Input */}
+          {/* Step 1: URL Input - LAYOUT 2 COLONNE */}
           {currentStep === 1 && (
             <motion.div
               key="step1"
               initial={{ opacity: 0, x: 20 }}
               animate={{ opacity: 1, x: 0 }}
               exit={{ opacity: 0, x: -20 }}
-              className="card p-8"
             >
-              <div className="text-center mb-8">
-                <Globe className="w-16 h-16 text-primary-400 mx-auto mb-4" />
-                <h2 className="text-2xl font-bold text-slate-100 mb-2">
-                  Inserisci URL del Sito
-                </h2>
-                <p className="text-slate-400">
-                  Inserisci il dominio o URL completo. Analizzeremo il contenuto per estrarre keywords rilevanti.
-                </p>
-              </div>
+              <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                {/* Colonna Sinistra: Form */}
+                <div className="card p-6">
+                  <div className="flex items-center gap-3 mb-4">
+                    <Globe className="w-10 h-10 text-primary-400" />
+                    <div>
+                      <h2 className="text-xl font-bold text-slate-100">Inserisci URL del Sito</h2>
+                      <p className="text-sm text-slate-400">Dominio o URL completo</p>
+                    </div>
+                  </div>
 
-              <div className="max-w-lg mx-auto space-y-6">
-                <div>
-                  <label className="label">URL Sito Web</label>
-                  <Input
-                    {...register('clientUrl', { 
-                      required: 'URL richiesto',
-                      validate: (value) => {
-                        try {
-                          const normalized = normalizeUrl(value);
-                          console.log('🔍 Validation - Original:', value, 'Normalized:', normalized);
-                          
-                          // Check if it's a valid URL format after normalization
-                          const urlPattern = /^https?:\/\/[^\s/$.?#].[^\s]*$/;
-                          const isValid = urlPattern.test(normalized);
-                          
-                          if (!isValid) {
-                            return 'Inserisci un dominio valido (es: esempio.com)';
+                  <div className="space-y-4">
+                    <div>
+                      <label className="label">URL Sito Web</label>
+                      <Input
+                        {...register('clientUrl', { 
+                          required: 'URL richiesto',
+                          validate: (value) => {
+                            try {
+                              const normalized = normalizeUrl(value);
+                              const urlPattern = /^https?:\/\/[^\s/$.?#].[^\s]*$/;
+                              const isValid = urlPattern.test(normalized);
+                              
+                              if (!isValid) {
+                                return 'Inserisci un dominio valido (es: esempio.com)';
+                              }
+                              
+                              if (normalized.includes('://') && normalized.split('://').length > 2) {
+                                return 'URL non valido - protocollo duplicato rilevato';
+                              }
+                              
+                              return true;
+                            } catch (error) {
+                              return 'Errore nella validazione dell\'URL';
+                            }
                           }
-                          
-                          // Additional check: ensure it doesn't have duplicate protocols
-                          if (normalized.includes('://') && normalized.split('://').length > 2) {
-                            return 'URL non valido - protocollo duplicato rilevato';
-                          }
-                          
-                          return true;
-                        } catch (error) {
-                          return 'Errore nella validazione dell\'URL';
-                        }
-                      }
-                    })}
-                    placeholder="esempio.com o https://esempio.com"
-                    className="text-lg"
-                  />
-                  {watchedUrl && !errors.clientUrl && (
-                    <p className="text-slate-500 text-sm mt-1">
-                      📍 Analizzeremo: <span className="text-primary-400">{normalizeUrl(watchedUrl)}</span>
-                    </p>
-                  )}
-                  {errors.clientUrl && (
-                    <p className="text-red-400 text-sm mt-1 flex items-center gap-1">
-                      <AlertCircle className="w-4 h-4" />
-                      {errors.clientUrl.message}
-                    </p>
-                  )}
+                        })}
+                        placeholder="esempio.com"
+                      />
+                      {watchedUrl && !errors.clientUrl && (
+                        <p className="text-slate-500 text-xs mt-1">
+                          📍 Analizzeremo: <span className="text-primary-400">{normalizeUrl(watchedUrl)}</span>
+                        </p>
+                      )}
+                      {errors.clientUrl && (
+                        <p className="text-red-400 text-xs mt-1 flex items-center gap-1">
+                          <AlertCircle className="w-4 h-4" />
+                          {errors.clientUrl.message}
+                        </p>
+                      )}
+                    </div>
+
+                    <Button
+                      onClick={analyzeUrlStep}
+                      disabled={!watchedUrl || isAnalyzing}
+                      size="lg"
+                      className="w-full"
+                    >
+                      {isAnalyzing ? (
+                        <>
+                          <Loader2 className="w-5 h-5 animate-spin mr-2" />
+                          Analizzando...
+                        </>
+                      ) : (
+                        <>
+                          <Sparkles className="w-5 h-5 mr-2" />
+                          Analizza con AI
+                        </>
+                      )}
+                    </Button>
+                  </div>
                 </div>
 
-                <Button
-                  onClick={analyzeUrlStep}
-                  disabled={!watchedUrl || isAnalyzing}
-                  size="lg"
-                  className="w-full"
-                >
-                  {isAnalyzing ? (
-                    <>
-                      <Loader2 className="w-5 h-5 animate-spin mr-2" />
-                      Analizzando sito...
-                    </>
-                  ) : (
-                    <>
-                      <Sparkles className="w-5 h-5 mr-2" />
-                      Analizza con AI
-                    </>
-                  )}
-                </Button>
+                {/* Colonna Destra: Info */}
+                <div className="bg-blue-500/10 border border-blue-500/20 rounded-xl p-6">
+                  <div className="flex items-center gap-2 mb-4">
+                    <Sparkles className="w-6 h-6 text-blue-400" />
+                    <h3 className="text-lg font-semibold text-blue-300">Cosa analizzeremo</h3>
+                  </div>
+                  <div className="grid grid-cols-2 gap-3">
+                    <div className="bg-slate-800/50 rounded-lg p-3">
+                      <div className="w-8 h-8 rounded-full bg-blue-500/20 flex items-center justify-center mb-2">
+                        <span className="text-lg">🎯</span>
+                      </div>
+                      <p className="text-slate-200 font-medium text-sm">Settore mercato</p>
+                      <p className="text-slate-500 text-xs mt-1">Industry categoria</p>
+                    </div>
+                    <div className="bg-slate-800/50 rounded-lg p-3">
+                      <div className="w-8 h-8 rounded-full bg-cyan-500/20 flex items-center justify-center mb-2">
+                        <span className="text-lg">⚡</span>
+                      </div>
+                      <p className="text-slate-200 font-medium text-sm">Servizi chiave</p>
+                      <p className="text-slate-500 text-xs mt-1">Cosa offri</p>
+                    </div>
+                    <div className="bg-slate-800/50 rounded-lg p-3">
+                      <div className="w-8 h-8 rounded-full bg-purple-500/20 flex items-center justify-center mb-2">
+                        <span className="text-lg">💎</span>
+                      </div>
+                      <p className="text-slate-200 font-medium text-sm">Valore offerto</p>
+                      <p className="text-slate-500 text-xs mt-1">Value proposition</p>
+                    </div>
+                    <div className="bg-slate-800/50 rounded-lg p-3">
+                      <div className="w-8 h-8 rounded-full bg-green-500/20 flex items-center justify-center mb-2">
+                        <span className="text-lg">🔑</span>
+                      </div>
+                      <p className="text-slate-200 font-medium text-sm">Keywords SEO</p>
+                      <p className="text-slate-500 text-xs mt-1">Parole chiave</p>
+                    </div>
+                  </div>
+                </div>
               </div>
             </motion.div>
           )}

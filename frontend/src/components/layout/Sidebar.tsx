@@ -33,20 +33,13 @@ const Sidebar: React.FC = () => {
   };
 
   return (
-    <div className="flex flex-col w-64 bg-surface border-r border-border h-screen">
+    <div className="flex flex-col w-64 bg-surface border-r border-border h-screen overflow-hidden rounded-r-2xl">
       {/* Logo & Brand */}
       <div className="flex items-center px-6 py-4 border-b border-border">
         <div className="flex items-center space-x-3">
-          <div className="w-8 h-8 bg-gradient-primary rounded-lg flex items-center justify-center relative">
-            {/* Globe */}
-            <svg viewBox="0 0 24 24" className="w-4 h-4 text-white absolute" fill="none" stroke="currentColor">
-              <circle cx="12" cy="12" r="9" strokeWidth="1.8"/>
-              <ellipse cx="12" cy="12" rx="9" ry="4" strokeWidth="1.2"/>
-              <path d="M 12 3 Q 15 12 12 21" strokeWidth="1.2"/>
-              <path d="M 12 3 Q 9 12 12 21" strokeWidth="1.2"/>
-            </svg>
-            {/* Magnifying glass */}
-            <Search className="w-2.5 h-2.5 text-white absolute" style={{ transform: 'translate(50%, 50%)' }} />
+          <div className="w-8 h-8 bg-gradient-primary rounded-lg flex items-center justify-center">
+            {/* Magnifying glass solo */}
+            <Search className="w-4 h-4 text-white" />
           </div>
           <div>
             <h1 className="text-lg font-semibold text-text-primary">Smart Competitor</h1>
@@ -56,7 +49,7 @@ const Sidebar: React.FC = () => {
       </div>
 
       {/* Navigation */}
-      <nav className="flex-1 px-4 py-6 space-y-2">
+      <nav className="flex-1 px-4 py-6 space-y-2 overflow-y-auto">
         {navigation.map((item) => {
           const isActive = pathname === item.href;
           return (
