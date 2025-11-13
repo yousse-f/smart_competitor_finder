@@ -10,6 +10,15 @@ const inter = Inter({
 export const metadata: Metadata = {
   title: "Smart Competitor Finder",
   description: "Piattaforma AI per analisi competitiva aziendale",
+  icons: {
+    icon: [
+      { url: '/icon.svg', type: 'image/svg+xml' },
+      { url: '/favicon.ico', sizes: 'any' }
+    ],
+    apple: [
+      { url: '/icon.svg', type: 'image/svg+xml' }
+    ]
+  }
 };
 
 export default function RootLayout({
