@@ -847,16 +847,9 @@ export default function LandingPage() {
             {/* Brand */}
             <div>
               <div className="flex items-center gap-3 mb-4">
-                <div className="w-10 h-10 bg-gradient-to-br from-blue-500 to-cyan-400 rounded-xl flex items-center justify-center relative">
-                  {/* Globe */}
-                  <svg viewBox="0 0 24 24" className="w-5 h-5 text-white absolute" fill="none" stroke="currentColor">
-                    <circle cx="12" cy="12" r="9" strokeWidth="1.8"/>
-                    <ellipse cx="12" cy="12" rx="9" ry="4" strokeWidth="1.2"/>
-                    <path d="M 12 3 Q 15 12 12 21" strokeWidth="1.2"/>
-                    <path d="M 12 3 Q 9 12 12 21" strokeWidth="1.2"/>
-                  </svg>
-                  {/* Magnifying glass */}
-                  <Search className="w-3 h-3 text-white absolute" style={{ transform: 'translate(50%, 50%)' }} />
+                <div className="w-10 h-10 bg-gradient-to-br from-blue-500 to-cyan-400 rounded-xl flex items-center justify-center shadow-lg shadow-blue-500/25">
+                  {/* Magnifying glass solo */}
+                  <Search className="w-5 h-5 text-white" />
                 </div>
                 <span className="text-lg font-bold">Smart Competitor Finder</span>
               </div>
