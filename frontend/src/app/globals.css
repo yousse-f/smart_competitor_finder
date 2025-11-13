@@ -202,4 +202,17 @@
   html {
     scroll-behavior: smooth;
   }
+
+  /* Prevent animation flicker */
+  * {
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+
+  /* Hardware acceleration for smooth animations */
+  [class*="motion-"] {
+    will-change: transform, opacity;
+    transform: translateZ(0);
+    backface-visibility: hidden;
+  }
 }

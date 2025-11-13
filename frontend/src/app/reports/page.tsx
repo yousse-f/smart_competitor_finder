@@ -15,7 +15,8 @@ import {
   BarChart3,
   ExternalLink,
   Sparkles,
-  RefreshCw
+  RefreshCw,
+  Package
 } from 'lucide-react';
 import { DashboardLayout } from '@/components/layout/DashboardLayout';
 import { Button } from '@/components/ui/Button';
@@ -63,6 +64,10 @@ export default function ReportsPage() {
   const [streamProgress, setStreamProgress] = useState(0);
   const [streamCurrentUrl, setStreamCurrentUrl] = useState('');
   const [streamResults, setStreamResults] = useState<any[]>([]);
+  
+  // 🆕 Stati per modal download
+  const [showDownloadModal, setShowDownloadModal] = useState(false);
+  const [selectedReportForDownload, setSelectedReportForDownload] = useState<string | null>(null);
 
   // Get URL search params client-side
   useEffect(() => {
@@ -378,10 +383,20 @@ export default function ReportsPage() {
       } else if (format === 'pdf') {
         downloadPdfReport(report);
       }
+      
+      // Chiudi il modal dopo il download
+      setShowDownloadModal(false);
+      setSelectedReportForDownload(null);
     } catch (error) {
       console.error('Errore durante il download:', error);
       alert('Errore durante il download del report');
     }
+  };
+  
+  // 🆕 Funzione per aprire il modal di download
+  const handleDownloadClick = (reportId: string) => {
+    setSelectedReportForDownload(reportId);
+    setShowDownloadModal(true);
   };
 
   const downloadExcelReport = (report: Report) => {
@@ -797,7 +812,7 @@ export default function ReportsPage() {
                     const competitor = selectedReport.matches ? normalizeCompetitorData(comp) : comp;
                     return (
                     <motion.tr
-                      key={competitor.url}
+                      key={`${competitor.url}-${index}`}
                       initial={{ opacity: 0, x: -20 }}
                       animate={{ opacity: 1, x: 0 }}
                       transition={{ delay: index * 0.1 }}
@@ -877,10 +892,13 @@ export default function ReportsPage() {
         >
           <div>
             <h1 className="text-3xl font-bold text-slate-100 mb-2">
-              Report e Analisi
+              Report Competitivi
             </h1>
             <p className="text-slate-400">
-              Visualizza, scarica e gestisci tutti i tuoi report di analisi competitiva
+              Gestisci, scarica e rivedi tutte le analisi generate con l'AI.
+            </p>
+            <p className="text-slate-500 text-sm mt-1">
+              Perfetto per clienti, presentazioni e benchmarking di mercato.
             </p>
           </div>
           <Button
@@ -898,13 +916,16 @@ export default function ReportsPage() {
           animate={{ opacity: 1, y: 0 }}
           className="card p-6"
         >
+          <h3 className="text-lg font-semibold text-slate-100 mb-4">
+            Filtra i tuoi Report
+          </h3>
           <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
             <div>
-              <label className="label">Cerca Report</label>
+              <label className="label">🔍 Cerca per nome o dominio</label>
               <div className="relative">
                 <Search className="w-5 h-5 absolute left-3 top-1/2 transform -translate-y-1/2 text-slate-400" />
                 <Input
-                  placeholder="Nome o URL cliente..."
+                  placeholder="Nome cliente o URL..."
                   value={searchTerm}
                   onChange={(e) => setSearchTerm(e.target.value)}
                   className="pl-10"
@@ -913,27 +934,27 @@ export default function ReportsPage() {
             </div>
             
             <div>
-              <label className="label">Status</label>
+              <label className="label">📌 Status</label>
               <select
                 value={statusFilter}
                 onChange={(e) => setStatusFilter(e.target.value)}
                 className="input"
               >
-                <option value="all">Tutti gli status</option>
-                <option value="completed">Completati</option>
-                <option value="processing">In elaborazione</option>
+                <option value="all">Tutti</option>
+                <option value="completed">Completato</option>
+                <option value="processing">In corso</option>
                 <option value="failed">Con errori</option>
               </select>
             </div>
 
             <div>
-              <label className="label">Tipo</label>
+              <label className="label">📁 Tipo</label>
               <select
                 value={typeFilter}
                 onChange={(e) => setTypeFilter(e.target.value)}
                 className="input"
               >
-                <option value="all">Tutti i tipi</option>
+                <option value="all">Tutti</option>
                 <option value="single">Analisi Singola</option>
                 <option value="bulk">Analisi Bulk</option>
               </select>
@@ -950,9 +971,21 @@ export default function ReportsPage() {
                 className="w-full"
               >
                 <RefreshCw className="w-4 h-4 mr-2" />
-                Reset
+                🔄 Reset
               </Button>
             </div>
+          </div>
+          
+          {/* 🆕 Suggerimenti sotto i filtri */}
+          <div className="mt-4 p-3 bg-slate-800/50 rounded-lg border border-slate-700/50">
+            <p className="text-sm text-slate-400">
+              <span className="font-semibold text-slate-300">💡 Suggerimenti:</span>
+            </p>
+            <ul className="text-xs text-slate-500 mt-2 space-y-1 ml-4">
+              <li>• Cerca per nome cliente o dominio</li>
+              <li>• Filtra per stato (in corso / completato)</li>
+              <li>• Filtra per tipo (analisi singola o bulk)</li>
+            </ul>
           </div>
         </motion.div>
 
@@ -1099,7 +1132,7 @@ export default function ReportsPage() {
                 <tr>
                   <th className="w-[35%]">Nome Report</th>
                   <th className="w-[12%]">Data</th>
-                  <th className="w-[12%]">Status</th>
+                  <th className="w-[12%]">Stato</th>
                   <th className="w-[10%]">Tipo</th>
                   <th className="w-[10%]">Competitors</th>
                   <th className="w-[21%] text-right">Azioni</th>
@@ -1115,29 +1148,36 @@ export default function ReportsPage() {
                   >
                     <td className="max-w-xs">
                       <div className="overflow-hidden">
-                        <p className="font-medium text-slate-100 truncate">{report.name}</p>
-                        <p className="text-sm text-slate-400 truncate">{report.clientUrl}</p>
+                        <div className="flex items-center gap-2 mb-1">
+                          <p className="font-medium text-slate-100 truncate">{report.name}</p>
+                        </div>
+                        <p className="text-xs text-slate-500">
+                          {report.type === 'bulk' ? '📦 Bulk' : '📁 Singola'} • {report.competitors} competitor analizzati
+                        </p>
                       </div>
                     </td>
                     <td className="text-slate-300 text-sm whitespace-nowrap">
                       <div className="flex items-center gap-1">
                         <Calendar className="w-3 h-3 text-slate-400" />
-                        {new Date(report.date).toLocaleDateString('it-IT')}
+                        {new Date(report.date).toLocaleDateString('it-IT', { day: '2-digit', month: '2-digit' })}
                       </div>
                     </td>
                     <td>
                       <Badge className={getStatusBadge(report.status)}>
+                        {report.status === 'completed' && '🟢 '}
+                        {report.status === 'processing' && '🟡 '}
+                        {report.status === 'failed' && '🔴 '}
                         {getStatusText(report.status)}
                       </Badge>
                     </td>
                     <td>
                       <Badge className={report.type === 'bulk' ? 'badge-primary' : 'badge-secondary'}>
-                        {report.type === 'bulk' ? 'Bulk' : 'Singola'}
+                        {report.type === 'bulk' ? '📦 Bulk' : '📁 Singola'}
                       </Badge>
                     </td>
-                    <td className="text-slate-300 text-center">{report.competitors}</td>
+                    <td className="text-slate-300 text-center font-semibold">{report.competitors}</td>
                     <td>
-                      <div className="flex items-center gap-1 justify-end">
+                      <div className="flex items-center gap-2 justify-end">
                         {report.status === 'completed' && (
                           <>
                             <Button
@@ -1145,18 +1185,20 @@ export default function ReportsPage() {
                               variant="ghost"
                               size="sm"
                               title="Visualizza dettagli"
-                              className="p-2"
+                              className="text-sm"
                             >
-                              <Eye className="w-4 h-4" />
+                              <Eye className="w-4 h-4 mr-1" />
+                              Visualizza
                             </Button>
                             <Button
-                              onClick={() => downloadReport(report.id, 'excel')}
+                              onClick={() => handleDownloadClick(report.id)}
                               variant="ghost"
                               size="sm"
-                              title="Scarica Excel"
-                              className="p-2"
+                              title="Scarica Report"
+                              className="text-sm"
                             >
-                              <Download className="w-4 h-4" />
+                              <Download className="w-4 h-4 mr-1" />
+                              Scarica
                             </Button>
                           </>
                         )}
@@ -1164,10 +1206,11 @@ export default function ReportsPage() {
                           onClick={() => deleteReport(report.id)}
                           variant="ghost"
                           size="sm"
-                          className="text-red-400 hover:text-red-300 p-2"
+                          className="text-red-400 hover:text-red-300 text-sm"
                           title="Elimina report"
                         >
-                          <Trash2 className="w-4 h-4" />
+                          <Trash2 className="w-4 h-4 mr-1" />
+                          Elimina
                         </Button>
                       </div>
                     </td>
@@ -1221,6 +1264,94 @@ export default function ReportsPage() {
             </a>
           </p>
         </motion.div>
+        
+        {/* 🆕 Modal Elegante per Scelta Formato Download */}
+        {showDownloadModal && (
+          <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-sm">
+            <motion.div
+              initial={{ opacity: 0, scale: 0.95, y: 20 }}
+              animate={{ opacity: 1, scale: 1, y: 0 }}
+              exit={{ opacity: 0, scale: 0.95, y: 20 }}
+              className="bg-slate-800 rounded-2xl shadow-2xl border border-slate-700 max-w-md w-full mx-4 overflow-hidden"
+            >
+              {/* Header */}
+              <div className="p-6 border-b border-slate-700 bg-gradient-to-r from-blue-500/10 to-cyan-500/10">
+                <h3 className="text-xl font-bold text-slate-100 flex items-center gap-2">
+                  <Download className="w-6 h-6 text-cyan-400" />
+                  Scegli Formato Export
+                </h3>
+                <p className="text-sm text-slate-400 mt-1">
+                  Seleziona il formato per scaricare il report
+                </p>
+              </div>
+              
+              {/* Body - Scelta Formati */}
+              <div className="p-6 space-y-3">
+                {/* Opzione Excel */}
+                <button
+                  onClick={() => {
+                    if (selectedReportForDownload) {
+                      downloadReport(selectedReportForDownload, 'excel');
+                    }
+                  }}
+                  className="w-full p-4 bg-gradient-to-r from-green-500/10 to-emerald-500/10 hover:from-green-500/20 hover:to-emerald-500/20 border border-green-500/30 hover:border-green-500/50 rounded-xl transition-all group"
+                >
+                  <div className="flex items-center gap-4">
+                    <div className="w-12 h-12 bg-gradient-to-br from-green-500 to-emerald-500 rounded-lg flex items-center justify-center shadow-lg group-hover:scale-110 transition-transform">
+                      <FileText className="w-6 h-6 text-white" />
+                    </div>
+                    <div className="flex-1 text-left">
+                      <div className="font-semibold text-slate-100">
+                        Excel (.xlsx)
+                      </div>
+                      <div className="text-xs text-slate-400 mt-1">
+                        Perfetto per analisi dati e presentazioni
+                      </div>
+                    </div>
+                  </div>
+                </button>
+                
+                {/* Opzione PDF */}
+                <button
+                  onClick={() => {
+                    if (selectedReportForDownload) {
+                      downloadReport(selectedReportForDownload, 'pdf');
+                    }
+                  }}
+                  className="w-full p-4 bg-gradient-to-r from-red-500/10 to-orange-500/10 hover:from-red-500/20 hover:to-orange-500/20 border border-red-500/30 hover:border-red-500/50 rounded-xl transition-all group"
+                >
+                  <div className="flex items-center gap-4">
+                    <div className="w-12 h-12 bg-gradient-to-br from-red-500 to-orange-500 rounded-lg flex items-center justify-center shadow-lg group-hover:scale-110 transition-transform">
+                      <FileText className="w-6 h-6 text-white" />
+                    </div>
+                    <div className="flex-1 text-left">
+                      <div className="font-semibold text-slate-100">
+                        PDF (.pdf)
+                      </div>
+                      <div className="text-xs text-slate-400 mt-1">
+                        Ideale per stampa e condivisione
+                      </div>
+                    </div>
+                  </div>
+                </button>
+              </div>
+              
+              {/* Footer - Pulsante Annulla */}
+              <div className="p-4 border-t border-slate-700 bg-slate-900/50">
+                <Button
+                  onClick={() => {
+                    setShowDownloadModal(false);
+                    setSelectedReportForDownload(null);
+                  }}
+                  variant="secondary"
+                  className="w-full"
+                >
+                  Annulla
+                </Button>
+              </div>
+            </motion.div>
+          </div>
+        )}
       </div>
     </DashboardLayout>
   );
