@@ -1,0 +1,23 @@
+<svg width="32" height="32" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <rect width="32" height="32" rx="8" fill="url(#gradient)"/>
+  
+  <!-- Globe -->
+  <circle cx="14" cy="14" r="7" stroke="white" stroke-width="1.8" fill="none"/>
+  <!-- Latitude lines -->
+  <ellipse cx="14" cy="14" rx="7" ry="3" stroke="white" stroke-width="1.2" fill="none"/>
+  <ellipse cx="14" cy="14" rx="7" ry="5" stroke="white" stroke-width="1" fill="none"/>
+  <!-- Longitude line -->
+  <path d="M 14 7 Q 17 14 14 21" stroke="white" stroke-width="1.2" fill="none"/>
+  <path d="M 14 7 Q 11 14 14 21" stroke="white" stroke-width="1.2" fill="none"/>
+  
+  <!-- Magnifying glass -->
+  <circle cx="22" cy="22" r="4" stroke="white" stroke-width="2" fill="none"/>
+  <line x1="24.5" y1="24.5" x2="27.5" y2="27.5" stroke="white" stroke-width="2.5" stroke-linecap="round"/>
+  
+  <defs>
+    <linearGradient id="gradient" x1="0" y1="0" x2="32" y2="32" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#3B82F6"/>
+      <stop offset="1" stop-color="#22D3EE"/>
+    </linearGradient>
+  </defs>
+</svg>

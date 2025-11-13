@@ -6,7 +6,7 @@ import { motion } from 'framer-motion';
 import { 
   Activity, ArrowRight, CheckCircle2, Search, FileSpreadsheet, 
   Zap, Shield, TrendingUp, Users, BarChart3, Target, Clock,
-  Sparkles, ChevronRight, Download, Eye, Brain, Database
+  Sparkles, ChevronRight, Download, Eye, Brain, Database, User, Settings, Globe
 } from 'lucide-react';
 import { Button, Card, CardContent, Badge } from '@/components/ui';
 
@@ -36,13 +36,67 @@ export default function LandingPage() {
               animate={{ opacity: 1, x: 0 }}
               className="flex items-center gap-3"
             >
-              <div className="w-10 h-10 bg-gradient-to-br from-blue-500 to-cyan-400 rounded-xl flex items-center justify-center shadow-lg shadow-blue-500/25">
-                <Activity className="w-6 h-6 text-white" />
+              <div className="w-10 h-10 bg-gradient-to-br from-blue-500 to-cyan-400 rounded-xl flex items-center justify-center shadow-lg shadow-blue-500/25 relative">
+                {/* Globe */}
+                <svg viewBox="0 0 24 24" className="w-5 h-5 text-white absolute" fill="none" stroke="currentColor">
+                  <circle cx="12" cy="12" r="9" strokeWidth="1.8"/>
+                  <ellipse cx="12" cy="12" rx="9" ry="4" strokeWidth="1.2"/>
+                  <path d="M 12 3 Q 15 12 12 21" strokeWidth="1.2"/>
+                  <path d="M 12 3 Q 9 12 12 21" strokeWidth="1.2"/>
+                </svg>
+                {/* Magnifying glass */}
+                <Search className="w-3 h-3 text-white absolute" style={{ transform: 'translate(50%, 50%)' }} />
               </div>
               <span className="text-xl font-bold bg-gradient-to-r from-blue-400 to-cyan-300 bg-clip-text text-transparent">
                 Smart Competitor Finder
               </span>
             </motion.div>
+            
+            {/* Navigation Links */}
+            <motion.div
+              initial={{ opacity: 0, y: -10 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.1 }}
+              className="hidden md:flex items-center gap-3"
+            >
+              <Button 
+                variant="ghost" 
+                size="sm"
+                onClick={() => {
+                  console.log('Navigating to /account');
+                  router.push('/account');
+                }}
+                className="text-slate-300 hover:text-white hover:bg-slate-800/50 transition-all"
+              >
+                <User className="w-4 h-4 mr-2" />
+                Utente
+              </Button>
+              <Button 
+                variant="ghost" 
+                size="sm"
+                onClick={() => {
+                  console.log('Navigating to /dashboard');
+                  router.push('/dashboard');
+                }}
+                className="text-slate-300 hover:text-white hover:bg-slate-800/50 transition-all"
+              >
+                <BarChart3 className="w-4 h-4 mr-2" />
+                Consulente
+              </Button>
+              <Button 
+                variant="ghost" 
+                size="sm"
+                onClick={() => {
+                  console.log('Navigating to /account (settings)');
+                  router.push('/account');
+                }}
+                className="text-slate-300 hover:text-white hover:bg-slate-800/50 transition-all"
+              >
+                <Settings className="w-4 h-4 mr-2" />
+                Impostazioni
+              </Button>
+            </motion.div>
+
             <motion.div
               initial={{ opacity: 0, x: 20 }}
               animate={{ opacity: 1, x: 0 }}
@@ -69,25 +123,28 @@ export default function LandingPage() {
             <motion.div
               initial={{ opacity: 0, y: 30 }}
               animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.8 }}
+              transition={{ duration: 0.8, ease: "easeOut" }}
             >
               <Badge className="mb-6 bg-blue-500/10 text-blue-400 border-blue-500/20">
                 <Sparkles className="w-3 h-3 mr-1" />
-                Powered by AI
+                Analisi AI Semantica
               </Badge>
               
               <h1 className="text-5xl lg:text-6xl font-bold mb-6 leading-tight">
-                Scopri i Tuoi{' '}
+                Trova i Veri Competitor{' '}
                 <span className="bg-gradient-to-r from-blue-400 via-cyan-300 to-blue-400 bg-clip-text text-transparent animate-gradient">
-                  Competitor
+                  in 60 Secondi
                 </span>
-                <br />in 60 Secondi
               </h1>
               
-              <p className="text-xl text-slate-400 mb-8 leading-relaxed">
-                Non perdere più giorni a cercare manualmente i competitor. 
-                La nostra <span className="text-cyan-400 font-semibold">intelligenza artificiale</span> analizza 
-                il web e trova i tuoi concorrenti automaticamente.
+              <p className="text-xl text-slate-400 mb-6 leading-relaxed">
+                L'AI confronta centinaia di siti e ti consegna un report professionale.
+              </p>
+              
+              <p className="text-lg text-slate-300 mb-8">
+                <span className="text-cyan-400 font-semibold">Zero lavoro manuale.</span>{' '}
+                <span className="text-cyan-400 font-semibold">Zero errori.</span>{' '}
+                <span className="text-cyan-400 font-semibold">Solo risultati.</span>
               </p>
 
               <div className="flex flex-col sm:flex-row gap-4 mb-12">
@@ -97,25 +154,25 @@ export default function LandingPage() {
                   onClick={handleCTA}
                   className="shadow-2xl shadow-blue-500/25 hover:shadow-blue-500/40 transition-all"
                 >
-                  Inizia Ora - Accedi
+                  Inizia Subito
                   <ArrowRight className="w-5 h-5 ml-2" />
                 </Button>
                 <Button 
                   variant="secondary" 
                   size="lg"
-                  onClick={() => document.getElementById('how-it-works')?.scrollIntoView({ behavior: 'smooth' })}
+                  onClick={() => document.getElementById('video-demo')?.scrollIntoView({ behavior: 'smooth' })}
                 >
                   <Eye className="w-5 h-5 mr-2" />
-                  Come Funziona
+                  Guarda Demo
                 </Button>
               </div>
 
               {/* Stats */}
               <div className="grid grid-cols-3 gap-6">
                 {[
-                  { value: '5min', label: 'Analisi completa' },
-                  { value: '100+', label: 'Siti simultanei' },
-                  { value: '95%', label: 'Accuratezza AI' }
+                  { value: '60s', label: 'Per iniziare' },
+                  { value: '100+', label: 'Siti analizzati' },
+                  { value: '0', label: 'Lavoro manuale' }
                 ].map((stat, i) => (
                   <motion.div
                     key={i}
@@ -134,7 +191,7 @@ export default function LandingPage() {
             <motion.div
               initial={{ opacity: 0, scale: 0.95 }}
               animate={{ opacity: 1, scale: 1 }}
-              transition={{ duration: 0.8, delay: 0.2 }}
+              transition={{ duration: 0.8, delay: 0.2, ease: "easeOut" }}
               className="relative"
             >
               {/* Floating Card Mockup */}
@@ -158,20 +215,20 @@ export default function LandingPage() {
                       {/* Results Preview */}
                       {[
                         { 
-                          title: 'Analisi Keywords', 
-                          description: 'Estrazione automatica keywords dal tuo sito',
+                          title: 'Estrazione Keywords', 
+                          description: 'Identifica le parole chiave del tuo business',
                           icon: Search,
                           color: 'from-blue-500 to-cyan-400'
                         },
                         { 
-                          title: 'Match Semantico AI', 
-                          description: 'Confronto intelligente con competitor',
+                          title: 'Analisi Intelligente', 
+                          description: 'AI confronta e trova competitor rilevanti',
                           icon: Brain,
                           color: 'from-cyan-400 to-teal-400'
                         },
                         { 
-                          title: 'Report Excel/PDF', 
-                          description: 'Esportazione professionale con score',
+                          title: 'Report Pronto', 
+                          description: 'Scarica Excel con score e raccomandazioni',
                           icon: FileSpreadsheet,
                           color: 'from-teal-400 to-green-400'
                         }
@@ -216,7 +273,7 @@ export default function LandingPage() {
                 {/* Floating Elements */}
                 <motion.div
                   animate={{ y: [0, -10, 0] }}
-                  transition={{ duration: 3, repeat: Infinity }}
+                  transition={{ duration: 3, repeat: Infinity, ease: "easeInOut" }}
                   className="absolute -top-6 -right-6 w-16 h-16 bg-gradient-to-br from-blue-500 to-cyan-400 rounded-2xl flex items-center justify-center shadow-xl shadow-blue-500/30"
                 >
                   <Brain className="w-8 h-8 text-white" />
@@ -224,7 +281,7 @@ export default function LandingPage() {
 
                 <motion.div
                   animate={{ y: [0, 10, 0] }}
-                  transition={{ duration: 2.5, repeat: Infinity }}
+                  transition={{ duration: 2.5, repeat: Infinity, ease: "easeInOut" }}
                   className="absolute -bottom-4 -left-4 w-14 h-14 bg-gradient-to-br from-cyan-400 to-blue-500 rounded-xl flex items-center justify-center shadow-xl shadow-cyan-500/30"
                 >
                   <Database className="w-7 h-7 text-white" />
@@ -235,41 +292,141 @@ export default function LandingPage() {
         </div>
       </section>
 
+      {/* Value Proposition Section */}
+      <section className="relative z-10 py-16 px-4 sm:px-6 lg:px-8">
+        <div className="max-w-4xl mx-auto">
+          <div className="text-center">
+            <p className="text-lg text-slate-300 leading-relaxed">
+              Il primo sistema che <span className="text-cyan-400 font-semibold">identifica i veri competitor</span> del tuo business in pochi minuti, 
+              confrontando centinaia di siti tramite <span className="text-cyan-400 font-semibold">analisi semantica AI</span>.
+            </p>
+          </div>
+        </div>
+      </section>
+
+      {/* Video Demo Section */}
+      <section id="video-demo" className="relative z-10 py-20 px-4 sm:px-6 lg:px-8 bg-slate-900/50">
+        <div className="max-w-5xl mx-auto">
+          <div className="text-center mb-12">
+            <h2 className="text-4xl font-bold mb-4">
+              🎥 Guarda l'AI al Lavoro
+            </h2>
+            <p className="text-xl text-slate-400 max-w-2xl mx-auto">
+              Come l'AI identifica i tuoi competitor reali in pochi secondi
+            </p>
+          </div>
+
+          <div className="relative">
+            {/* Video Placeholder */}
+            <div className="relative aspect-video rounded-2xl overflow-hidden border-2 border-slate-700/50 shadow-2xl shadow-blue-500/10">
+              {/* Glow Effect */}
+              <div className="absolute inset-0 bg-gradient-to-r from-blue-500/10 to-cyan-400/10 blur-2xl" />
+              
+              {/* Placeholder Content */}
+              <div className="relative w-full h-full bg-gradient-to-br from-slate-800 to-slate-900 flex items-center justify-center">
+                <div className="text-center space-y-6">
+                  <div className="w-24 h-24 mx-auto bg-gradient-to-br from-blue-500 to-cyan-400 rounded-full flex items-center justify-center shadow-2xl shadow-blue-500/30">
+                    <svg className="w-12 h-12 text-white" fill="currentColor" viewBox="0 0 24 24">
+                      <path d="M8 5v14l11-7z"/>
+                    </svg>
+                  </div>
+                  <div>
+                    <div className="text-2xl font-bold text-slate-200 mb-2">Demo Reale</div>
+                    <div className="text-slate-400">Sistema in azione step-by-step</div>
+                  </div>
+                  <Badge className="bg-cyan-500/10 text-cyan-400 border-cyan-500/20">
+                    <Clock className="w-3 h-3 mr-1" />
+                    60 secondi
+                  </Badge>
+                </div>
+              </div>
+            </div>
+
+            {/* Trust Elements Below Video */}
+            <div className="grid grid-cols-4 gap-4 mt-8">
+              {[
+                { icon: CheckCircle2, text: 'Nessun setup' },
+                { icon: Clock, text: '60 secondi' },
+                { icon: Zap, text: 'Risultati immediati' },
+                { icon: Shield, text: 'Dati sicuri' }
+              ].map((item, i) => (
+                <div
+                  key={i}
+                  className="flex flex-col items-center gap-2 text-center"
+                >
+                  <div className="w-10 h-10 rounded-full bg-slate-800 flex items-center justify-center border border-slate-700">
+                    <item.icon className="w-5 h-5 text-cyan-400" />
+                  </div>
+                  <span className="text-sm text-slate-400">{item.text}</span>
+                </div>
+              ))}
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Immediate Benefits Section */}
+      <section className="relative z-10 py-16 px-4 sm:px-6 lg:px-8">
+        <div className="max-w-4xl mx-auto">
+          <Card className="border-slate-700/50 bg-slate-800/50">
+            <CardContent padding="lg">
+              <h3 className="text-2xl font-bold mb-6 text-center">Benefici Immediati</h3>
+              <div className="grid md:grid-cols-3 gap-6">
+                {[
+                  {
+                    icon: Clock,
+                    title: 'Risparmi giorni di analisi manuale',
+                    color: 'from-blue-500 to-cyan-400'
+                  },
+                  {
+                    icon: FileSpreadsheet,
+                    title: 'Report pronti per clienti e investitori',
+                    color: 'from-cyan-400 to-teal-400'
+                  },
+                  {
+                    icon: Target,
+                    title: 'Identificazione dei veri competitor (non quelli "simili")',
+                    color: 'from-teal-400 to-green-400'
+                  }
+                ].map((benefit, i) => (
+                  <div key={i} className="flex flex-col items-center text-center">
+                    <div className={`w-14 h-14 mb-4 rounded-xl bg-gradient-to-br ${benefit.color} flex items-center justify-center shadow-lg`}>
+                      <benefit.icon className="w-7 h-7 text-white" />
+                    </div>
+                    <p className="text-slate-300 leading-relaxed">{benefit.title}</p>
+                  </div>
+                ))}
+              </div>
+            </CardContent>
+          </Card>
+        </div>
+      </section>
+
       {/* Problem Section */}
       <section className="relative z-10 py-20 px-4 sm:px-6 lg:px-8 bg-slate-900/50">
         <div className="max-w-7xl mx-auto">
-          <motion.div
-            initial={{ opacity: 0, y: 30 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            className="text-center mb-16"
-          >
+          <div className="text-center mb-16">
             <h2 className="text-4xl font-bold mb-4">
-              Stanco di Perdere Tempo?
+              Il Problema che Risolviamo
             </h2>
             <p className="text-xl text-slate-400 max-w-3xl mx-auto">
-              L'analisi competitor manuale è lenta, incompleta e costosa. 
-              Ecco perché abbiamo creato una soluzione automatizzata.
+              Analizzare competitor manualmente costa tempo e denaro. Noi lo facciamo in automatico.
             </p>
-          </motion.div>
+          </div>
 
           <div className="grid md:grid-cols-2 gap-8">
             {/* Prima: Pain Points */}
-            <motion.div
-              initial={{ opacity: 0, x: -30 }}
-              whileInView={{ opacity: 1, x: 0 }}
-              viewport={{ once: true }}
-            >
+            <div>
               <Card className="h-full border-red-900/30 bg-red-950/20">
                 <CardContent padding="lg">
-                  <h3 className="text-2xl font-bold mb-6 text-red-400">❌ Metodo Tradizionale</h3>
+                  <h3 className="text-2xl font-bold mb-6 text-red-400">❌ Senza il Nostro Sistema</h3>
                   <ul className="space-y-4">
                     {[
-                      'Ore perse su Google a cercare manualmente',
-                      'Analisi incomplete e superficiali',
-                      'Impossibile scalare oltre 10-20 siti',
-                      'Dati non strutturati e difficili da analizzare',
-                      'Costi elevati di consulenti esterni'
+                      'Giorni persi su Google senza risultati chiari',
+                      'Dati sparsi, impossibili da confrontare',
+                      'Massimo 10-20 siti analizzabili',
+                      'Costi alti per consulenti esterni',
+                      'Aggiornamenti manuali continui'
                     ].map((item, i) => (
                       <li key={i} className="flex items-start gap-3 text-slate-300">
                         <div className="w-6 h-6 rounded-full bg-red-500/10 flex items-center justify-center flex-shrink-0 mt-0.5">
@@ -281,24 +438,20 @@ export default function LandingPage() {
                   </ul>
                 </CardContent>
               </Card>
-            </motion.div>
+            </div>
 
             {/* Dopo: Soluzione */}
-            <motion.div
-              initial={{ opacity: 0, x: 30 }}
-              whileInView={{ opacity: 1, x: 0 }}
-              viewport={{ once: true }}
-            >
+            <div>
               <Card className="h-full border-green-900/30 bg-green-950/20">
                 <CardContent padding="lg">
-                  <h3 className="text-2xl font-bold mb-6 text-green-400">✓ Con Smart Competitor</h3>
+                  <h3 className="text-2xl font-bold mb-6 text-green-400">✓ Con Smart Competitor Finder</h3>
                   <ul className="space-y-4">
                     {[
-                      '100 siti analizzati in 5 minuti',
-                      'AI trova keywords e semantica nascosta',
-                      'Report Excel professionali automatici',
-                      'Score di match 0-100% per ogni competitor',
-                      'Costo fisso mensile, analisi illimitate'
+                      'Analisi illimitata: centinaia di siti in pochi minuti',
+                      'Report Excel pronti per presentazioni',
+                      'Score preciso per ogni competitor (0-100%)',
+                      'AI trova opportunità nascoste',
+                      'Costo fisso, nessuna sorpresa'
                     ].map((item, i) => (
                       <li key={i} className="flex items-start gap-3 text-slate-300">
                         <CheckCircle2 className="w-6 h-6 text-green-400 flex-shrink-0 mt-0.5" />
@@ -308,7 +461,7 @@ export default function LandingPage() {
                   </ul>
                 </CardContent>
               </Card>
-            </motion.div>
+            </div>
           </div>
         </div>
       </section>
@@ -316,51 +469,40 @@ export default function LandingPage() {
       {/* How It Works */}
       <section id="how-it-works" className="relative z-10 py-20 px-4 sm:px-6 lg:px-8">
         <div className="max-w-7xl mx-auto">
-          <motion.div
-            initial={{ opacity: 0, y: 30 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            className="text-center mb-16"
-          >
+          <div className="text-center mb-16">
             <h2 className="text-4xl font-bold mb-4">
-              Come Funziona in 3 Step
+              Semplice Come 1-2-3
             </h2>
             <p className="text-xl text-slate-400 max-w-3xl mx-auto">
-              Processo semplificato per risultati professionali in pochi minuti
+              Tre passaggi per ottenere il tuo report competitor professionale
             </p>
-          </motion.div>
+          </div>
 
           <div className="grid md:grid-cols-3 gap-8">
             {[
               {
                 icon: Search,
                 step: '01',
-                title: 'Analisi del Tuo Business',
-                description: 'Inserisci il tuo sito web e personalizza il contesto: aggiungi keywords specifiche, descrizione aziendale e settore. L\'AI apprende il tuo posizionamento di mercato.',
+                title: 'Inserisci il Tuo Sito',
+                description: 'Incolla l\'URL del tuo business. L\'AI estrae automaticamente keywords e contesto di mercato in pochi secondi.',
                 color: 'from-blue-500 to-cyan-400'
               },
               {
                 icon: Brain,
                 step: '02',
-                title: 'Analisi Competitor in Real-Time',
-                description: 'Carica un file Excel con centinaia di URL. L\'AI analizza ogni sito istantaneamente, confronta keywords e semantica, calcola il match score in tempo reale con aggiornamenti live.',
+                title: 'Carica la Lista Competitor',
+                description: 'Upload di un file Excel con gli URL da analizzare. Il sistema confronta tutto in tempo reale e calcola i match score.',
                 color: 'from-cyan-400 to-teal-400'
               },
               {
                 icon: FileSpreadsheet,
                 step: '03',
-                title: 'Export Report Professionale',
-                description: 'Scarica report completo in Excel o PDF con score dettagliato, keywords matchate, classificazione settore e raccomandazioni strategiche pronte per presentazioni.',
+                title: 'Scarica il Report',
+                description: 'Ottieni un file Excel completo con score, classifiche e insights strategici pronti per decisioni immediate.',
                 color: 'from-teal-400 to-green-400'
               }
             ].map((step, i) => (
-              <motion.div
-                key={i}
-                initial={{ opacity: 0, y: 30 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ delay: i * 0.2 }}
-              >
+              <div key={i}>
                 <Card className="h-full border-slate-700/50 hover:border-slate-600 transition-all hover:shadow-xl hover:shadow-blue-500/10 group">
                   <CardContent padding="lg">
                     <div className={`w-16 h-16 mb-6 rounded-2xl bg-gradient-to-br ${step.color} flex items-center justify-center shadow-lg group-hover:scale-110 transition-transform`}>
@@ -371,7 +513,7 @@ export default function LandingPage() {
                     <p className="text-slate-400 leading-relaxed">{step.description}</p>
                   </CardContent>
                 </Card>
-              </motion.div>
+              </div>
             ))}
           </div>
         </div>
@@ -380,58 +522,47 @@ export default function LandingPage() {
       {/* Case Studies / Sectors */}
       <section className="relative z-10 py-20 px-4 sm:px-6 lg:px-8 bg-slate-900/50">
         <div className="max-w-7xl mx-auto">
-          <motion.div
-            initial={{ opacity: 0, y: 30 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            className="text-center mb-16"
-          >
+          <div className="text-center mb-16">
             <h2 className="text-4xl font-bold mb-4">
-              Settori di Applicazione
+              Chi Lo Usa Già
             </h2>
             <p className="text-xl text-slate-400 max-w-3xl mx-auto">
-              Utilizzato da professionisti in diverse industry per vincere la concorrenza
+              Professionisti in diversi settori si affidano a noi per battere la concorrenza
             </p>
-          </motion.div>
+          </div>
 
           <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
             {[
               {
                 icon: TrendingUp,
-                sector: 'Finanza & Investimenti',
-                use_case: 'Analisi banche online e fintech',
-                result: '45 competitor trovati in 3 minuti',
+                sector: 'Finanza',
+                use_case: 'Banche e fintech',
+                result: '45 competitor mappati in minuti',
                 gradient: 'from-blue-500 to-cyan-400'
               },
               {
                 icon: BarChart3,
                 sector: 'E-commerce',
-                use_case: 'Monitoraggio marketplace e shop',
-                result: '120+ siti analizzati simultaneamente',
+                use_case: 'Marketplace e shop online',
+                result: '120+ siti analizzati insieme',
                 gradient: 'from-cyan-400 to-teal-400'
               },
               {
                 icon: Users,
                 sector: 'Consulting',
                 use_case: 'Report per clienti B2B',
-                result: 'Export Excel professionali pronti',
+                result: 'Export pronti per presentazioni',
                 gradient: 'from-teal-400 to-green-400'
               },
               {
                 icon: Target,
                 sector: 'SaaS & Tech',
-                use_case: 'Competitive intelligence software',
-                result: 'Score semantico AI 95% accurato',
+                use_case: 'Intelligence software',
+                result: 'Precisione AI al 95%',
                 gradient: 'from-green-400 to-emerald-400'
               }
             ].map((item, i) => (
-              <motion.div
-                key={i}
-                initial={{ opacity: 0, y: 30 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ delay: i * 0.1 }}
-              >
+              <div key={i}>
                 <Card className="h-full border-slate-700/50 hover:border-slate-600 transition-all hover:shadow-xl hover:shadow-blue-500/10 group cursor-pointer">
                   <CardContent padding="lg">
                     <div className={`w-12 h-12 mb-4 rounded-xl bg-gradient-to-br ${item.gradient} flex items-center justify-center shadow-lg group-hover:scale-110 transition-transform`}>
@@ -447,7 +578,7 @@ export default function LandingPage() {
                     </div>
                   </CardContent>
                 </Card>
-              </motion.div>
+              </div>
             ))}
           </div>
         </div>
@@ -456,71 +587,48 @@ export default function LandingPage() {
       {/* Features Grid */}
       <section className="relative z-10 py-20 px-4 sm:px-6 lg:px-8">
         <div className="max-w-7xl mx-auto">
-          <motion.div
-            initial={{ opacity: 0, y: 30 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            className="text-center mb-16"
-          >
+          <div className="text-center mb-16">
             <h2 className="text-4xl font-bold mb-4">
-              Funzionalità Avanzate
+              La Tecnologia che Fa il Lavoro al Posto Tuo
             </h2>
             <p className="text-xl text-slate-400 max-w-3xl mx-auto">
-              Tecnologia AI all'avanguardia per analisi competitor professionali
+              Niente fuffa: solo risultati misurabili
             </p>
-          </motion.div>
+          </div>
 
-          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+          <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6 mb-12">
             {[
               {
-                icon: Shield,
-                title: 'Scraping Intelligente',
-                description: '4 livelli di fallback per superare protezioni anti-bot e WAF',
-                badge: 'Anti-Block'
+                icon: Search,
+                title: 'Capisce Chi Sei',
+                description: 'Analizza il tuo business e identifica il tuo posizionamento',
+                badge: 'Intelligente'
               },
               {
                 icon: Brain,
-                title: 'Semantic Analysis',
-                description: 'Non solo keywords: AI capisce il contesto e trova competitor nascosti',
-                badge: 'AI-Powered'
-              },
-              {
-                icon: FileSpreadsheet,
-                title: 'Report Automatici',
-                description: 'Export Excel stilizzati con grafici, score e raccomandazioni',
-                badge: 'Professional'
+                title: 'Capisce Cosa Fanno gli Altri',
+                description: 'Legge e comprende centinaia di siti in automatico',
+                badge: 'Semantico'
               },
               {
                 icon: Zap,
-                title: 'Analisi Bulk',
-                description: 'Carica Excel con 100+ URL, analizza tutti simultaneamente',
+                title: 'Confronta Tutto in Real-Time',
+                description: 'Calcola match score e rilevanza istantaneamente',
                 badge: 'Veloce'
               },
               {
                 icon: Target,
-                title: 'Match Score 0-100%',
-                description: 'Algoritmo ibrido keyword + semantic per scoring preciso',
-                badge: 'Accurato'
-              },
-              {
-                icon: Clock,
-                title: 'Real-Time Streaming',
-                description: 'Vedi il progresso in tempo reale, aggiornamenti SSE live',
-                badge: 'Live'
+                title: 'Ti Dice Chi è Competitor Vero',
+                description: 'Non "siti simili", ma veri competitor di mercato',
+                badge: 'Preciso'
               }
             ].map((feature, i) => (
-              <motion.div
-                key={i}
-                initial={{ opacity: 0, y: 30 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ delay: i * 0.1 }}
-              >
+              <div key={i}>
                 <Card className="h-full border-slate-700/50 hover:border-slate-600 transition-all hover:shadow-xl hover:shadow-blue-500/10 group">
                   <CardContent padding="lg">
                     <div className="flex items-start justify-between mb-4">
-                      <div className="w-10 h-10 rounded-lg bg-gradient-to-br from-blue-500 to-cyan-400 flex items-center justify-center group-hover:scale-110 transition-transform">
-                        <feature.icon className="w-5 h-5 text-white" />
+                      <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-blue-500 to-cyan-400 flex items-center justify-center group-hover:scale-110 transition-transform shadow-lg">
+                        <feature.icon className="w-6 h-6 text-white" />
                       </div>
                       <Badge className="bg-cyan-500/10 text-cyan-400 border-cyan-500/20 text-xs">
                         {feature.badge}
@@ -530,7 +638,48 @@ export default function LandingPage() {
                     <p className="text-sm text-slate-400 leading-relaxed">{feature.description}</p>
                   </CardContent>
                 </Card>
-              </motion.div>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* Target Audience Section */}
+      <section className="relative z-10 py-20 px-4 sm:px-6 lg:px-8 bg-slate-900/50">
+        <div className="max-w-5xl mx-auto">
+          <div className="text-center mb-12">
+            <h2 className="text-4xl font-bold mb-4">
+              Per Chi è Pensato?
+            </h2>
+            <p className="text-xl text-slate-400">
+              Professionisti che gestiscono analisi competitive di mercato
+            </p>
+          </div>
+
+          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+            {[
+              { icon: TrendingUp, label: 'Consulenti Finanziari', description: 'Analisi settoriali e benchmarking' },
+              { icon: BarChart3, label: 'Business Analyst', description: 'Intelligence competitiva' },
+              { icon: Users, label: 'Studi di Consulenza', description: 'Report per clienti corporate' },
+              { icon: Target, label: 'Advisor M&A', description: 'Due diligence di mercato' },
+              { icon: Database, label: 'Agenzie Dati', description: 'Raccolta e benchmarking dati' },
+              { icon: Shield, label: 'Market Intelligence', description: 'Valutazione nuovi mercati' }
+            ].map((item, i) => (
+              <div key={i}>
+                <Card className="h-full border-slate-700/50 hover:border-cyan-500/30 transition-all group">
+                  <CardContent padding="md">
+                    <div className="flex items-start gap-4">
+                      <div className="w-10 h-10 rounded-lg bg-gradient-to-br from-blue-500 to-cyan-400 flex items-center justify-center flex-shrink-0 shadow-lg group-hover:scale-110 transition-transform">
+                        <item.icon className="w-5 h-5 text-white" />
+                      </div>
+                      <div>
+                        <h3 className="font-bold text-slate-200 mb-1">{item.label}</h3>
+                        <p className="text-sm text-slate-400">{item.description}</p>
+                      </div>
+                    </div>
+                  </CardContent>
+                </Card>
+              </div>
             ))}
           </div>
         </div>
@@ -539,11 +688,7 @@ export default function LandingPage() {
       {/* CTA Final */}
       <section className="relative z-10 py-20 px-4 sm:px-6 lg:px-8">
         <div className="max-w-4xl mx-auto">
-          <motion.div
-            initial={{ opacity: 0, y: 30 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-          >
+          <div>
             <Card className="border-slate-700/50 bg-gradient-to-br from-slate-800 to-slate-900 relative overflow-hidden">
               {/* Glow Effect */}
               <div className="absolute inset-0 bg-gradient-to-r from-blue-500/10 to-cyan-400/10 blur-3xl" />
@@ -551,11 +696,11 @@ export default function LandingPage() {
               <CardContent padding="lg">
                 <div className="relative text-center">
                   <h2 className="text-4xl font-bold mb-4">
-                    Pronto a Dominare il Mercato?
+                    Pronto a Iniziare?
                   </h2>
                   <p className="text-xl text-slate-400 mb-8 max-w-2xl mx-auto">
-                    Richiedi accesso alla piattaforma e inizia ad analizzare i tuoi competitor 
-                    con l'intelligenza artificiale oggi stesso.
+                    Accedi ora e scopri chi sono i tuoi veri competitor. 
+                    Primo report pronto in meno di 5 minuti.
                   </p>
 
                   <div className="flex flex-col sm:flex-row gap-4 justify-center mb-8">
@@ -565,7 +710,7 @@ export default function LandingPage() {
                       onClick={handleCTA}
                       className="shadow-2xl shadow-blue-500/25 hover:shadow-blue-500/40 transition-all"
                     >
-                      Richiedi Accesso
+                      Accedi Subito
                       <ChevronRight className="w-5 h-5 ml-2" />
                     </Button>
                   </div>
@@ -573,21 +718,21 @@ export default function LandingPage() {
                   <div className="flex items-center justify-center gap-8 text-sm text-slate-500">
                     <div className="flex items-center gap-2">
                       <CheckCircle2 className="w-4 h-4 text-green-400" />
-                      Setup immediato
+                      Nessun setup
                     </div>
                     <div className="flex items-center gap-2">
                       <CheckCircle2 className="w-4 h-4 text-green-400" />
-                      Supporto dedicato
+                      Risultati immediati
                     </div>
                     <div className="flex items-center gap-2">
                       <CheckCircle2 className="w-4 h-4 text-green-400" />
-                      Dati sicuri
+                      Supporto incluso
                     </div>
                   </div>
                 </div>
               </CardContent>
             </Card>
-          </motion.div>
+          </div>
         </div>
       </section>
 
@@ -598,23 +743,32 @@ export default function LandingPage() {
             {/* Brand */}
             <div>
               <div className="flex items-center gap-3 mb-4">
-                <div className="w-10 h-10 bg-gradient-to-br from-blue-500 to-cyan-400 rounded-xl flex items-center justify-center">
-                  <Activity className="w-6 h-6 text-white" />
+                <div className="w-10 h-10 bg-gradient-to-br from-blue-500 to-cyan-400 rounded-xl flex items-center justify-center relative">
+                  {/* Globe */}
+                  <svg viewBox="0 0 24 24" className="w-5 h-5 text-white absolute" fill="none" stroke="currentColor">
+                    <circle cx="12" cy="12" r="9" strokeWidth="1.8"/>
+                    <ellipse cx="12" cy="12" rx="9" ry="4" strokeWidth="1.2"/>
+                    <path d="M 12 3 Q 15 12 12 21" strokeWidth="1.2"/>
+                    <path d="M 12 3 Q 9 12 12 21" strokeWidth="1.2"/>
+                  </svg>
+                  {/* Magnifying glass */}
+                  <Search className="w-3 h-3 text-white absolute" style={{ transform: 'translate(50%, 50%)' }} />
                 </div>
                 <span className="text-lg font-bold">Smart Competitor Finder</span>
               </div>
               <p className="text-sm text-slate-400 leading-relaxed">
-                Analisi competitor automatizzata con intelligenza artificiale. 
-                Trova, analizza e batti la concorrenza in pochi minuti.
+                Analisi competitor automatizzata con AI. 
+                Trova, confronta e batti la concorrenza.
               </p>
             </div>
 
             {/* Quick Links */}
             <div>
-              <h3 className="font-semibold mb-4">Quick Links</h3>
+              <h3 className="font-semibold mb-4">Link Rapidi</h3>
               <ul className="space-y-2 text-sm text-slate-400">
+                <li><a href="#video-demo" className="hover:text-cyan-400 transition-colors">Guarda Demo</a></li>
                 <li><a href="#how-it-works" className="hover:text-cyan-400 transition-colors">Come Funziona</a></li>
-                <li><a href="/login" className="hover:text-cyan-400 transition-colors">Login</a></li>
+                <li><a href="/login" className="hover:text-cyan-400 transition-colors">Accedi</a></li>
               </ul>
             </div>
 
@@ -640,7 +794,7 @@ export default function LandingPage() {
 
           <div className="pt-8 border-t border-slate-800">
             <p className="text-center text-xs text-slate-500">
-              Tecnologia AI per l'analisi competitor professionale
+              Analisi competitor professionale powered by AI
             </p>
           </div>
         </div>
