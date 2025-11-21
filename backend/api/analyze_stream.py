@@ -17,6 +17,7 @@ from .analysis_manager import (
     complete_analysis,
     fail_analysis
 )
+from utils.excel_utils import ExcelProcessor
 
 router = APIRouter()
 
@@ -38,21 +39,20 @@ async def upload_and_analyze_stream(
         # Read the uploaded file
         contents = await file.read()
         
-        # Extract URLs (same logic as upload_analyze.py)
-        urls = []
+        # 🆕 Use new ExcelProcessor for intelligent column detection
+        excel_processor = ExcelProcessor()
+        sites_data = []
+        
         try:
-            if file.filename and file.filename.endswith('.csv'):
-                df = pd.read_csv(io.StringIO(contents.decode('utf-8')))
-                first_column = df.iloc[:, 0].dropna()
-                for url in first_column:
-                    url_str = str(url).strip()
-                    if url_str and url_str.lower() not in ['nan', 'none', '']:
-                        if not url_str.startswith(('http://', 'https://')):
-                            url_str = 'https://' + url_str
-                        urls.append(url_str)
+            if file.filename and (file.filename.endswith('.xlsx') or file.filename.endswith('.xls')):
+                # Use intelligent Excel processing with auto-detection
+                sites_data = excel_processor.process_excel_file(contents, file.filename)
+                urls = [site['url'] for site in sites_data]
                 
-            elif file.filename and (file.filename.endswith('.xlsx') or file.filename.endswith('.xls')):
-                df = pd.read_excel(io.BytesIO(contents))
+            elif file.filename and file.filename.endswith('.csv'):
+                # CSV processing (simple first column extraction)
+                df = pd.read_csv(io.StringIO(contents.decode('utf-8')))
+                urls = []
                 first_column = df.iloc[:, 0].dropna()
                 for url in first_column:
                     url_str = str(url).strip()
@@ -62,7 +62,9 @@ async def upload_and_analyze_stream(
                         urls.append(url_str)
                 
             else:
+                # Plain text file processing
                 text_content = contents.decode('utf-8')
+                urls = []
                 lines = [line.strip() for line in text_content.split('\n') if line.strip()]
                 for line in lines:
                     if line and line.lower() not in ['nan', 'none', '']:
@@ -71,19 +73,11 @@ async def upload_and_analyze_stream(
                         urls.append(line)
                 
         except Exception as file_error:
-            try:
-                text_content = contents.decode('utf-8')
-                lines = [line.strip() for line in text_content.split('\n') if line.strip()]
-                for line in lines:
-                    if line and line.lower() not in ['nan', 'none', '']:
-                        if not line.startswith(('http://', 'https://')):
-                            line = 'https://' + line
-                        urls.append(line)
-            except Exception as text_error:
-                raise HTTPException(
-                    status_code=400, 
-                    detail=f"Failed to parse file. Error: {str(file_error)}"
-                )
+            logging.error(f"File parsing error: {str(file_error)}")
+            raise HTTPException(
+                status_code=400, 
+                detail=f"Failed to parse file. Error: {str(file_error)}"
+            )
         
         logging.info(f"Extracted {len(urls)} URLs for streaming analysis")
         
