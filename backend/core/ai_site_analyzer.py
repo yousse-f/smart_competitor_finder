@@ -39,34 +39,41 @@ class AISiteAnalyzer:
         
         # Template prompt per l'analisi business
         self.analysis_prompt = """
-Sei un esperto analista business. Analizza il contenuto del sito web fornito e crea un riassunto professionale.
+Sei un esperto analista business. Analizza ATTENTAMENTE il contenuto EFFETTIVO del sito web fornito e crea un riassunto professionale.
 
 CONTENUTO SITO:
 {content}
 
-ISTRUZIONI:
-1. Identifica chiaramente di cosa si occupa questo business
-2. Scrivi una descrizione di 2-3 frasi in italiano che spieghi:
-   - Settore di attività
-   - Prodotti/servizi principali  
-   - Target di mercato
-3. Identifica il settore industriale (es: "Arredamento", "Elettronica", "E-commerce")
-4. Lista massimo 5 servizi/prodotti chiave
+ISTRUZIONI CRITICHE:
+1. Leggi ATTENTAMENTE il contenuto fornito - NON fare supposizioni basate solo sul nome dell'azienda
+2. Identifica chiaramente di cosa si occupa REALMENTE questo business basandoti sui prodotti/servizi descritti nel contenuto
+3. Scrivi una descrizione di 2-3 frasi in italiano che spieghi:
+   - Settore di attività EFFETTIVO (basato sul contenuto, non sul nome)
+   - Prodotti/servizi principali REALI trovati nel sito
+   - Target di mercato REALE
+4. Identifica il settore industriale CORRETTO (es: "HVAC e Climatizzazione", "Impiantistica Industriale", "Arredamento", "Elettronica", "E-commerce")
+5. Lista ESATTAMENTE 5 servizi/prodotti chiave TROVATI nel contenuto
+
+ESEMPI DI ERRORI DA EVITARE:
+- Se il sito parla di "impianti aria" e "ventilazione", NON dire che è "noleggio auto"
+- Se il sito vende "mobili", NON dire che è "software"
+- Basati SEMPRE sul contenuto effettivo, non sul nome dell'azienda
 
 FORMATO RISPOSTA (JSON):
 {{
-    "business_description": "Descrizione 2-3 frasi in italiano",
-    "industry_sector": "Settore industriale",
-    "target_market": "Descrizione target clienti",
-    "key_services": ["servizio1", "servizio2", "servizio3"],
+    "business_description": "Descrizione accurata di 2-3 frasi basata sul CONTENUTO REALE",
+    "industry_sector": "Settore industriale CORRETTO identificato dal contenuto",
+    "target_market": "Target clienti REALE descritto nel sito",
+    "key_services": ["servizio_reale_1", "servizio_reale_2", "servizio_reale_3", "servizio_reale_4", "servizio_reale_5"],
     "confidence_score": 0.85
 }}
 
 REGOLE:
 - Descrizione MASSIMO 3 frasi
 - Linguaggio professionale ma comprensibile
-- Focus su cosa fa il business, non su come lo fa
+- Focus su cosa fa REALMENTE il business secondo il contenuto
 - Se il sito non è chiaro, confidence_score < 0.5
+- PRIORITÀ: accuratezza sui prodotti/servizi EFFETTIVAMENTE descritti
 """
 
     async def analyze_site(self, url: str) -> SiteSummary:
@@ -127,8 +134,8 @@ REGOLE:
         try:
             soup = BeautifulSoup(html_content, 'html.parser')
             
-            # Rimuovi elementi non necessari
-            for element in soup(['script', 'style', 'nav', 'footer', 'header', 'aside']):
+            # Rimuovi elementi non necessari MA mantieni header principale
+            for element in soup(['script', 'style', 'nav', 'footer', 'aside']):
                 element.decompose()
             
             # Estrai testo significativo
@@ -139,6 +146,14 @@ REGOLE:
             meta_desc = soup.find('meta', attrs={'name': 'description'})
             description = meta_desc.get('content', '').strip() if meta_desc else ""
             
+            # Estrai H1, H2 per contesto migliore
+            headers = []
+            for h in soup.find_all(['h1', 'h2', 'h3']):
+                header_text = h.get_text().strip()
+                if header_text and len(header_text) > 5:
+                    headers.append(header_text)
+            headers_text = " | ".join(headers[:10])  # Max 10 header principali
+            
             # Contenuto principale
             main_content = soup.get_text()
             
@@ -147,20 +162,21 @@ REGOLE:
             chunks = (phrase.strip() for line in lines for phrase in line.split("  "))
             clean_text = ' '.join(chunk for chunk in chunks if chunk and len(chunk) > 3)
             
-            # Limita lunghezza per OpenAI (max 4000 caratteri per essere sicuri)
-            max_chars = 4000
+            # Limita lunghezza per OpenAI (max 4500 caratteri per includere più info)
+            max_chars = 4500
             if len(clean_text) > max_chars:
                 clean_text = clean_text[:max_chars] + "..."
             
-            # Combina informazioni chiave
+            # Combina informazioni chiave CON HEADERS per contesto
             content_summary = f"""
 URL: {url}
 TITLE: {title_text}
-DESCRIPTION: {description}
-CONTENT: {clean_text}
+META DESCRIPTION: {description}
+MAIN HEADERS: {headers_text}
+FULL CONTENT: {clean_text}
 """
             
-            logger.info(f"🧹 Content cleaned: {len(content_summary)} characters")
+            logger.info(f"🧹 Content cleaned: {len(content_summary)} characters, {len(headers)} headers found")
             return content_summary.strip()
             
         except Exception as e:
