@@ -42,7 +42,7 @@ async def analyze_bulk(request: AnalyzeBulkRequest, background_tasks: Background
     them asynchronously. Use the returned analysis_id to check progress and results.
     """
     try:
-        # Generate analysis ID
+        # Generate unique analysis ID
         analysis_id = f"analysis_{datetime.now().strftime('%Y%m%d_%H%M%S')}_{len(request.sites_data)}"
         
         # Validate input
@@ -52,14 +52,24 @@ async def analyze_bulk(request: AnalyzeBulkRequest, background_tasks: Background
         if not request.target_keywords:
             raise HTTPException(status_code=400, detail="No target keywords provided")
         
-        # Initialize analysis status
+        # IMPORTANT: Clear any existing data for this analysis_id to prevent ghost data
+        if analysis_id in analysis_status:
+            del analysis_status[analysis_id]
+        if analysis_id in analysis_results:
+            del analysis_results[analysis_id]
+        
+        # Initialize analysis status with fresh data
         analysis_status[analysis_id] = {
             'status': 'started',
             'total_sites': len(request.sites_data),
             'processed_sites': 0,
             'start_time': datetime.now().isoformat(),
-            'target_keywords': request.target_keywords
+            'target_keywords': request.target_keywords,
+            'sites_data': request.sites_data  # Store original sites for reference
         }
+        
+        # Initialize empty results
+        analysis_results[analysis_id] = []
         
         # Start background analysis
         background_tasks.add_task(
@@ -158,6 +168,34 @@ async def list_analyses():
             detail=f"Failed to list analyses: {str(e)}"
         )
 
+@router.post("/cleanup")
+async def cleanup_all():
+    """
+    Clean up ALL analysis results and reset cache.
+    Use this to clear memory and start fresh.
+    """
+    try:
+        global analysis_results, analysis_status
+        
+        # Clear in-memory storage
+        analysis_results.clear()
+        analysis_status.clear()
+        
+        logging.info("✅ All analysis data cleared from memory")
+        
+        return {
+            'message': 'All analysis data cleared successfully',
+            'remaining_analyses': 0,
+            'timestamp': datetime.now().isoformat()
+        }
+        
+    except Exception as e:
+        logging.error(f"Error cleaning up all data: {str(e)}")
+        raise HTTPException(
+            status_code=500,
+            detail=f"Failed to cleanup all data: {str(e)}"
+        )
+
 @router.delete("/analyze-bulk/{analysis_id}")
 async def delete_analysis(analysis_id: str):
     """Delete a specific analysis from memory. Supports partial ID matching."""
@@ -249,11 +287,18 @@ async def run_bulk_analysis(analysis_id: str, sites_data: List[Dict], target_key
         # Update status to processing
         analysis_status[analysis_id]['status'] = 'processing'
         
+        # IMPORTANT: Clear any existing results before starting
+        analysis_results[analysis_id] = []
+        
+        logging.info(f"Starting fresh analysis {analysis_id} with {len(sites_data)} sites")
+        
         # Run the bulk scraping with sector analysis
         results = await bulk_scraper.analyze_sites_bulk(sites_data, target_keywords, client_url)
         
-        # Store results
+        # Store results (completely replace, don't append)
         analysis_results[analysis_id] = results
+        
+        logging.info(f"Analysis {analysis_id} completed with {len(results)} results")
         
         # Update final status
         end_time = datetime.now()
@@ -267,7 +312,7 @@ async def run_bulk_analysis(analysis_id: str, sites_data: List[Dict], target_key
             'duration_seconds': round(duration, 2)
         })
         
-        logging.info(f"Completed bulk analysis {analysis_id} in {duration:.2f} seconds")
+        logging.info(f"Completed bulk analysis {analysis_id} in {duration:.2f} seconds with {len(results)} sites")
         
     except Exception as e:
         logging.error(f"Error in bulk analysis {analysis_id}: {str(e)}")
