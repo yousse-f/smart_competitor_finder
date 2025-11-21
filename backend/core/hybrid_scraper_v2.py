@@ -197,7 +197,8 @@ class HybridScraperV2:
                 async with session.get('https://app.scrapingbee.com/api/v1/', params=params) as response:
                     duration = time.time() - start_time
                     
-                    if response.status == 200:
+                    # ✅ Accept all 2xx status codes for ScrapingBee too
+                    if 200 <= response.status < 300:
                         content = await response.text()
                         return ScrapingResult(
                             success=True,
@@ -301,10 +302,11 @@ class HybridScraperV2:
                             duration = time.time() - start_time
                             logger.info(f"📊 Basic HTTP: Got response status {response.status}")
                             
-                            if response.status == 200:
+                            # ✅ Accept all 2xx status codes (200-299), including 202 Accepted
+                            if 200 <= response.status < 300:
                                 content = await response.text()
                                 content_length = len(content)
-                                logger.info(f"✅ Basic HTTP SUCCESS: {content_length} characters received")
+                                logger.info(f"✅ Basic HTTP SUCCESS ({response.status}): {content_length} characters received")
                                 return ScrapingResult(
                                     success=True,
                                     content=content,
