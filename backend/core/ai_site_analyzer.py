@@ -86,17 +86,51 @@ REGOLE:
         logger.info(f"🤖 Starting AI analysis for: {url}")
         
         try:
-            # 1. Scraping del contenuto (solo HTML, non keywords)
+            # 1. Scraping del contenuto con FALLBACK INTELLIGENTE
             logger.info("📡 Scraping site content...")
             
-            # Usa il metodo _scrape_basic per ottenere contenuto HTML puro
+            # Step 1: Try fast basic HTTP first
             scraping_result = await self.scraper._scrape_basic(url)
+            content = None
+            scraping_method = "unknown"
             
-            if not scraping_result.success or not scraping_result.content:
-                raise ValueError(f"Failed to scrape content from {url}: {getattr(scraping_result, 'error', 'Unknown error')}")
+            if scraping_result.success and scraping_result.content:
+                content = scraping_result.content
+                scraping_method = "basic_http"
+                logger.info(f"✅ Basic HTTP returned {len(content)} characters")
+                
+                # Check if content is sufficient (HTTP 202 might return incomplete content)
+                if len(content) < 1000:
+                    logger.warning(f"⚠️ Content too short ({len(content)} chars), trying Browser Pool fallback...")
+                    content = None  # Force fallback
+            
+            # Step 2: Fallback to Browser Pool if basic failed or content insufficient
+            if not content:
+                logger.info("🔄 Using Browser Pool fallback for better content...")
+                from core.browser_pool import browser_pool
+                
+                try:
+                    session = await browser_pool.get_session()
+                    html_content = await browser_pool.scrape_with_session(session, url)
+                    
+                    if html_content and len(html_content) > 1000:
+                        content = html_content
+                        scraping_method = "browser_pool"
+                        logger.info(f"✅ Browser Pool returned {len(content)} characters")
+                    else:
+                        raise ValueError(f"Browser Pool returned insufficient content: {len(html_content) if html_content else 0} chars")
+                except Exception as pool_error:
+                    logger.error(f"❌ Browser Pool fallback failed: {pool_error}")
+                    raise ValueError(f"All scraping methods failed for {url}")
+            
+            # Final validation
+            if not content or len(content) < 500:
+                raise ValueError(f"Insufficient content from {url}: only {len(content) if content else 0} characters")
+            
+            logger.info(f"📊 Final content: {len(content)} chars via {scraping_method}")
             
             # 2. Pulizia e ottimizzazione del contenuto
-            clean_content = self._clean_content_for_ai(scraping_result.content, url)
+            clean_content = self._clean_content_for_ai(content, url)
             
             # 3. Analisi AI con OpenAI
             logger.info("🤖 Generating AI business summary...")
