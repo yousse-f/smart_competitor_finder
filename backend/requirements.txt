@@ -27,7 +27,8 @@ fake-useragent # FIX: Missing dependency causing Railway crash
 # --- Data Processing (Fissate per compatibilità Docker) ---
 numpy==1.26.4
 pandas==2.1.4
-openpyxl
+openpyxl  # For .xlsx files
+xlrd      # For legacy .xls files
 nltk
 
 # --- ML Libraries (Fissate per compatibilità Docker) ---
