@@ -125,6 +125,16 @@ class HybridScraperV2:
         start_time = time.time()
         
         try:
+            # 🚨 Check if Browser Pool is available (Railway resource protection)
+            if not browser_pool.is_initialized:
+                logger.warning("⚠️ Browser Pool not initialized - skipping")
+                return ScrapingResult(
+                    success=False,
+                    error="Browser pool not initialized (resource protection)",
+                    method="browser_pool",
+                    duration=time.time() - start_time
+                )
+            
             # Ottieni sessione dal pool
             session = await browser_pool.get_session()
             

@@ -36,7 +36,7 @@ class BrowserPool:
     - Performance optimization
     """
     
-    def __init__(self, pool_size: int = 3, max_requests_per_session: int = 10):
+    def __init__(self, pool_size: int = 1, max_requests_per_session: int = 10):
         self.pool_size = pool_size
         self.max_requests_per_session = max_requests_per_session
         self.sessions: List[BrowserSession] = []
@@ -76,7 +76,13 @@ class BrowserPool:
             
         logger.info(f"🏊‍♂️ Initializing browser pool with {self.pool_size} sessions...")
         
-        self.playwright_instance = await async_playwright().start()
+        try:
+            self.playwright_instance = await async_playwright().start()
+        except Exception as pw_error:
+            logger.error(f"❌ CRITICAL: Failed to start Playwright: {pw_error}")
+            logger.warning("⚠️ Browser Pool disabled - will use Basic HTTP only")
+            self.is_initialized = False
+            return  # Fail gracefully without crashing
         
         # Crea tutti i browser del pool
         for i in range(self.pool_size):
@@ -84,10 +90,20 @@ class BrowserPool:
                 session = await self._create_session(f"session_{i}")
                 self.sessions.append(session)
                 logger.info(f"✅ Created browser session {i+1}/{self.pool_size}")
+            except BlockingIOError as bio_error:
+                # 🚨 Resource exhaustion - common on Railway
+                logger.error(f"❌ RESOURCE EXHAUSTION creating session {i}: {bio_error}")
+                logger.warning("⚠️ Stopping Browser Pool initialization - insufficient system resources")
+                break  # Stop trying to create more sessions
             except Exception as e:
                 logger.error(f"❌ Failed to create session {i}: {e}")
         
-        self.is_initialized = True
+        if len(self.sessions) == 0:
+            logger.error("❌ NO BROWSER SESSIONS created - Browser Pool disabled")
+            self.is_initialized = False
+        else:
+            self.is_initialized = True
+            logger.info(f"🎉 Browser pool initialized with {len(self.sessions)} sessions")
         logger.info(f"🎉 Browser pool initialized with {len(self.sessions)} healthy sessions")
     
     async def _create_session(self, session_id: str) -> BrowserSession:
@@ -167,10 +183,11 @@ class BrowserPool:
         best_session.last_used = time.time()
         best_session.request_count += 1
         
+        # 🔇 DISABLED: Auto-renewal to prevent Railway resource exhaustion
         # Check se sessione deve essere rinnovata
-        if best_session.request_count >= self.max_requests_per_session:
-            logger.info(f"🔄 Session {best_session.session_id} reached max requests, scheduling renewal...")
-            asyncio.create_task(self._renew_session(best_session))
+        # if best_session.request_count >= self.max_requests_per_session:
+        #     logger.info(f"🔄 Session {best_session.session_id} reached max requests, scheduling renewal...")
+        #     asyncio.create_task(self._renew_session(best_session))
         
         return best_session
     

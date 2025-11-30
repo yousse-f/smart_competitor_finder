@@ -211,7 +211,7 @@ async def stream_analysis_progress(urls: List[str], keywords: List[str], analysi
                 update_analysis_progress(
                     analysis_id=analysis_id,
                     processed_sites=current_index,
-                    result={
+                    new_result={
                         'url': url,
                         'score': score,
                         'keywords_found': found_keywords,
