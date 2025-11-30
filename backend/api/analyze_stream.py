@@ -18,8 +18,29 @@ from .analysis_manager import (
     fail_analysis
 )
 from utils.excel_utils import ExcelProcessor
+import math
 
 router = APIRouter()
+
+# 🛠️ Helper function per categorizzare errori e fornire suggerimenti
+def _get_error_suggestion(error_msg: str) -> str:
+    """Fornisce suggerimenti actionable basati sul tipo di errore"""
+    error_lower = error_msg.lower()
+    
+    if 'timeout' in error_lower or 'timed out' in error_lower:
+        return 'Sito troppo lento o bloccato - riprova manualmente o contatta il sito'
+    elif '403' in error_msg or '401' in error_msg:
+        return 'Sito protetto da WAF/firewall - necessario proxy premium (ScrapingBee)'
+    elif 'connection' in error_lower or 'connect' in error_lower:
+        return 'Sito temporaneamente irraggiungibile - verifica che sia online'
+    elif 'ssl' in error_lower or 'certificate' in error_lower:
+        return 'Problemi certificato SSL - sito potrebbe avere configurazione errata'
+    elif '404' in error_msg:
+        return 'Pagina non trovata - verifica URL corretto'
+    elif '500' in error_msg or '502' in error_msg or '503' in error_msg:
+        return 'Errore server del sito - riprova più tardi'
+    else:
+        return 'Errore generico - verifica manualmente il sito'
 
 @router.post("/upload-and-analyze-stream")
 async def upload_and_analyze_stream(
@@ -116,15 +137,23 @@ async def upload_and_analyze_stream(
         raise HTTPException(status_code=500, detail=f"Failed to process file: {str(e)}")
 
 
+# 📦 Batch configuration
+BATCH_SIZE = 100  # Split analyses into batches of 100 sites
+
 async def stream_analysis_progress(urls: List[str], keywords: List[str], analysis_id: str):
     """
     🎯 Generator that yields SSE events for each analyzed competitor.
     🆕 Now saves progress to persistent JSON file
+    ⏱️ FASE 1: Max 60s timeout per site
+    📦 FASE 2: Automatic batch processing for 100+ sites
     
     Event format:
     data: {"event": "started", "analysis_id": "...", "total": 10}
+    data: {"event": "batch_info", "total_sites": 250, "batch_size": 100, "num_batches": 3}
+    data: {"event": "batch_start", "batch_num": 1, "total_batches": 3, "batch_size": 100}
     data: {"event": "progress", "url": "...", "current": 1, "total": 10, "percentage": 10}
     data: {"event": "result", "url": "...", "score": 75, "keywords_found": [...]}
+    data: {"event": "batch_complete", "batch_num": 1, "sites_processed": 100}
     data: {"event": "complete", "matches": [...], "summary": {...}}
     """
     from core.hybrid_scraper_v2 import hybrid_scraper_v2
@@ -134,30 +163,71 @@ async def stream_analysis_progress(urls: List[str], keywords: List[str], analysi
     import ssl
     
     matches = []
+    failed_sites = []  # 🆕 FASE 1: Track failed sites for Excel report
     total_urls = len(urls)
     
     # 🆕 Send initial event with analysis_id
     yield f"data: {json.dumps({'event': 'started', 'analysis_id': analysis_id, 'total': total_urls, 'message': 'Analisi avviata con successo'})}\n\n"
     
+    # 📦 FASE 2: Check if batch mode needed
+    if total_urls > BATCH_SIZE:
+        num_batches = math.ceil(total_urls / BATCH_SIZE)
+        logging.info(f"📦 BATCH MODE: {total_urls} siti divisi in {num_batches} batch da {BATCH_SIZE}")
+        yield f"data: {json.dumps({'event': 'batch_info', 'total_sites': total_urls, 'batch_size': BATCH_SIZE, 'num_batches': num_batches})}\n\n"
+    
     try:
-        for i, url in enumerate(urls):
-            current_index = i + 1
-            percentage = int((current_index / total_urls) * 100)
+        # 📦 FASE 2: Process in batches
+        for batch_num in range(0, total_urls, BATCH_SIZE):
+            batch_urls = urls[batch_num:batch_num + BATCH_SIZE]
+            batch_index = batch_num // BATCH_SIZE + 1
+            total_batches = math.ceil(total_urls / BATCH_SIZE)
             
-            # Send progress event
-            yield f"data: {json.dumps({'event': 'progress', 'url': url, 'current': current_index, 'total': total_urls, 'percentage': percentage})}\n\n"
+            if total_urls > BATCH_SIZE:
+                logging.info(f"🔄 Processing BATCH {batch_index}/{total_batches} ({len(batch_urls)} siti)")
+                yield f"data: {json.dumps({'event': 'batch_start', 'batch_num': batch_index, 'total_batches': total_batches, 'batch_size': len(batch_urls)})}\n\n"
             
-            try:
-                logging.info(f"📊 Streaming analysis {current_index}/{total_urls}: {url}")
+            # Process each URL in batch
+            for idx, url in enumerate(batch_urls):
+                global_index = batch_num + idx + 1
+                percentage = int((global_index / total_urls) * 100)
                 
-                # 1. Scrape competitor site
-                scrape_result = await hybrid_scraper_v2.scrape_intelligent(url, max_keywords=20, use_advanced=True)
+                # Send progress event
+                yield f"data: {json.dumps({'event': 'progress', 'url': url, 'current': global_index, 'total': total_urls, 'percentage': percentage})}\n\n"
                 
-                if not scrape_result.get('status') == 'success':
-                    logging.warning(f"⚠️ Scraping failed for {url}")
-                    # Send error event
-                    yield f"data: {json.dumps({'event': 'error', 'url': url, 'message': 'Scraping failed'})}\n\n"
-                    continue
+                try:
+                    logging.info(f"📊 Streaming analysis {global_index}/{total_urls}: {url}")
+                    
+                    # ⏱️ FASE 1: Max 60s timeout per site
+                    try:
+                        async with asyncio.timeout(60):
+                            # 1. Scrape competitor site
+                            scrape_result = await hybrid_scraper_v2.scrape_intelligent(url, max_keywords=20, use_advanced=True)
+                    except asyncio.TimeoutError:
+                        logging.error(f"⏱️ TIMEOUT (60s) for {url}")
+                        failed_sites.append({
+                            'url': url,
+                            'error': 'Timeout dopo 60 secondi',
+                            'suggestion': 'Sito troppo lento o bloccato - riprova manualmente',
+                            'timestamp': datetime.now().strftime('%Y-%m-%d %H:%M:%S')
+                        })
+                        yield f"data: {json.dumps({'event': 'site_failed', 'url': url, 'reason': 'timeout_60s'})}\n\n"
+                        continue
+                
+                    if not scrape_result.get('status') == 'success':
+                        error_msg = scrape_result.get('error', 'Scraping failed')
+                        logging.warning(f"⚠️ Scraping failed for {url}: {error_msg}")
+                        
+                        # 🆕 FASE 1: Track failed site
+                        failed_sites.append({
+                            'url': url,
+                            'error': error_msg[:100],  # Primi 100 caratteri
+                            'suggestion': _get_error_suggestion(error_msg),
+                            'timestamp': datetime.now().strftime('%Y-%m-%d %H:%M:%S')
+                        })
+                        
+                        # Send error event
+                        yield f"data: {json.dumps({'event': 'site_failed', 'url': url, 'reason': 'scraping_failed', 'message': error_msg})}\n\n"
+                        continue
                 
                 # Extract full text
                 try:
@@ -207,32 +277,47 @@ async def stream_analysis_progress(urls: List[str], keywords: List[str], analysi
                 
                 logging.info(f"✅ {url}: {score}% match")
                 
-                # 💾 Save progress to file
-                update_analysis_progress(
-                    analysis_id=analysis_id,
-                    processed_sites=current_index,
-                    new_result={
+                    # 💾 Save progress to file
+                    update_analysis_progress(
+                        analysis_id=analysis_id,
+                        processed_sites=global_index,
+                        new_result={
+                            'url': url,
+                            'score': score,
+                            'keywords_found': found_keywords,
+                            'title': match.title,
+                            'description': match.description,
+                            'status': match.status
+                        }
+                    )
+                    
+                except Exception as e:
+                    error_msg = str(e)
+                    logging.error(f"❌ Error processing {url}: {error_msg}")
+                    
+                    # 🆕 FASE 1: Track failed site with categorization
+                    failed_sites.append({
                         'url': url,
-                        'score': score,
-                        'keywords_found': found_keywords,
-                        'title': match.title,
-                        'description': match.description,
-                        'status': match.status
-                    }
-                )
-                
-            except Exception as e:
-                logging.error(f"❌ Error processing {url}: {str(e)}")
-                # Send error event but continue
-                yield f"data: {json.dumps({'event': 'error', 'url': url, 'message': str(e)})}\n\n"
-                
-                matches.append(CompetitorMatch(
-                    url=url,
-                    score=0,
-                    keywords_found=[],
-                    title=f"Error: {url}",
-                    description=f"Analysis failed: {str(e)}"
-                ))
+                        'error': error_msg[:100],
+                        'suggestion': _get_error_suggestion(error_msg),
+                        'timestamp': datetime.now().strftime('%Y-%m-%d %H:%M:%S')
+                    })
+                    
+                    # Send error event but continue
+                    yield f"data: {json.dumps({'event': 'site_failed', 'url': url, 'reason': 'processing_error', 'message': error_msg})}\n\n"
+                    
+                    matches.append(CompetitorMatch(
+                        url=url,
+                        score=0,
+                        keywords_found=[],
+                        title=f"Error: {url}",
+                        description=f"Analysis failed: {error_msg}"
+                    ))
+            
+            # 📦 FASE 2: Batch complete event
+            if total_urls > BATCH_SIZE:
+                logging.info(f"✅ BATCH {batch_index}/{total_batches} completato ({len(batch_urls)} siti processati)")
+                yield f"data: {json.dumps({'event': 'batch_complete', 'batch_num': batch_index, 'sites_processed': len(batch_urls)})}\n\n"
         
         # Sort by score
         matches.sort(key=lambda x: x.score, reverse=True)
@@ -250,6 +335,12 @@ async def stream_analysis_progress(urls: List[str], keywords: List[str], analysi
         
         report_id = f"RPT_{datetime.now().strftime('%Y%m%d_%H%M%S')}"
         
+        # 🆕 FASE 1: Log failed sites summary
+        if failed_sites:
+            logging.warning(f"⚠️ {len(failed_sites)} siti falliti durante l'analisi")
+            for failed in failed_sites:
+                logging.warning(f"  - {failed['url']}: {failed['error']}")
+        
         # Send completion event with full results
         final_response = {
             "event": "complete",
@@ -266,6 +357,8 @@ async def stream_analysis_progress(urls: List[str], keywords: List[str], analysi
                 }
                 for match in matches
             ],
+            "failed_sites": failed_sites,  # 🆕 FASE 1: Include failed sites for Excel report
+            "failed_count": len(failed_sites),
             "average_score": round(average_score, 1),
             "report_id": report_id,
             "summary_by_status": {

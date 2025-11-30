@@ -1,0 +1,899 @@
+2025-11-24T09:41:35.058501140Z [inf]  INFO:     100.64.0.6:33114 - "GET /health HTTP/1.1" 200 OK
+2025-11-24T09:41:35.058519756Z [err]  WARNING:api.analysis_manager:⚠️ Analisi non trovata: 20251121_110300
+2025-11-24T09:41:35.058529329Z [inf]  INFO:     100.64.0.6:33126 - "GET /api/analyses/20251121_110300 HTTP/1.1" 404 Not Found
+2025-11-24T09:41:35.058537239Z [inf]  INFO:     100.64.0.6:33126 - "GET /health HTTP/1.1" 200 OK
+2025-11-24T09:41:35.058548534Z [inf]  INFO:     100.64.0.6:33126 - "GET /api/analyze-bulk HTTP/1.1" 200 OK
+2025-11-24T09:41:35.176812732Z [inf]  INFO:     100.64.0.6:33126 - "GET /health HTTP/1.1" 200 OK
+2025-11-24T09:41:35.225554125Z [inf]  INFO:     100.64.0.6:33126 - "GET /health HTTP/1.1" 200 OK
+2025-11-24T09:41:40.073841712Z [inf]  INFO:     100.64.0.7:21646 - "OPTIONS /api/analyze-site HTTP/1.1" 200 OK
+2025-11-24T09:41:40.073846321Z [err]  INFO:root:🎯 Starting analysis for URL: https://www.aircar.it/ (max_keywords: 100)
+2025-11-24T09:41:40.073850629Z [err]  INFO:root:🔧 Advanced scraping: True
+2025-11-24T09:41:40.073855436Z [err]  INFO:root:🌐 Scraping mode: development
+2025-11-24T09:41:40.073860002Z [err]  INFO:core.hybrid_scraper_v2:🎯 Starting ULTRA-INTELLIGENT scrape for: https://www.aircar.it/
+2025-11-24T09:41:43.498374897Z [err]  INFO:core.browser_pool:🕐 Human-like delay: 6.6s
+2025-11-24T09:42:03.497259979Z [err]  INFO:core.hybrid_scraper_v2:✅ Browser Pool SUCCESS: 50 keywords
+2025-11-24T09:42:03.497265731Z [err]  INFO:core.ai_site_analyzer:🧹 Content cleaned: 5201 characters, 7 headers found
+2025-11-24T09:42:03.497270889Z [inf]  INFO:     100.64.0.7:21646 - "POST /api/analyze-site HTTP/1.1" 200 OK
+2025-11-24T09:42:03.497278268Z [inf]  INFO:     100.64.0.7:21646 - "OPTIONS /api/generate-site-summary HTTP/1.1" 200 OK
+2025-11-24T09:42:03.497280082Z [err]  INFO:core.ai_site_analyzer:🤖 Generating AI business summary...
+2025-11-24T09:42:03.497286189Z [err]  INFO:api.site_summary:🎯 AI Summary request for: https://www.aircar.it/
+2025-11-24T09:42:03.497288723Z [err]  INFO:httpx:HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2025-11-24T09:42:03.497293110Z [err]  INFO:core.ai_site_analyzer:🤖 Starting AI analysis for: https://www.aircar.it/
+2025-11-24T09:42:03.497299210Z [err]  INFO:core.ai_site_analyzer:📡 Scraping site content...
+2025-11-24T09:42:03.497306436Z [err]  INFO:core.hybrid_scraper_v2:🚀 Basic HTTP starting for: https://www.aircar.it/
+2025-11-24T09:42:03.497312814Z [err]  INFO:core.hybrid_scraper_v2:🎭 Using rotated UA: Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) Ap...
+2025-11-24T09:42:03.497319177Z [err]  INFO:core.hybrid_scraper_v2:🔧 Basic HTTP: Creating session with EXPERT timeouts (5s total)
+2025-11-24T09:42:03.497325596Z [err]  INFO:core.hybrid_scraper_v2:🌐 Basic HTTP: Attempt 1/2 - Making request to https://www.aircar.it/
+2025-11-24T09:42:03.497331482Z [err]  INFO:core.hybrid_scraper_v2:📊 Basic HTTP: Got response status 200
+2025-11-24T09:42:03.497337618Z [err]  INFO:core.hybrid_scraper_v2:✅ Basic HTTP SUCCESS (200): 183707 characters received
+2025-11-24T09:42:03.497343349Z [err]  INFO:core.ai_site_analyzer:✅ Basic HTTP returned 183707 characters
+2025-11-24T09:42:03.497349153Z [err]  INFO:core.ai_site_analyzer:📊 Final content: 183707 chars via basic_http
+2025-11-24T09:42:03.498894526Z [err]  INFO:core.ai_site_analyzer:🤖 OpenAI response length: 735 chars
+2025-11-24T09:42:03.498905470Z [err]  INFO:core.ai_site_analyzer:✅ AI response validated successfully
+2025-11-24T09:42:03.498911106Z [err]  INFO:core.ai_site_analyzer:✅ AI analysis completed in 3.41s
+2025-11-24T09:42:03.498915934Z [err]  INFO:core.ai_site_analyzer:📊 Confidence: 0.90
+2025-11-24T09:42:03.498920447Z [err]  INFO:core.ai_site_analyzer:🏢 Sector: HVAC e Trattamento dell'Aria
+2025-11-24T09:42:03.498925575Z [err]  INFO:api.site_summary:✅ AI Summary completed for https://www.aircar.it/
+2025-11-24T09:42:03.498930206Z [err]  INFO:api.site_summary:📊 Confidence: 0.90
+2025-11-24T09:42:03.498934567Z [err]  INFO:api.site_summary:🏢 Sector: HVAC e Trattamento dell'Aria
+2025-11-24T09:42:03.498939477Z [inf]  INFO:     100.64.0.7:21646 - "POST /api/generate-site-summary HTTP/1.1" 200 OK
+2025-11-24T09:42:05.432797245Z [inf]  INFO:     100.64.0.7:51592 - "GET /health HTTP/1.1" 200 OK
+2025-11-24T09:42:35.087765345Z [err]  INFO:api.analysis_manager:✅ Analisi creata: 20251124_094234
+2025-11-24T09:42:35.087782879Z [err]  INFO:root:✅ Created analysis file: 20251124_094234
+2025-11-24T09:42:35.087786403Z [err]  INFO:root:Starting STREAMING bulk analysis with 2 keywords
+2025-11-24T09:42:35.087795946Z [err]  INFO:utils.excel_utils:Processing Excel file: Prova 2.xls with 91 rows and columns: ['www.frigoveneta.it']
+2025-11-24T09:42:35.087797826Z [inf]  INFO:     100.64.0.7:40470 - "POST /api/upload-and-analyze-stream HTTP/1.1" 200 OK
+2025-11-24T09:42:35.087804452Z [err]  INFO:utils.excel_utils:Detected URL column: 'www.frigoveneta.it', Company column: 'None'
+2025-11-24T09:42:35.087806170Z [err]  INFO:root:📊 Streaming analysis 1/91: https://fastaer.com
+2025-11-24T09:42:35.087812863Z [err]  INFO:utils.excel_utils:Successfully extracted 91 valid URLs from Prova 2.xls
+2025-11-24T09:42:35.087814502Z [err]  INFO:core.hybrid_scraper_v2:🎯 Starting ULTRA-INTELLIGENT scrape for: https://fastaer.com
+2025-11-24T09:42:35.087819787Z [err]  INFO:root:Extracted 91 URLs for streaming analysis
+2025-11-24T09:42:35.240760867Z [inf]  INFO:     100.64.0.7:40474 - "GET /health HTTP/1.1" 200 OK
+2025-11-24T09:42:40.859199249Z [err]  INFO:core.browser_pool:🕐 Human-like delay: 4.4s
+2025-11-24T09:42:49.279725131Z [err]  INFO:core.hybrid_scraper_v2:✅ Browser Pool SUCCESS: 20 keywords
+2025-11-24T09:42:50.366453970Z [err]  INFO:core.matching:🔍 Keyword splitting: 2 phrases → 4 words
+2025-11-24T09:42:50.366477038Z [err]  INFO:core.matching:📊 Matching analysis: 2 original keywords → 4 words
+2025-11-24T09:42:50.366483970Z [err]  INFO:core.semantic_filter:Starting semantic analysis with 4 keywords
+2025-11-24T09:42:51.446634328Z [err]  INFO:httpx:HTTP Request: POST https://api.openai.com/v1/embeddings "HTTP/1.1 200 OK"
+2025-11-24T09:42:52.021847047Z [err]  INFO:httpx:HTTP Request: POST https://api.openai.com/v1/embeddings "HTTP/1.1 200 OK"
+2025-11-24T09:42:53.109580701Z [err]  INFO:httpx:HTTP Request: POST https://api.openai.com/v1/embeddings "HTTP/1.1 200 OK"
+2025-11-24T09:42:54.119814610Z [err]  INFO:httpx:HTTP Request: POST https://api.openai.com/v1/embeddings "HTTP/1.1 200 OK"
+2025-11-24T09:42:54.119819682Z [err]  INFO:httpx:HTTP Request: POST https://api.openai.com/v1/embeddings "HTTP/1.1 200 OK"
+2025-11-24T09:42:54.346730267Z [err]  INFO:httpx:HTTP Request: POST https://api.openai.com/v1/embeddings "HTTP/1.1 200 OK"
+2025-11-24T09:42:54.346740071Z [err]  INFO:root:✅ https://fastaer.com: 37% match
+2025-11-24T09:42:54.346746088Z [err]  ERROR:root:❌ Error processing https://fastaer.com: update_analysis_progress() got an unexpected keyword argument 'result'
+2025-11-24T09:42:54.346753803Z [err]  INFO:root:📊 Streaming analysis 2/91: https://www.samp-spa.com
+2025-11-24T09:42:54.346759522Z [err]  INFO:core.hybrid_scraper_v2:🎯 Starting ULTRA-INTELLIGENT scrape for: https://www.samp-spa.com
+2025-11-24T09:43:00.469446146Z [err]  INFO:core.browser_pool:🕐 Human-like delay: 5.9s
+2025-11-24T09:43:05.464920444Z [inf]  INFO:     100.64.0.4:33386 - "GET /health HTTP/1.1" 200 OK
+2025-11-24T09:43:25.475003698Z [err]  INFO:root:📊 Streaming analysis 3/91: https://download.comefri.com
+2025-11-24T09:43:25.475012808Z [err]  INFO:core.hybrid_scraper_v2:🎯 Starting ULTRA-INTELLIGENT scrape for: https://download.comefri.com
+2025-11-24T09:43:25.475018471Z [err]  INFO:core.browser_pool:🕐 Human-like delay: 5.6s
+2025-11-24T09:43:25.475030637Z [err]  ERROR:asyncio:Future exception was never retrieved
+2025-11-24T09:43:25.475038147Z [err]  future: <Future finished exception=TargetClosedError('Target page, context or browser has been closed')>
+2025-11-24T09:43:25.475043722Z [err]  playwright._impl._errors.TargetClosedError: Target page, context or browser has been closed
+2025-11-24T09:43:25.475049159Z [err]  INFO:core.hybrid_scraper_v2:✅ ScrapingBee SUCCESS: 20 keywords
+2025-11-24T09:43:25.475053206Z [err]  INFO:core.matching:🔍 Keyword splitting: 2 phrases → 4 words
+2025-11-24T09:43:25.475057631Z [err]  INFO:core.matching:📊 Matching analysis: 2 original keywords → 4 words
+2025-11-24T09:43:25.475061699Z [err]  INFO:core.semantic_filter:Starting semantic analysis with 4 keywords
+2025-11-24T09:43:25.475065706Z [err]  INFO:httpx:HTTP Request: POST https://api.openai.com/v1/embeddings "HTTP/1.1 200 OK"
+2025-11-24T09:43:25.475070654Z [err]  INFO:root:✅ https://www.samp-spa.com: 37% match
+2025-11-24T09:43:25.475074810Z [err]  ERROR:root:❌ Error processing https://www.samp-spa.com: update_analysis_progress() got an unexpected keyword argument 'result'
+2025-11-24T09:43:27.613739024Z [err]  INFO:core.hybrid_scraper_v2:✅ Browser Pool SUCCESS: 20 keywords
+2025-11-24T09:43:27.785106240Z [err]  INFO:core.matching:🔍 Keyword splitting: 2 phrases → 4 words
+2025-11-24T09:43:27.785113192Z [err]  INFO:core.matching:📊 Matching analysis: 2 original keywords → 4 words
+2025-11-24T09:43:27.785117725Z [err]  INFO:core.semantic_filter:Starting semantic analysis with 4 keywords
+2025-11-24T09:43:28.324366254Z [err]  INFO:httpx:HTTP Request: POST https://api.openai.com/v1/embeddings "HTTP/1.1 200 OK"
+2025-11-24T09:43:28.324371253Z [err]  INFO:root:✅ https://download.comefri.com: 21% match
+2025-11-24T09:43:28.324376300Z [err]  ERROR:root:❌ Error processing https://download.comefri.com: update_analysis_progress() got an unexpected keyword argument 'result'
+2025-11-24T09:43:28.324383002Z [err]  INFO:root:📊 Streaming analysis 4/91: https://www.texaindustries.com
+2025-11-24T09:43:28.324389659Z [err]  INFO:core.hybrid_scraper_v2:🎯 Starting ULTRA-INTELLIGENT scrape for: https://www.texaindustries.com
+2025-11-24T09:43:35.342434755Z [inf]  INFO:     100.64.0.4:43514 - "GET /health HTTP/1.1" 200 OK
+2025-11-24T09:43:43.721506267Z [err]  ERROR:asyncio:Future exception was never retrieved
+2025-11-24T09:43:43.721528484Z [err]  future: <Future finished exception=TargetClosedError('Target page, context or browser has been closed\nCall log:\n  - navigating to "https://www.texaindustries.com/", waiting until "networkidle"\n')>
+2025-11-24T09:43:43.721538627Z [err]  playwright._impl._errors.TargetClosedError: Target page, context or browser has been closed
+2025-11-24T09:43:43.721546519Z [err]  Call log:
+2025-11-24T09:43:43.721555743Z [err]    - navigating to "https://www.texaindustries.com/", waiting until "networkidle"
+2025-11-24T09:43:43.721565483Z [err]  
+2025-11-24T09:44:03.721272350Z [err]  INFO:core.hybrid_scraper_v2:🚨 TRYING BASIC HTTP for https://www.texaindustries.com - FORCED!
+2025-11-24T09:44:03.721284450Z [err]  INFO:core.hybrid_scraper_v2:🚀 Basic HTTP starting for: https://www.texaindustries.com
+2025-11-24T09:44:03.721289891Z [err]  INFO:core.hybrid_scraper_v2:🎭 Using rotated UA: Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) Ap...
+2025-11-24T09:44:03.721294526Z [err]  INFO:core.hybrid_scraper_v2:🔧 Basic HTTP: Creating session with EXPERT timeouts (5s total)
+2025-11-24T09:44:03.721298987Z [err]  INFO:core.hybrid_scraper_v2:🌐 Basic HTTP: Attempt 1/2 - Making request to https://www.texaindustries.com
+2025-11-24T09:44:03.721303790Z [err]  INFO:core.hybrid_scraper_v2:📊 Basic HTTP: Got response status 200
+2025-11-24T09:44:03.721307900Z [err]  INFO:core.hybrid_scraper_v2:✅ Basic HTTP SUCCESS (200): 259416 characters received
+2025-11-24T09:44:03.721312131Z [err]  INFO:core.hybrid_scraper_v2:🔍 Basic HTTP result: success=True, error=
+2025-11-24T09:44:03.721316151Z [err]  INFO:core.hybrid_scraper_v2:✅ Basic HTTP SUCCESS: 20 keywords
+2025-11-24T09:44:05.611091913Z [inf]  INFO:     100.64.0.4:15696 - "GET /health HTTP/1.1" 200 OK
+2025-11-24T09:44:06.776693092Z [err]  INFO:core.matching:🔍 Keyword splitting: 2 phrases → 4 words
+2025-11-24T09:44:06.776702989Z [err]  INFO:core.matching:📊 Matching analysis: 2 original keywords → 4 words
+2025-11-24T09:44:06.776709650Z [err]  INFO:core.semantic_filter:Starting semantic analysis with 4 keywords
+2025-11-24T09:44:07.140642912Z [err]  INFO:httpx:HTTP Request: POST https://api.openai.com/v1/embeddings "HTTP/1.1 200 OK"
+2025-11-24T09:44:07.174588044Z [err]  INFO:root:✅ https://www.texaindustries.com: 20% match
+2025-11-24T09:44:07.174595290Z [err]  ERROR:root:❌ Error processing https://www.texaindustries.com: update_analysis_progress() got an unexpected keyword argument 'result'
+2025-11-24T09:44:07.174600231Z [err]  INFO:root:📊 Streaming analysis 5/91: https://www.frigomeccanica.com
+2025-11-24T09:44:07.174604991Z [err]  INFO:core.hybrid_scraper_v2:🎯 Starting ULTRA-INTELLIGENT scrape for: https://www.frigomeccanica.com
+2025-11-24T09:44:10.744430833Z [err]  INFO:core.browser_pool:🕐 Human-like delay: 3.7s
+2025-11-24T09:44:17.819163623Z [err]  INFO:core.hybrid_scraper_v2:✅ Browser Pool SUCCESS: 20 keywords
+2025-11-24T09:44:17.819170026Z [err]  INFO:core.matching:🔍 Keyword splitting: 2 phrases → 4 words
+2025-11-24T09:44:17.819176139Z [err]  INFO:core.matching:📊 Matching analysis: 2 original keywords → 4 words
+2025-11-24T09:44:17.819182742Z [err]  INFO:core.semantic_filter:Starting semantic analysis with 4 keywords
+2025-11-24T09:44:18.209941656Z [err]  INFO:httpx:HTTP Request: POST https://api.openai.com/v1/embeddings "HTTP/1.1 200 OK"
+2025-11-24T09:44:18.216966763Z [err]  INFO:root:✅ https://www.frigomeccanica.com: 9% match
+2025-11-24T09:44:18.216973587Z [err]  ERROR:root:❌ Error processing https://www.frigomeccanica.com: update_analysis_progress() got an unexpected keyword argument 'result'
+2025-11-24T09:44:18.216978549Z [err]  INFO:root:📊 Streaming analysis 6/91: https://biemmedue.com
+2025-11-24T09:44:18.216983121Z [err]  INFO:core.hybrid_scraper_v2:🎯 Starting ULTRA-INTELLIGENT scrape for: https://biemmedue.com
+2025-11-24T09:44:38.213502961Z [inf]  INFO:     100.64.0.4:41498 - "GET /health HTTP/1.1" 200 OK
+2025-11-24T09:44:58.257039369Z [err]  INFO:core.hybrid_scraper_v2:🚨 TRYING BASIC HTTP for https://biemmedue.com - FORCED!
+2025-11-24T09:44:58.257044648Z [err]  INFO:core.hybrid_scraper_v2:🚀 Basic HTTP starting for: https://biemmedue.com
+2025-11-24T09:44:58.257182538Z [err]  INFO:core.hybrid_scraper_v2:🎭 Using rotated UA: Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) Ap...
+2025-11-24T09:44:58.257192412Z [err]  INFO:core.hybrid_scraper_v2:🔧 Basic HTTP: Creating session with EXPERT timeouts (5s total)
+2025-11-24T09:44:58.257199095Z [err]  INFO:core.hybrid_scraper_v2:🌐 Basic HTTP: Attempt 1/2 - Making request to https://biemmedue.com
+2025-11-24T09:44:58.257205018Z [err]  INFO:core.hybrid_scraper_v2:📊 Basic HTTP: Got response status 200
+2025-11-24T09:44:58.257211553Z [err]  INFO:core.hybrid_scraper_v2:✅ Basic HTTP SUCCESS (200): 366153 characters received
+2025-11-24T09:44:58.257218773Z [err]  INFO:core.hybrid_scraper_v2:🔍 Basic HTTP result: success=True, error=
+2025-11-24T09:44:58.257224928Z [err]  ERROR:asyncio:Future exception was never retrieved
+2025-11-24T09:44:58.257231626Z [err]  future: <Future finished exception=TargetClosedError('Target page, context or browser has been closed\nCall log:\n  - navigating to "https://biemmedue.com/", waiting until "networkidle"\n')>
+2025-11-24T09:44:58.257237394Z [err]  playwright._impl._errors.TargetClosedError: Target page, context or browser has been closed
+2025-11-24T09:44:58.257243471Z [err]  Call log:
+2025-11-24T09:44:58.257250731Z [err]    - navigating to "https://biemmedue.com/", waiting until "networkidle"
+2025-11-24T09:44:58.257257307Z [err]  
+2025-11-24T09:44:58.257263150Z [err]  INFO:core.hybrid_scraper_v2:✅ Basic HTTP SUCCESS: 20 keywords
+2025-11-24T09:44:58.257268620Z [err]  INFO:core.matching:🔍 Keyword splitting: 2 phrases → 4 words
+2025-11-24T09:44:58.257274011Z [err]  INFO:core.matching:📊 Matching analysis: 2 original keywords → 4 words
+2025-11-24T09:44:58.257439597Z [err]  INFO:core.semantic_filter:Starting semantic analysis with 4 keywords
+2025-11-24T09:44:58.257444834Z [err]  INFO:root:✅ https://biemmedue.com: 9% match
+2025-11-24T09:44:58.257449253Z [err]  ERROR:root:❌ Error processing https://biemmedue.com: update_analysis_progress() got an unexpected keyword argument 'result'
+2025-11-24T09:44:58.257453551Z [err]  INFO:root:📊 Streaming analysis 7/91: https://www.geoclima.com
+2025-11-24T09:44:58.257457586Z [err]  INFO:core.hybrid_scraper_v2:🎯 Starting ULTRA-INTELLIGENT scrape for: https://www.geoclima.com
+2025-11-24T09:44:58.257461754Z [err]  INFO:core.browser_pool:🕐 Human-like delay: 4.4s
+2025-11-24T09:45:03.634571888Z [err]  INFO:core.hybrid_scraper_v2:✅ Browser Pool SUCCESS: 20 keywords
+2025-11-24T09:45:04.358409329Z [err]  INFO:core.matching:🔍 Keyword splitting: 2 phrases → 4 words
+2025-11-24T09:45:04.358415194Z [err]  INFO:core.matching:📊 Matching analysis: 2 original keywords → 4 words
+2025-11-24T09:45:04.358423112Z [err]  INFO:core.semantic_filter:Starting semantic analysis with 4 keywords
+2025-11-24T09:45:04.358429435Z [err]  INFO:httpx:HTTP Request: POST https://api.openai.com/v1/embeddings "HTTP/1.1 200 OK"
+2025-11-24T09:45:04.442993343Z [err]  INFO:root:✅ https://www.geoclima.com: 18% match
+2025-11-24T09:45:04.442999656Z [err]  ERROR:root:❌ Error processing https://www.geoclima.com: update_analysis_progress() got an unexpected keyword argument 'result'
+2025-11-24T09:45:04.443004662Z [err]  INFO:root:📊 Streaming analysis 8/91: https://www.rdz.it
+2025-11-24T09:45:04.443008707Z [err]  INFO:core.hybrid_scraper_v2:🎯 Starting ULTRA-INTELLIGENT scrape for: https://www.rdz.it
+2025-11-24T09:45:05.493661162Z [inf]  INFO:     100.64.0.4:26300 - "GET /health HTTP/1.1" 200 OK
+2025-11-24T09:45:07.372415195Z [err]  INFO:core.browser_pool:🕐 Human-like delay: 4.3s
+2025-11-24T09:45:16.371292325Z [err]  INFO:core.hybrid_scraper_v2:✅ Browser Pool SUCCESS: 20 keywords
+2025-11-24T09:45:17.402042277Z [err]  INFO:core.matching:🔍 Keyword splitting: 2 phrases → 4 words
+2025-11-24T09:45:17.402047823Z [err]  INFO:core.matching:📊 Matching analysis: 2 original keywords → 4 words
+2025-11-24T09:45:17.402056319Z [err]  INFO:core.semantic_filter:Starting semantic analysis with 4 keywords
+2025-11-24T09:45:18.369205321Z [err]  INFO:httpx:HTTP Request: POST https://api.openai.com/v1/embeddings "HTTP/1.1 200 OK"
+2025-11-24T09:45:18.369210431Z [err]  INFO:root:✅ https://www.rdz.it: 38% match
+2025-11-24T09:45:18.369215195Z [err]  ERROR:root:❌ Error processing https://www.rdz.it: update_analysis_progress() got an unexpected keyword argument 'result'
+2025-11-24T09:45:18.369225641Z [err]  INFO:root:📊 Streaming analysis 9/91: http://www.faco.it
+2025-11-24T09:45:18.369232545Z [err]  INFO:core.hybrid_scraper_v2:🎯 Starting ULTRA-INTELLIGENT scrape for: http://www.faco.it
+2025-11-24T09:45:19.675236045Z [err]  INFO:core.browser_pool:🕐 Human-like delay: 6.8s
+2025-11-24T09:45:39.666512566Z [err]  INFO:core.hybrid_scraper_v2:✅ Browser Pool SUCCESS: 20 keywords
+2025-11-24T09:45:39.666521508Z [err]  INFO:core.hybrid_scraper_v2:🎯 Starting ULTRA-INTELLIGENT scrape for: https://enerblue.it
+2025-11-24T09:45:39.666534335Z [inf]  INFO:     100.64.0.4:49220 - "GET /health HTTP/1.1" 200 OK
+2025-11-24T09:45:39.666542510Z [err]  INFO:core.browser_pool:🕐 Human-like delay: 4.9s
+2025-11-24T09:45:39.666555449Z [err]  INFO:core.matching:🔍 Keyword splitting: 2 phrases → 4 words
+2025-11-24T09:45:39.666560627Z [err]  INFO:core.matching:📊 Matching analysis: 2 original keywords → 4 words
+2025-11-24T09:45:39.666565394Z [err]  INFO:core.semantic_filter:Starting semantic analysis with 4 keywords
+2025-11-24T09:45:39.666569312Z [err]  INFO:httpx:HTTP Request: POST https://api.openai.com/v1/embeddings "HTTP/1.1 200 OK"
+2025-11-24T09:45:39.666575224Z [err]  INFO:root:✅ http://www.faco.it: 26% match
+2025-11-24T09:45:39.666578956Z [err]  ERROR:root:❌ Error processing http://www.faco.it: update_analysis_progress() got an unexpected keyword argument 'result'
+2025-11-24T09:45:39.666582561Z [err]  INFO:root:📊 Streaming analysis 10/91: https://enerblue.it
+2025-11-24T09:45:45.497026040Z [err]  INFO:core.hybrid_scraper_v2:✅ Browser Pool SUCCESS: 20 keywords
+2025-11-24T09:45:46.465810432Z [err]  INFO:core.matching:🔍 Keyword splitting: 2 phrases → 4 words
+2025-11-24T09:45:46.465823170Z [err]  INFO:core.matching:📊 Matching analysis: 2 original keywords → 4 words
+2025-11-24T09:45:46.465831858Z [err]  INFO:core.semantic_filter:Starting semantic analysis with 4 keywords
+2025-11-24T09:45:46.465839424Z [err]  INFO:httpx:HTTP Request: POST https://api.openai.com/v1/embeddings "HTTP/1.1 200 OK"
+2025-11-24T09:45:46.465846840Z [err]  INFO:root:✅ https://enerblue.it: 24% match
+2025-11-24T09:45:46.465854481Z [err]  ERROR:root:❌ Error processing https://enerblue.it: update_analysis_progress() got an unexpected keyword argument 'result'
+2025-11-24T09:45:46.465861847Z [err]  INFO:root:📊 Streaming analysis 11/91: https://emmegi-heat-exchangers.com
+2025-11-24T09:45:46.465869162Z [err]  INFO:core.hybrid_scraper_v2:🎯 Starting ULTRA-INTELLIGENT scrape for: https://emmegi-heat-exchangers.com
+2025-11-24T09:45:48.518424911Z [err]  INFO:core.browser_pool:🕐 Human-like delay: 4.7s
+2025-11-24T09:45:56.525574076Z [err]  INFO:core.hybrid_scraper_v2:✅ Browser Pool SUCCESS: 20 keywords
+2025-11-24T09:45:56.525580403Z [err]  INFO:core.matching:🔍 Keyword splitting: 2 phrases → 4 words
+2025-11-24T09:45:56.525586681Z [err]  INFO:core.matching:📊 Matching analysis: 2 original keywords → 4 words
+2025-11-24T09:45:56.525593050Z [err]  INFO:core.semantic_filter:Starting semantic analysis with 4 keywords
+2025-11-24T09:45:56.791384865Z [err]  INFO:httpx:HTTP Request: POST https://api.openai.com/v1/embeddings "HTTP/1.1 200 OK"
+2025-11-24T09:45:56.805999137Z [err]  INFO:root:✅ https://emmegi-heat-exchangers.com: 20% match
+2025-11-24T09:45:56.806011164Z [err]  ERROR:root:❌ Error processing https://emmegi-heat-exchangers.com: update_analysis_progress() got an unexpected keyword argument 'result'
+2025-11-24T09:45:56.806019875Z [err]  INFO:root:📊 Streaming analysis 12/91: https://coldcar.com
+2025-11-24T09:45:56.806027323Z [err]  INFO:core.hybrid_scraper_v2:🎯 Starting ULTRA-INTELLIGENT scrape for: https://coldcar.com
+2025-11-24T09:46:03.737280728Z [err]  INFO:core.browser_pool:🕐 Human-like delay: 5.6s
+2025-11-24T09:46:05.295952070Z [inf]  INFO:     100.64.0.4:48846 - "GET /health HTTP/1.1" 200 OK
+2025-11-24T09:46:35.297532494Z [err]  INFO:core.hybrid_scraper_v2:🚨 TRYING BASIC HTTP for https://coldcar.com - FORCED!
+2025-11-24T09:46:35.297541949Z [err]  INFO:core.hybrid_scraper_v2:🚀 Basic HTTP starting for: https://coldcar.com
+2025-11-24T09:46:35.297548622Z [err]  INFO:core.hybrid_scraper_v2:🎭 Using rotated UA: Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) Ap...
+2025-11-24T09:46:35.297554412Z [err]  INFO:core.hybrid_scraper_v2:🔧 Basic HTTP: Creating session with EXPERT timeouts (5s total)
+2025-11-24T09:46:35.297559300Z [err]  INFO:core.hybrid_scraper_v2:🌐 Basic HTTP: Attempt 1/2 - Making request to https://coldcar.com
+2025-11-24T09:46:35.297566482Z [err]  INFO:core.hybrid_scraper_v2:📊 Basic HTTP: Got response status 200
+2025-11-24T09:46:35.297572794Z [err]  INFO:core.hybrid_scraper_v2:✅ Basic HTTP SUCCESS (200): 86159 characters received
+2025-11-24T09:46:35.297578793Z [err]  INFO:core.hybrid_scraper_v2:🔍 Basic HTTP result: success=True, error=
+2025-11-24T09:46:35.297583179Z [err]  INFO:core.hybrid_scraper_v2:✅ Basic HTTP SUCCESS: 20 keywords
+2025-11-24T09:46:35.297587118Z [inf]  INFO:     100.64.0.4:41152 - "GET /health HTTP/1.1" 200 OK
+2025-11-24T09:46:35.821122596Z [err]  INFO:core.matching:🔍 Keyword splitting: 2 phrases → 4 words
+2025-11-24T09:46:35.821127016Z [err]  INFO:core.matching:📊 Matching analysis: 2 original keywords → 4 words
+2025-11-24T09:46:35.821131451Z [err]  INFO:core.semantic_filter:Starting semantic analysis with 4 keywords
+2025-11-24T09:46:36.037601402Z [err]  INFO:httpx:HTTP Request: POST https://api.openai.com/v1/embeddings "HTTP/1.1 200 OK"
+2025-11-24T09:46:36.051226899Z [err]  INFO:root:✅ https://coldcar.com: 22% match
+2025-11-24T09:46:36.051237239Z [err]  ERROR:root:❌ Error processing https://coldcar.com: update_analysis_progress() got an unexpected keyword argument 'result'
+2025-11-24T09:46:36.051244460Z [err]  INFO:root:📊 Streaming analysis 13/91: https://www.frigomeccanica.it
+2025-11-24T09:46:36.051251778Z [err]  INFO:core.hybrid_scraper_v2:🎯 Starting ULTRA-INTELLIGENT scrape for: https://www.frigomeccanica.it
+2025-11-24T09:46:37.317553519Z [err]  INFO:core.browser_pool:🕐 Human-like delay: 6.6s
+2025-11-24T09:46:46.127614464Z [err]  INFO:core.hybrid_scraper_v2:✅ Browser Pool SUCCESS: 20 keywords
+2025-11-24T09:46:46.298957719Z [err]  INFO:core.matching:🔍 Keyword splitting: 2 phrases → 4 words
+2025-11-24T09:46:46.298965486Z [err]  INFO:core.matching:📊 Matching analysis: 2 original keywords → 4 words
+2025-11-24T09:46:46.298971069Z [err]  INFO:core.semantic_filter:Starting semantic analysis with 4 keywords
+2025-11-24T09:46:46.669291377Z [err]  INFO:httpx:HTTP Request: POST https://api.openai.com/v1/embeddings "HTTP/1.1 200 OK"
+2025-11-24T09:46:46.682038898Z [err]  INFO:root:✅ https://www.frigomeccanica.it: 34% match
+2025-11-24T09:46:46.682048004Z [err]  ERROR:root:❌ Error processing https://www.frigomeccanica.it: update_analysis_progress() got an unexpected keyword argument 'result'
+2025-11-24T09:46:46.682054896Z [err]  INFO:root:📊 Streaming analysis 14/91: https://www.mzaspiratori.eu
+2025-11-24T09:46:46.682204693Z [err]  INFO:core.hybrid_scraper_v2:🎯 Starting ULTRA-INTELLIGENT scrape for: https://www.mzaspiratori.eu
+2025-11-24T09:46:48.309105308Z [err]  INFO:core.browser_pool:🕐 Human-like delay: 6.4s
+2025-11-24T09:46:58.251972406Z [err]  INFO:core.hybrid_scraper_v2:✅ Browser Pool SUCCESS: 20 keywords
+2025-11-24T09:46:58.530869918Z [err]  INFO:core.matching:🔍 Keyword splitting: 2 phrases → 4 words
+2025-11-24T09:46:58.530894618Z [err]  INFO:core.matching:📊 Matching analysis: 2 original keywords → 4 words
+2025-11-24T09:46:58.530902771Z [err]  INFO:core.semantic_filter:Starting semantic analysis with 4 keywords
+2025-11-24T09:46:58.765219538Z [err]  INFO:httpx:HTTP Request: POST https://api.openai.com/v1/embeddings "HTTP/1.1 200 OK"
+2025-11-24T09:46:58.774273481Z [err]  INFO:root:✅ https://www.mzaspiratori.eu: 70% match
+2025-11-24T09:46:58.774281215Z [err]  ERROR:root:❌ Error processing https://www.mzaspiratori.eu: update_analysis_progress() got an unexpected keyword argument 'result'
+2025-11-24T09:46:58.774286721Z [err]  INFO:root:📊 Streaming analysis 15/91: https://www.tamaaernova.com
+2025-11-24T09:46:58.774294437Z [err]  INFO:core.hybrid_scraper_v2:🎯 Starting ULTRA-INTELLIGENT scrape for: https://www.tamaaernova.com
+2025-11-24T09:47:02.306001932Z [err]  INFO:core.browser_pool:🕐 Human-like delay: 6.7s
+2025-11-24T09:47:05.524852191Z [inf]  INFO:     100.64.0.4:10602 - "GET /health HTTP/1.1" 200 OK
+2025-11-24T09:47:35.584699380Z [err]  INFO:core.hybrid_scraper_v2:🚨 TRYING BASIC HTTP for https://www.tamaaernova.com - FORCED!
+2025-11-24T09:47:35.584711081Z [err]  INFO:core.hybrid_scraper_v2:🚀 Basic HTTP starting for: https://www.tamaaernova.com
+2025-11-24T09:47:35.584717633Z [err]  INFO:core.hybrid_scraper_v2:🎭 Using rotated UA: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWeb...
+2025-11-24T09:47:35.584723307Z [err]  INFO:core.hybrid_scraper_v2:🔧 Basic HTTP: Creating session with EXPERT timeouts (5s total)
+2025-11-24T09:47:35.584729027Z [err]  INFO:core.hybrid_scraper_v2:🌐 Basic HTTP: Attempt 1/2 - Making request to https://www.tamaaernova.com
+2025-11-24T09:47:35.584739526Z [err]  INFO:core.hybrid_scraper_v2:📊 Basic HTTP: Got response status 200
+2025-11-24T09:47:35.584745455Z [err]  INFO:core.hybrid_scraper_v2:✅ Basic HTTP SUCCESS (200): 135585 characters received
+2025-11-24T09:47:35.584750532Z [err]  INFO:core.hybrid_scraper_v2:🔍 Basic HTTP result: success=True, error=
+2025-11-24T09:47:35.584755616Z [err]  INFO:core.hybrid_scraper_v2:✅ Basic HTTP SUCCESS: 20 keywords
+2025-11-24T09:47:35.584762424Z [err]  INFO:core.matching:🔍 Keyword splitting: 2 phrases → 4 words
+2025-11-24T09:47:35.584767315Z [err]  INFO:core.matching:📊 Matching analysis: 2 original keywords → 4 words
+2025-11-24T09:47:35.584771986Z [err]  INFO:core.semantic_filter:Starting semantic analysis with 4 keywords
+2025-11-24T09:47:35.584776918Z [inf]  INFO:     100.64.0.4:59862 - "GET /health HTTP/1.1" 200 OK
+2025-11-24T09:47:35.613179061Z [err]  INFO:httpx:HTTP Request: POST https://api.openai.com/v1/embeddings "HTTP/1.1 200 OK"
+2025-11-24T09:47:35.639284628Z [err]  INFO:root:✅ https://www.tamaaernova.com: 40% match
+2025-11-24T09:47:35.639299315Z [err]  ERROR:root:❌ Error processing https://www.tamaaernova.com: update_analysis_progress() got an unexpected keyword argument 'result'
+2025-11-24T09:47:35.639307448Z [err]  INFO:root:📊 Streaming analysis 16/91: https://www.villascambiatori.com
+2025-11-24T09:47:35.639318621Z [err]  INFO:core.hybrid_scraper_v2:🎯 Starting ULTRA-INTELLIGENT scrape for: https://www.villascambiatori.com
+2025-11-24T09:47:36.984191779Z [err]  INFO:core.browser_pool:🕐 Human-like delay: 4.3s
+2025-11-24T09:47:44.687344729Z [err]  INFO:core.hybrid_scraper_v2:✅ Browser Pool SUCCESS: 20 keywords
+2025-11-24T09:47:45.193891474Z [err]  INFO:core.matching:🔍 Keyword splitting: 2 phrases → 4 words
+2025-11-24T09:47:45.193898092Z [err]  INFO:core.matching:📊 Matching analysis: 2 original keywords → 4 words
+2025-11-24T09:47:45.193902773Z [err]  INFO:core.semantic_filter:Starting semantic analysis with 4 keywords
+2025-11-24T09:47:45.652302765Z [err]  INFO:httpx:HTTP Request: POST https://api.openai.com/v1/embeddings "HTTP/1.1 200 OK"
+2025-11-24T09:47:45.652317028Z [err]  INFO:root:✅ https://www.villascambiatori.com: 24% match
+2025-11-24T09:47:45.652324581Z [err]  ERROR:root:❌ Error processing https://www.villascambiatori.com: update_analysis_progress() got an unexpected keyword argument 'result'
+2025-11-24T09:47:45.652336126Z [err]  INFO:root:📊 Streaming analysis 17/91: https://zudek.com
+2025-11-24T09:47:45.652347315Z [err]  INFO:core.hybrid_scraper_v2:🎯 Starting ULTRA-INTELLIGENT scrape for: https://zudek.com
+2025-11-24T09:47:48.678288068Z [err]  INFO:core.browser_pool:🕐 Human-like delay: 4.3s
+2025-11-24T09:47:57.130959316Z [err]  INFO:core.hybrid_scraper_v2:✅ Browser Pool SUCCESS: 20 keywords
+2025-11-24T09:47:57.926034616Z [err]  INFO:core.matching:🔍 Keyword splitting: 2 phrases → 4 words
+2025-11-24T09:47:57.926040928Z [err]  INFO:core.matching:📊 Matching analysis: 2 original keywords → 4 words
+2025-11-24T09:47:57.926045255Z [err]  INFO:core.semantic_filter:Starting semantic analysis with 4 keywords
+2025-11-24T09:47:58.198695831Z [err]  INFO:httpx:HTTP Request: POST https://api.openai.com/v1/embeddings "HTTP/1.1 200 OK"
+2025-11-24T09:47:58.232089932Z [err]  INFO:root:✅ https://zudek.com: 38% match
+2025-11-24T09:47:58.232098608Z [err]  ERROR:root:❌ Error processing https://zudek.com: update_analysis_progress() got an unexpected keyword argument 'result'
+2025-11-24T09:47:58.232103204Z [err]  INFO:root:📊 Streaming analysis 18/91: https://www.saiver.com
+2025-11-24T09:47:58.232107555Z [err]  INFO:core.hybrid_scraper_v2:🎯 Starting ULTRA-INTELLIGENT scrape for: https://www.saiver.com
+2025-11-24T09:47:58.764761727Z [err]  WARNING:core.browser_pool:⚠️ Navigation attempt 1 failed: Page.goto: net::ERR_CONNECTION_RESET at https://www.saiver.com/
+2025-11-24T09:47:58.764769045Z [err]  Call log:
+2025-11-24T09:47:58.764774150Z [err]    - navigating to "https://www.saiver.com/", waiting until "networkidle"
+2025-11-24T09:47:58.764780101Z [err]  
+2025-11-24T09:48:00.763665530Z [err]  WARNING:core.browser_pool:⚠️ Navigation attempt 2 failed: Page.goto: net::ERR_CONNECTION_RESET at https://www.saiver.com/
+2025-11-24T09:48:00.763670375Z [err]  Call log:
+2025-11-24T09:48:00.763674973Z [err]    - navigating to "https://www.saiver.com/", waiting until "networkidle"
+2025-11-24T09:48:00.763680480Z [err]  
+2025-11-24T09:48:02.776630596Z [err]    - navigating to "https://www.saiver.com/", waiting until "networkidle"
+2025-11-24T09:48:02.776640150Z [err]  
+2025-11-24T09:48:02.776684551Z [err]  ERROR:core.browser_pool:❌ Scraping failed for https://www.saiver.com: Page.goto: net::ERR_CONNECTION_RESET at https://www.saiver.com/
+2025-11-24T09:48:02.776690845Z [err]  Call log:
+2025-11-24T09:48:07.139782097Z [err]  ERROR:core.advanced_scraper:Scraping failed for https://www.saiver.com: Page.goto: net::ERR_CONNECTION_RESET at https://www.saiver.com/
+2025-11-24T09:48:07.139793081Z [err]  Call log:
+2025-11-24T09:48:07.139799216Z [err]    - navigating to "https://www.saiver.com/", waiting until "networkidle"
+2025-11-24T09:48:07.139806108Z [err]  
+2025-11-24T09:48:07.168132403Z [err]  WARNING:core.advanced_scraper:⚠️ Empty content from https://www.saiver.com (attempt 1)
+2025-11-24T09:48:07.168140506Z [err]  ERROR:core.advanced_scraper:🚫 All attempts failed for https://www.saiver.com
+2025-11-24T09:48:07.168146932Z [err]  INFO:core.hybrid_scraper_v2:🚨 TRYING BASIC HTTP for https://www.saiver.com - FORCED!
+2025-11-24T09:48:07.168151938Z [err]  INFO:core.hybrid_scraper_v2:🚀 Basic HTTP starting for: https://www.saiver.com
+2025-11-24T09:48:07.168157251Z [err]  INFO:core.hybrid_scraper_v2:🎭 Using rotated UA: Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36...
+2025-11-24T09:48:07.168161964Z [err]  INFO:core.hybrid_scraper_v2:🔧 Basic HTTP: Creating session with EXPERT timeouts (5s total)
+2025-11-24T09:48:07.168167495Z [err]  INFO:core.hybrid_scraper_v2:🌐 Basic HTTP: Attempt 1/2 - Making request to https://www.saiver.com
+2025-11-24T09:48:07.262994248Z [err]  WARNING:core.hybrid_scraper_v2:🌐 Connection Error on attempt 1: Cannot connect to host www.saiver.com:443 ssl:default [Connection reset by peer]
+2025-11-24T09:48:07.263002859Z [err]  INFO:core.hybrid_scraper_v2:🌐 Basic HTTP: Attempt 2/2 - Making request to https://www.saiver.com
+2025-11-24T09:48:07.343829270Z [err]  WARNING:core.hybrid_scraper_v2:🌐 Connection Error on attempt 2: Cannot connect to host www.saiver.com:443 ssl:default [Connection reset by peer]
+2025-11-24T09:48:07.343850094Z [err]  ERROR:core.hybrid_scraper_v2:💥 Basic HTTP EXCEPTION: ClientConnectorError: Cannot connect to host www.saiver.com:443 ssl:default [Connection reset by peer]
+2025-11-24T09:48:07.343858473Z [err]  ERROR:core.hybrid_scraper_v2:🔍 Exception details: ClientConnectorError(ConnectionKey(host='www.saiver.com', port=443, is_ssl=True, ssl=True, proxy=None, proxy_auth=None, proxy_headers_hash=None), ConnectionResetError(104, 'Connection reset by peer'))
+2025-11-24T09:48:07.343866204Z [err]  ERROR:core.hybrid_scraper_v2:📝 Exception args: (ConnectionKey(host='www.saiver.com', port=443, is_ssl=True, ssl=True, proxy=None, proxy_auth=None, proxy_headers_hash=None), ConnectionResetError(104, 'Connection reset by peer'))
+2025-11-24T09:48:07.343873121Z [err]  INFO:core.hybrid_scraper_v2:🚨 All HTTP methods failed with exceptions - trying PROXY FALLBACK
+2025-11-24T09:48:07.343880057Z [err]  INFO:core.hybrid_scraper_v2:🚫 Site not in proxy whitelist - skipping ScraperAPI
+2025-11-24T09:48:07.343887274Z [err]  INFO:core.hybrid_scraper_v2:🔍 Basic HTTP result: success=False, error=ClientConnectorError: Cannot connect to host www.saiver.com:443 ssl:default [Connection reset by peer]
+2025-11-24T09:48:07.343894195Z [err]  ERROR:core.hybrid_scraper_v2:❌ Basic HTTP FAILED: ClientConnectorError: Cannot connect to host www.saiver.com:443 ssl:default [Connection reset by peer]
+2025-11-24T09:48:07.343900983Z [err]  ERROR:core.hybrid_scraper_v2:❌ ALL METHODS FAILED for https://www.saiver.com after 9.09s
+2025-11-24T09:48:07.343908649Z [err]  WARNING:root:⚠️ Scraping failed for https://www.saiver.com
+2025-11-24T09:48:07.343936280Z [err]  INFO:root:📊 Streaming analysis 19/91: https://www.stefaniexchangers.com
+2025-11-24T09:48:07.343943410Z [err]  INFO:core.hybrid_scraper_v2:🎯 Starting ULTRA-INTELLIGENT scrape for: https://www.stefaniexchangers.com
+2025-11-24T09:48:07.345945273Z [err]  INFO:core.browser_pool:🔄 Session session_0 reached max requests, scheduling renewal...
+2025-11-24T09:48:07.345953415Z [err]  ERROR:core.browser_pool:❌ Scraping failed for https://www.stefaniexchangers.com: BrowserContext.new_page: Target page, context or browser has been closed
+2025-11-24T09:48:07.425856795Z [err]  INFO:core.browser_pool:✅ Renewed session session_0
+2025-11-24T09:48:27.416426305Z [inf]  INFO:     100.64.0.4:15262 - "GET /health HTTP/1.1" 200 OK
+2025-11-24T09:48:27.416433310Z [err]  INFO:core.hybrid_scraper_v2:🚨 TRYING BASIC HTTP for https://www.stefaniexchangers.com - FORCED!
+2025-11-24T09:48:27.416439082Z [err]  INFO:core.hybrid_scraper_v2:🚀 Basic HTTP starting for: https://www.stefaniexchangers.com
+2025-11-24T09:48:27.416443662Z [err]  INFO:core.hybrid_scraper_v2:🎭 Using rotated UA: Mozilla/5.0 (iPhone; CPU iPhone OS 17_1 like Mac O...
+2025-11-24T09:48:27.416449856Z [err]  INFO:core.hybrid_scraper_v2:🔧 Basic HTTP: Creating session with EXPERT timeouts (5s total)
+2025-11-24T09:48:27.416455600Z [err]  INFO:core.hybrid_scraper_v2:🌐 Basic HTTP: Attempt 1/2 - Making request to https://www.stefaniexchangers.com
+2025-11-24T09:48:28.447933528Z [err]  INFO:core.hybrid_scraper_v2:📊 Basic HTTP: Got response status 200
+2025-11-24T09:48:28.857244233Z [err]  INFO:core.hybrid_scraper_v2:✅ Basic HTTP SUCCESS (200): 264666 characters received
+2025-11-24T09:48:28.857256249Z [err]  INFO:core.hybrid_scraper_v2:🔍 Basic HTTP result: success=True, error=
+2025-11-24T09:48:28.872664537Z [err]  INFO:core.hybrid_scraper_v2:✅ Basic HTTP SUCCESS: 20 keywords
+2025-11-24T09:48:30.387365583Z [err]  INFO:core.matching:🔍 Keyword splitting: 2 phrases → 4 words
+2025-11-24T09:48:30.387371369Z [err]  INFO:core.matching:📊 Matching analysis: 2 original keywords → 4 words
+2025-11-24T09:48:30.387376426Z [err]  INFO:core.semantic_filter:Starting semantic analysis with 4 keywords
+2025-11-24T09:48:30.565233675Z [err]  INFO:httpx:HTTP Request: POST https://api.openai.com/v1/embeddings "HTTP/1.1 200 OK"
+2025-11-24T09:48:30.565245099Z [err]  INFO:root:✅ https://www.stefaniexchangers.com: 27% match
+2025-11-24T09:48:30.565251987Z [err]  ERROR:root:❌ Error processing https://www.stefaniexchangers.com: update_analysis_progress() got an unexpected keyword argument 'result'
+2025-11-24T09:48:30.565258653Z [err]  INFO:root:📊 Streaming analysis 20/91: https://www.rodigas.it
+2025-11-24T09:48:30.565265097Z [err]  INFO:core.hybrid_scraper_v2:🎯 Starting ULTRA-INTELLIGENT scrape for: https://www.rodigas.it
+2025-11-24T09:48:33.429813036Z [err]  INFO:core.browser_pool:🕐 Human-like delay: 4.4s
+2025-11-24T09:48:42.509202380Z [err]  INFO:core.hybrid_scraper_v2:✅ Browser Pool SUCCESS: 20 keywords
+2025-11-24T09:48:43.031669556Z [err]  INFO:core.matching:🔍 Keyword splitting: 2 phrases → 4 words
+2025-11-24T09:48:43.031676739Z [err]  INFO:core.matching:📊 Matching analysis: 2 original keywords → 4 words
+2025-11-24T09:48:43.031680934Z [err]  INFO:core.semantic_filter:Starting semantic analysis with 4 keywords
+2025-11-24T09:48:43.445434824Z [err]  INFO:httpx:HTTP Request: POST https://api.openai.com/v1/embeddings "HTTP/1.1 200 OK"
+2025-11-24T09:48:43.445444884Z [err]  INFO:root:✅ https://www.rodigas.it: 35% match
+2025-11-24T09:48:43.445451546Z [err]  ERROR:root:❌ Error processing https://www.rodigas.it: update_analysis_progress() got an unexpected keyword argument 'result'
+2025-11-24T09:48:43.445456905Z [err]  INFO:root:📊 Streaming analysis 21/91: https://www.tecnoventil.it
+2025-11-24T09:48:43.445463014Z [err]  INFO:core.hybrid_scraper_v2:🎯 Starting ULTRA-INTELLIGENT scrape for: https://www.tecnoventil.it
+2025-11-24T09:48:45.689728090Z [err]  INFO:core.browser_pool:🕐 Human-like delay: 5.3s
+2025-11-24T09:48:54.825944754Z [err]  INFO:core.hybrid_scraper_v2:✅ Browser Pool SUCCESS: 20 keywords
+2025-11-24T09:48:55.890584061Z [err]  INFO:core.matching:🔍 Keyword splitting: 2 phrases → 4 words
+2025-11-24T09:48:55.890593185Z [err]  INFO:core.matching:📊 Matching analysis: 2 original keywords → 4 words
+2025-11-24T09:48:55.890599655Z [err]  INFO:core.semantic_filter:Starting semantic analysis with 4 keywords
+2025-11-24T09:48:56.125874798Z [err]  INFO:httpx:HTTP Request: POST https://api.openai.com/v1/embeddings "HTTP/1.1 200 OK"
+2025-11-24T09:48:56.148978808Z [err]  INFO:root:✅ https://www.tecnoventil.it: 70% match
+2025-11-24T09:48:56.148986257Z [err]  ERROR:root:❌ Error processing https://www.tecnoventil.it: update_analysis_progress() got an unexpected keyword argument 'result'
+2025-11-24T09:48:56.148991375Z [err]  INFO:root:📊 Streaming analysis 22/91: https://www.milanodispensers.com
+2025-11-24T09:48:56.148995943Z [err]  INFO:core.hybrid_scraper_v2:🎯 Starting ULTRA-INTELLIGENT scrape for: https://www.milanodispensers.com
+2025-11-24T09:48:58.781311545Z [err]  INFO:core.browser_pool:🕐 Human-like delay: 4.1s
+2025-11-24T09:49:05.633410706Z [err]  INFO:core.hybrid_scraper_v2:✅ Browser Pool SUCCESS: 20 keywords
+2025-11-24T09:49:06.032237201Z [err]  INFO:core.matching:🔍 Keyword splitting: 2 phrases → 4 words
+2025-11-24T09:49:06.032245891Z [err]  INFO:core.matching:📊 Matching analysis: 2 original keywords → 4 words
+2025-11-24T09:49:06.032251434Z [err]  INFO:core.semantic_filter:Starting semantic analysis with 4 keywords
+2025-11-24T09:49:06.267945318Z [err]  INFO:httpx:HTTP Request: POST https://api.openai.com/v1/embeddings "HTTP/1.1 200 OK"
+2025-11-24T09:49:06.275040646Z [err]  INFO:root:✅ https://www.milanodispensers.com: 19% match
+2025-11-24T09:49:06.275047332Z [err]  ERROR:root:❌ Error processing https://www.milanodispensers.com: update_analysis_progress() got an unexpected keyword argument 'result'
+2025-11-24T09:49:06.275051629Z [err]  INFO:root:📊 Streaming analysis 23/91: https://www.fral.it
+2025-11-24T09:49:06.275055675Z [err]  INFO:core.hybrid_scraper_v2:🎯 Starting ULTRA-INTELLIGENT scrape for: https://www.fral.it
+2025-11-24T09:49:10.185245024Z [err]  INFO:core.browser_pool:🕐 Human-like delay: 5.2s
+2025-11-24T09:49:17.918546676Z [err]  INFO:core.hybrid_scraper_v2:✅ Browser Pool SUCCESS: 20 keywords
+2025-11-24T09:49:17.986553083Z [err]  INFO:core.matching:🔍 Keyword splitting: 2 phrases → 4 words
+2025-11-24T09:49:17.986561538Z [err]  INFO:core.matching:📊 Matching analysis: 2 original keywords → 4 words
+2025-11-24T09:49:17.986567622Z [err]  INFO:core.semantic_filter:Starting semantic analysis with 4 keywords
+2025-11-24T09:49:18.287846832Z [err]  INFO:httpx:HTTP Request: POST https://api.openai.com/v1/embeddings "HTTP/1.1 200 OK"
+2025-11-24T09:49:18.303894020Z [err]  INFO:root:📊 Streaming analysis 24/91: https://www.hitema.it
+2025-11-24T09:49:18.303906286Z [err]  INFO:core.hybrid_scraper_v2:🎯 Starting ULTRA-INTELLIGENT scrape for: https://www.hitema.it
+2025-11-24T09:49:18.303988668Z [err]  INFO:root:✅ https://www.fral.it: 46% match
+2025-11-24T09:49:18.303993398Z [err]  ERROR:root:❌ Error processing https://www.fral.it: update_analysis_progress() got an unexpected keyword argument 'result'
+2025-11-24T09:49:19.961512646Z [err]  INFO:core.browser_pool:🕐 Human-like delay: 6.2s
+2025-11-24T09:49:23.495849210Z [inf]  INFO:     100.64.0.4:43142 - "GET /health HTTP/1.1" 200 OK
+2025-11-24T09:49:29.384081921Z [err]  INFO:core.hybrid_scraper_v2:✅ Browser Pool SUCCESS: 20 keywords
+2025-11-24T09:49:30.190343991Z [err]  INFO:core.matching:🔍 Keyword splitting: 2 phrases → 4 words
+2025-11-24T09:49:30.190350747Z [err]  INFO:core.matching:📊 Matching analysis: 2 original keywords → 4 words
+2025-11-24T09:49:30.190355435Z [err]  INFO:core.semantic_filter:Starting semantic analysis with 4 keywords
+2025-11-24T09:49:30.569506071Z [err]  INFO:httpx:HTTP Request: POST https://api.openai.com/v1/embeddings "HTTP/1.1 200 OK"
+2025-11-24T09:49:30.592767496Z [err]  INFO:root:✅ https://www.hitema.it: 23% match
+2025-11-24T09:49:30.592779085Z [err]  ERROR:root:❌ Error processing https://www.hitema.it: update_analysis_progress() got an unexpected keyword argument 'result'
+2025-11-24T09:49:30.592784683Z [err]  INFO:root:📊 Streaming analysis 25/91: https://www.fic.com
+2025-11-24T09:49:30.592789160Z [err]  INFO:core.hybrid_scraper_v2:🎯 Starting ULTRA-INTELLIGENT scrape for: https://www.fic.com
+2025-11-24T09:49:32.446015212Z [err]  INFO:core.browser_pool:🕐 Human-like delay: 3.2s
+2025-11-24T09:49:39.389981379Z [err]  INFO:core.hybrid_scraper_v2:✅ Browser Pool SUCCESS: 20 keywords
+2025-11-24T09:49:39.535930555Z [err]  INFO:core.matching:🔍 Keyword splitting: 2 phrases → 4 words
+2025-11-24T09:49:39.535939912Z [err]  INFO:core.matching:📊 Matching analysis: 2 original keywords → 4 words
+2025-11-24T09:49:39.535945132Z [err]  INFO:core.semantic_filter:Starting semantic analysis with 4 keywords
+2025-11-24T09:49:40.050185275Z [err]  INFO:httpx:HTTP Request: POST https://api.openai.com/v1/embeddings "HTTP/1.1 200 OK"
+2025-11-24T09:49:40.050195234Z [err]  INFO:root:✅ https://www.fic.com: 32% match
+2025-11-24T09:49:40.050199983Z [err]  ERROR:root:❌ Error processing https://www.fic.com: update_analysis_progress() got an unexpected keyword argument 'result'
+2025-11-24T09:49:40.050204881Z [err]  INFO:root:📊 Streaming analysis 26/91: https://www.mth.it
+2025-11-24T09:49:40.050210264Z [err]  INFO:core.hybrid_scraper_v2:🎯 Starting ULTRA-INTELLIGENT scrape for: https://www.mth.it
+2025-11-24T09:49:42.205206592Z [err]  INFO:core.browser_pool:🕐 Human-like delay: 6.5s
+2025-11-24T09:50:02.438425476Z [err]  INFO:root:✅ https://www.mth.it: 44% match
+2025-11-24T09:50:02.438434266Z [err]  ERROR:root:❌ Error processing https://www.mth.it: update_analysis_progress() got an unexpected keyword argument 'result'
+2025-11-24T09:50:02.438439915Z [err]  INFO:root:📊 Streaming analysis 27/91: https://www.enginiasrl.com
+2025-11-24T09:50:02.438445130Z [err]  INFO:core.hybrid_scraper_v2:🎯 Starting ULTRA-INTELLIGENT scrape for: https://www.enginiasrl.com
+2025-11-24T09:50:02.438448536Z [err]  INFO:core.hybrid_scraper_v2:✅ Browser Pool SUCCESS: 20 keywords
+2025-11-24T09:50:02.438453146Z [err]  INFO:core.browser_pool:🔄 Session session_0 reached max requests, scheduling renewal...
+2025-11-24T09:50:02.438456949Z [err]  INFO:core.matching:🔍 Keyword splitting: 2 phrases → 4 words
+2025-11-24T09:50:02.438461590Z [err]  ERROR:core.browser_pool:❌ Scraping failed for https://www.enginiasrl.com: BrowserContext.new_page: Target page, context or browser has been closed
+2025-11-24T09:50:02.438466606Z [err]  INFO:core.matching:📊 Matching analysis: 2 original keywords → 4 words
+2025-11-24T09:50:02.438466639Z [err]  INFO:core.browser_pool:✅ Renewed session session_0
+2025-11-24T09:50:02.438474107Z [err]  INFO:core.semantic_filter:Starting semantic analysis with 4 keywords
+2025-11-24T09:50:02.438480058Z [err]  INFO:httpx:HTTP Request: POST https://api.openai.com/v1/embeddings "HTTP/1.1 200 OK"
+2025-11-24T09:50:22.449129986Z [err]  INFO:core.hybrid_scraper_v2:🚨 TRYING BASIC HTTP for https://www.enginiasrl.com - FORCED!
+2025-11-24T09:50:22.449131664Z [err]  Call log:
+2025-11-24T09:50:22.449138557Z [err]  INFO:core.hybrid_scraper_v2:🚀 Basic HTTP starting for: https://www.enginiasrl.com
+2025-11-24T09:50:22.449138867Z [err]  WARNING:root:⚠️ Scraping failed for https://www.enginiasrl.com
+2025-11-24T09:50:22.449142633Z [err]    - navigating to "https://www.enginiasrl.com/", waiting until "networkidle"
+2025-11-24T09:50:22.449144854Z [err]  INFO:core.hybrid_scraper_v2:🎭 Using rotated UA: Mozilla/5.0 (Android 14; Mobile; rv:121.0) Gecko/1...
+2025-11-24T09:50:22.449149306Z [err]  INFO:root:📊 Streaming analysis 28/91: http://www.euroklimat.it
+2025-11-24T09:50:22.449152126Z [err]  
+2025-11-24T09:50:22.449154907Z [err]  INFO:core.hybrid_scraper_v2:🔧 Basic HTTP: Creating session with EXPERT timeouts (5s total)
+2025-11-24T09:50:22.449159235Z [err]  INFO:core.hybrid_scraper_v2:🎯 Starting ULTRA-INTELLIGENT scrape for: http://www.euroklimat.it
+2025-11-24T09:50:22.449160817Z [err]  INFO:core.browser_pool:🕐 Human-like delay: 4.9s
+2025-11-24T09:50:22.449164040Z [err]  INFO:core.hybrid_scraper_v2:🌐 Basic HTTP: Attempt 1/2 - Making request to https://www.enginiasrl.com
+2025-11-24T09:50:22.449168250Z [err]  ERROR:asyncio:Future exception was never retrieved
+2025-11-24T09:50:22.449173564Z [err]  WARNING:core.hybrid_scraper_v2:⏰ Timeout on attempt 1: Timeout on reading data from socket
+2025-11-24T09:50:22.449174379Z [err]  future: <Future finished exception=Error('net::ERR_ABORTED; maybe frame was detached?\nCall log:\n  - navigating to "https://www.enginiasrl.com/", waiting until "networkidle"\n')>
+2025-11-24T09:50:22.449181268Z [err]  playwright._impl._errors.Error: net::ERR_ABORTED; maybe frame was detached?
+2025-11-24T09:50:22.449182239Z [err]  INFO:core.hybrid_scraper_v2:🌐 Basic HTTP: Attempt 2/2 - Making request to https://www.enginiasrl.com
+2025-11-24T09:50:22.449190111Z [err]  WARNING:core.hybrid_scraper_v2:⏰ Timeout on attempt 2: Timeout on reading data from socket
+2025-11-24T09:50:22.449196456Z [err]  ERROR:core.hybrid_scraper_v2:💥 Basic HTTP EXCEPTION: SocketTimeoutError: Timeout on reading data from socket
+2025-11-24T09:50:22.449202551Z [err]  ERROR:core.hybrid_scraper_v2:🔍 Exception details: SocketTimeoutError('Timeout on reading data from socket')
+2025-11-24T09:50:22.449209127Z [err]  ERROR:core.hybrid_scraper_v2:📝 Exception args: ('Timeout on reading data from socket',)
+2025-11-24T09:50:22.449215280Z [err]  INFO:core.hybrid_scraper_v2:🚨 All HTTP methods failed with exceptions - trying PROXY FALLBACK
+2025-11-24T09:50:22.449222351Z [err]  INFO:core.hybrid_scraper_v2:🚫 Site not in proxy whitelist - skipping ScraperAPI
+2025-11-24T09:50:22.449222455Z [err]  ERROR:core.hybrid_scraper_v2:❌ ALL METHODS FAILED for https://www.enginiasrl.com after 26.33s
+2025-11-24T09:50:22.449228851Z [err]  INFO:core.hybrid_scraper_v2:🔍 Basic HTTP result: success=False, error=SocketTimeoutError: Timeout on reading data from socket
+2025-11-24T09:50:22.449235915Z [err]  ERROR:core.hybrid_scraper_v2:❌ Basic HTTP FAILED: SocketTimeoutError: Timeout on reading data from socket
+2025-11-24T09:50:23.617872115Z [inf]  INFO:     100.64.0.4:48332 - "GET /health HTTP/1.1" 200 OK
+2025-11-24T09:50:31.551506543Z [err]  INFO:core.hybrid_scraper_v2:✅ Browser Pool SUCCESS: 20 keywords
+2025-11-24T09:50:31.577710168Z [err]  INFO:core.matching:🔍 Keyword splitting: 2 phrases → 4 words
+2025-11-24T09:50:31.577721636Z [err]  INFO:core.matching:📊 Matching analysis: 2 original keywords → 4 words
+2025-11-24T09:50:31.577728658Z [err]  INFO:core.semantic_filter:Starting semantic analysis with 4 keywords
+2025-11-24T09:50:31.925941387Z [err]  INFO:httpx:HTTP Request: POST https://api.openai.com/v1/embeddings "HTTP/1.1 200 OK"
+2025-11-24T09:50:31.941050563Z [err]  INFO:root:✅ http://www.euroklimat.it: 23% match
+2025-11-24T09:50:31.941061459Z [err]  ERROR:root:❌ Error processing http://www.euroklimat.it: update_analysis_progress() got an unexpected keyword argument 'result'
+2025-11-24T09:50:31.941069495Z [err]  INFO:root:📊 Streaming analysis 29/91: https://www.columbiasrl.it
+2025-11-24T09:50:31.941076918Z [err]  INFO:core.hybrid_scraper_v2:🎯 Starting ULTRA-INTELLIGENT scrape for: https://www.columbiasrl.it
+2025-11-24T09:50:33.970991640Z [err]  INFO:core.browser_pool:🕐 Human-like delay: 5.9s
+2025-11-24T09:50:42.663087179Z [err]  INFO:core.hybrid_scraper_v2:✅ Browser Pool SUCCESS: 20 keywords
+2025-11-24T09:50:43.760801555Z [err]  INFO:core.matching:🔍 Keyword splitting: 2 phrases → 4 words
+2025-11-24T09:50:43.760809967Z [err]  INFO:core.matching:📊 Matching analysis: 2 original keywords → 4 words
+2025-11-24T09:50:43.760816869Z [err]  INFO:core.semantic_filter:Starting semantic analysis with 4 keywords
+2025-11-24T09:50:43.970195274Z [err]  INFO:httpx:HTTP Request: POST https://api.openai.com/v1/embeddings "HTTP/1.1 200 OK"
+2025-11-24T09:50:43.984355307Z [err]  INFO:root:✅ https://www.columbiasrl.it: 14% match
+2025-11-24T09:50:43.984361374Z [err]  ERROR:root:❌ Error processing https://www.columbiasrl.it: update_analysis_progress() got an unexpected keyword argument 'result'
+2025-11-24T09:50:43.984365495Z [err]  INFO:root:📊 Streaming analysis 30/91: http://www.axialfansint.com
+2025-11-24T09:50:43.984370508Z [err]  INFO:core.hybrid_scraper_v2:🎯 Starting ULTRA-INTELLIGENT scrape for: http://www.axialfansint.com
+2025-11-24T09:50:45.209092187Z [err]  INFO:core.browser_pool:🕐 Human-like delay: 5.2s
+2025-11-24T09:50:52.845682057Z [err]  INFO:core.hybrid_scraper_v2:✅ Browser Pool SUCCESS: 20 keywords
+2025-11-24T09:50:52.904841205Z [err]  INFO:core.matching:🔍 Keyword splitting: 2 phrases → 4 words
+2025-11-24T09:50:52.904848010Z [err]  INFO:core.matching:📊 Matching analysis: 2 original keywords → 4 words
+2025-11-24T09:50:52.904853021Z [err]  INFO:core.semantic_filter:Starting semantic analysis with 4 keywords
+2025-11-24T09:50:53.125767071Z [err]  INFO:httpx:HTTP Request: POST https://api.openai.com/v1/embeddings "HTTP/1.1 200 OK"
+2025-11-24T09:50:53.125775685Z [err]  INFO:root:✅ http://www.axialfansint.com: 27% match
+2025-11-24T09:50:53.125781252Z [err]  ERROR:root:❌ Error processing http://www.axialfansint.com: update_analysis_progress() got an unexpected keyword argument 'result'
+2025-11-24T09:50:53.125792051Z [err]  INFO:root:📊 Streaming analysis 31/91: https://www.evapco.eu
+2025-11-24T09:50:53.125797938Z [err]  INFO:core.hybrid_scraper_v2:🎯 Starting ULTRA-INTELLIGENT scrape for: https://www.evapco.eu
+2025-11-24T09:50:54.983199677Z [err]  INFO:core.browser_pool:🕐 Human-like delay: 3.7s
+2025-11-24T09:51:02.082152569Z [err]  INFO:core.hybrid_scraper_v2:✅ Browser Pool SUCCESS: 20 keywords
+2025-11-24T09:51:02.289135525Z [err]  INFO:core.matching:🔍 Keyword splitting: 2 phrases → 4 words
+2025-11-24T09:51:02.289140006Z [err]  INFO:core.matching:📊 Matching analysis: 2 original keywords → 4 words
+2025-11-24T09:51:02.289144935Z [err]  INFO:core.semantic_filter:Starting semantic analysis with 4 keywords
+2025-11-24T09:51:02.562650868Z [err]  INFO:httpx:HTTP Request: POST https://api.openai.com/v1/embeddings "HTTP/1.1 200 OK"
+2025-11-24T09:51:02.562657808Z [err]  INFO:root:✅ https://www.evapco.eu: 20% match
+2025-11-24T09:51:02.562662992Z [err]  ERROR:root:❌ Error processing https://www.evapco.eu: update_analysis_progress() got an unexpected keyword argument 'result'
+2025-11-24T09:51:02.562668574Z [err]  INFO:root:📊 Streaming analysis 32/91: http://www.recuperator.eu
+2025-11-24T09:51:02.562674192Z [err]  INFO:core.hybrid_scraper_v2:🎯 Starting ULTRA-INTELLIGENT scrape for: http://www.recuperator.eu
+2025-11-24T09:51:04.352234326Z [err]  INFO:core.browser_pool:🕐 Human-like delay: 4.5s
+2025-11-24T09:51:13.152617770Z [err]  INFO:core.hybrid_scraper_v2:✅ Browser Pool SUCCESS: 20 keywords
+2025-11-24T09:51:13.408997970Z [err]  INFO:core.matching:🔍 Keyword splitting: 2 phrases → 4 words
+2025-11-24T09:51:13.409007874Z [err]  INFO:core.matching:📊 Matching analysis: 2 original keywords → 4 words
+2025-11-24T09:51:13.409016381Z [err]  INFO:core.semantic_filter:Starting semantic analysis with 4 keywords
+2025-11-24T09:51:14.251047508Z [err]  INFO:httpx:HTTP Request: POST https://api.openai.com/v1/embeddings "HTTP/1.1 200 OK"
+2025-11-24T09:51:14.251054953Z [err]  INFO:root:✅ http://www.recuperator.eu: 25% match
+2025-11-24T09:51:14.251061543Z [err]  ERROR:root:❌ Error processing http://www.recuperator.eu: update_analysis_progress() got an unexpected keyword argument 'result'
+2025-11-24T09:51:14.251068565Z [err]  INFO:root:📊 Streaming analysis 33/91: https://www.oesse.com
+2025-11-24T09:51:14.251074542Z [err]  INFO:core.hybrid_scraper_v2:🎯 Starting ULTRA-INTELLIGENT scrape for: https://www.oesse.com
+2025-11-24T09:51:16.802022450Z [err]  INFO:core.browser_pool:🕐 Human-like delay: 4.4s
+2025-11-24T09:51:23.498316412Z [inf]  INFO:     100.64.0.4:34942 - "GET /health HTTP/1.1" 200 OK
+2025-11-24T09:51:27.697807740Z [err]  INFO:core.hybrid_scraper_v2:✅ Browser Pool SUCCESS: 20 keywords
+2025-11-24T09:51:27.842759203Z [err]  INFO:core.matching:🔍 Keyword splitting: 2 phrases → 4 words
+2025-11-24T09:51:27.842769541Z [err]  INFO:core.matching:📊 Matching analysis: 2 original keywords → 4 words
+2025-11-24T09:51:27.842776303Z [err]  INFO:core.semantic_filter:Starting semantic analysis with 4 keywords
+2025-11-24T09:51:28.448310356Z [err]  INFO:httpx:HTTP Request: POST https://api.openai.com/v1/embeddings "HTTP/1.1 200 OK"
+2025-11-24T09:51:28.448315395Z [err]  INFO:root:✅ https://www.oesse.com: 38% match
+2025-11-24T09:51:28.448320346Z [err]  ERROR:root:❌ Error processing https://www.oesse.com: update_analysis_progress() got an unexpected keyword argument 'result'
+2025-11-24T09:51:28.448326898Z [err]  INFO:root:📊 Streaming analysis 34/91: https://www.bpstecnologie.com
+2025-11-24T09:51:28.448331581Z [err]  INFO:core.hybrid_scraper_v2:🎯 Starting ULTRA-INTELLIGENT scrape for: https://www.bpstecnologie.com
+2025-11-24T09:51:30.371249328Z [err]  INFO:core.browser_pool:🕐 Human-like delay: 6.3s
+2025-11-24T09:51:50.051056581Z [err]  INFO:core.hybrid_scraper_v2:✅ Browser Pool SUCCESS: 20 keywords
+2025-11-24T09:51:50.051068438Z [err]  INFO:core.matching:🔍 Keyword splitting: 2 phrases → 4 words
+2025-11-24T09:51:50.051073926Z [err]  INFO:core.matching:📊 Matching analysis: 2 original keywords → 4 words
+2025-11-24T09:51:50.051078968Z [err]  INFO:core.semantic_filter:Starting semantic analysis with 4 keywords
+2025-11-24T09:51:50.051088318Z [err]  INFO:httpx:HTTP Request: POST https://api.openai.com/v1/embeddings "HTTP/1.1 200 OK"
+2025-11-24T09:51:50.051094330Z [err]  INFO:root:✅ https://www.bpstecnologie.com: 29% match
+2025-11-24T09:51:50.051099793Z [err]  ERROR:root:❌ Error processing https://www.bpstecnologie.com: update_analysis_progress() got an unexpected keyword argument 'result'
+2025-11-24T09:51:50.051105212Z [err]  INFO:root:📊 Streaming analysis 35/91: https://www.isolcell.com
+2025-11-24T09:51:50.051112129Z [err]  INFO:core.hybrid_scraper_v2:🎯 Starting ULTRA-INTELLIGENT scrape for: https://www.isolcell.com
+2025-11-24T09:51:50.051125388Z [err]  INFO:core.browser_pool:🔄 Session session_0 reached max requests, scheduling renewal...
+2025-11-24T09:51:50.051131424Z [err]  ERROR:core.browser_pool:❌ Scraping failed for https://www.isolcell.com: BrowserContext.new_page: Target page, context or browser has been closed
+2025-11-24T09:51:50.051136950Z [err]  INFO:core.browser_pool:✅ Renewed session session_0
+2025-11-24T09:52:10.051084063Z [err]  INFO:core.hybrid_scraper_v2:🎯 Starting ULTRA-INTELLIGENT scrape for: https://www.thermocold.it
+2025-11-24T09:52:10.051101794Z [err]  INFO:core.hybrid_scraper_v2:🚨 TRYING BASIC HTTP for https://www.isolcell.com - FORCED!
+2025-11-24T09:52:10.051106740Z [err]  INFO:core.hybrid_scraper_v2:🚀 Basic HTTP starting for: https://www.isolcell.com
+2025-11-24T09:52:10.051111735Z [err]  INFO:core.hybrid_scraper_v2:🎭 Using rotated UA: Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) Ap...
+2025-11-24T09:52:10.051117045Z [err]  INFO:core.hybrid_scraper_v2:🔧 Basic HTTP: Creating session with EXPERT timeouts (5s total)
+2025-11-24T09:52:10.051122496Z [err]  INFO:core.hybrid_scraper_v2:🌐 Basic HTTP: Attempt 1/2 - Making request to https://www.isolcell.com
+2025-11-24T09:52:10.051128000Z [err]  INFO:core.hybrid_scraper_v2:📊 Basic HTTP: Got response status 200
+2025-11-24T09:52:10.051134562Z [err]  INFO:core.hybrid_scraper_v2:✅ Basic HTTP SUCCESS (200): 131742 characters received
+2025-11-24T09:52:10.051140256Z [err]  INFO:core.hybrid_scraper_v2:🔍 Basic HTTP result: success=True, error=
+2025-11-24T09:52:10.051145344Z [err]  INFO:core.hybrid_scraper_v2:✅ Basic HTTP SUCCESS: 20 keywords
+2025-11-24T09:52:10.051149402Z [err]  INFO:core.matching:🔍 Keyword splitting: 2 phrases → 4 words
+2025-11-24T09:52:10.051153799Z [err]  INFO:core.matching:📊 Matching analysis: 2 original keywords → 4 words
+2025-11-24T09:52:10.051157738Z [err]  INFO:core.semantic_filter:Starting semantic analysis with 4 keywords
+2025-11-24T09:52:10.051161592Z [err]  INFO:root:✅ https://www.isolcell.com: 9% match
+2025-11-24T09:52:10.051165610Z [err]  ERROR:root:❌ Error processing https://www.isolcell.com: update_analysis_progress() got an unexpected keyword argument 'result'
+2025-11-24T09:52:10.051169674Z [err]  INFO:root:📊 Streaming analysis 36/91: https://www.thermocold.it
+2025-11-24T09:52:11.736487488Z [err]  INFO:core.browser_pool:🕐 Human-like delay: 6.5s
+2025-11-24T09:52:31.513592103Z [inf]  INFO:     100.64.0.9:48904 - "GET /health HTTP/1.1" 200 OK
+2025-11-24T09:52:39.215961024Z [err]  INFO:core.hybrid_scraper_v2:🚨 TRYING BASIC HTTP for https://www.thermocold.it - FORCED!
+2025-11-24T09:52:39.215967306Z [err]  INFO:core.hybrid_scraper_v2:🚀 Basic HTTP starting for: https://www.thermocold.it
+2025-11-24T09:52:39.215972069Z [err]  INFO:core.hybrid_scraper_v2:🎭 Using rotated UA: Mozilla/5.0 (Android 14; Mobile; rv:121.0) Gecko/1...
+2025-11-24T09:52:39.215976809Z [err]  INFO:core.hybrid_scraper_v2:🔧 Basic HTTP: Creating session with EXPERT timeouts (5s total)
+2025-11-24T09:52:39.215982087Z [err]  INFO:core.hybrid_scraper_v2:🌐 Basic HTTP: Attempt 1/2 - Making request to https://www.thermocold.it
+2025-11-24T09:52:39.410298595Z [err]  ERROR:asyncio:Future exception was never retrieved
+2025-11-24T09:52:39.410307999Z [err]  future: <Future finished exception=TargetClosedError('Target page, context or browser has been closed')>
+2025-11-24T09:52:39.410314717Z [err]  playwright._impl._errors.TargetClosedError: Target page, context or browser has been closed
+2025-11-24T09:52:40.199397560Z [err]  INFO:core.hybrid_scraper_v2:📊 Basic HTTP: Got response status 200
+2025-11-24T09:52:40.199407381Z [err]  INFO:core.hybrid_scraper_v2:✅ Basic HTTP SUCCESS (200): 104477 characters received
+2025-11-24T09:52:40.199417331Z [err]  INFO:core.hybrid_scraper_v2:🔍 Basic HTTP result: success=True, error=
+2025-11-24T09:52:40.199424712Z [err]  ERROR:asyncio:Future exception was never retrieved
+2025-11-24T09:52:40.199431625Z [err]  future: <Future finished exception=TargetClosedError('Target page, context or browser has been closed')>
+2025-11-24T09:52:40.199437683Z [err]  playwright._impl._errors.TargetClosedError: Target page, context or browser has been closed
+2025-11-24T09:52:40.227879512Z [err]  INFO:core.hybrid_scraper_v2:✅ Basic HTTP SUCCESS: 20 keywords
+2025-11-24T09:52:41.485662125Z [err]  INFO:core.matching:🔍 Keyword splitting: 2 phrases → 4 words
+2025-11-24T09:52:41.485708854Z [err]  INFO:core.matching:📊 Matching analysis: 2 original keywords → 4 words
+2025-11-24T09:52:41.485718191Z [err]  INFO:core.semantic_filter:Starting semantic analysis with 4 keywords
+2025-11-24T09:52:42.073188129Z [err]  INFO:httpx:HTTP Request: POST https://api.openai.com/v1/embeddings "HTTP/1.1 200 OK"
+2025-11-24T09:52:42.076627248Z [err]  INFO:root:✅ https://www.thermocold.it: 33% match
+2025-11-24T09:52:42.076638521Z [err]  ERROR:root:❌ Error processing https://www.thermocold.it: update_analysis_progress() got an unexpected keyword argument 'result'
+2025-11-24T09:52:42.076644188Z [err]  INFO:root:📊 Streaming analysis 37/91: https://shop.systemair.com
+2025-11-24T09:52:42.076648762Z [err]  INFO:core.hybrid_scraper_v2:🎯 Starting ULTRA-INTELLIGENT scrape for: https://shop.systemair.com
+2025-11-24T09:52:45.160430002Z [err]  INFO:core.browser_pool:🕐 Human-like delay: 4.5s
+2025-11-24T09:53:04.892212812Z [err]  INFO:core.hybrid_scraper_v2:✅ Browser Pool SUCCESS: 20 keywords
+2025-11-24T09:53:04.892225153Z [err]  INFO:core.matching:🔍 Keyword splitting: 2 phrases → 4 words
+2025-11-24T09:53:04.892231813Z [err]  INFO:core.matching:📊 Matching analysis: 2 original keywords → 4 words
+2025-11-24T09:53:04.892237099Z [err]  INFO:core.semantic_filter:Starting semantic analysis with 4 keywords
+2025-11-24T09:53:04.892293717Z [err]  INFO:httpx:HTTP Request: POST https://api.openai.com/v1/embeddings "HTTP/1.1 200 OK"
+2025-11-24T09:53:04.892301392Z [err]  INFO:root:✅ https://shop.systemair.com: 23% match
+2025-11-24T09:53:04.892309439Z [err]  ERROR:root:❌ Error processing https://shop.systemair.com: update_analysis_progress() got an unexpected keyword argument 'result'
+2025-11-24T09:53:04.892316829Z [err]  INFO:root:📊 Streaming analysis 38/91: https://www.desmon.it
+2025-11-24T09:53:04.892323220Z [err]  INFO:core.hybrid_scraper_v2:🎯 Starting ULTRA-INTELLIGENT scrape for: https://www.desmon.it
+2025-11-24T09:53:04.892330223Z [err]  INFO:core.browser_pool:🕐 Human-like delay: 5.2s
+2025-11-24T09:53:24.894866008Z [inf]  INFO:     100.64.0.9:14098 - "GET /health HTTP/1.1" 200 OK
+2025-11-24T09:53:32.846651537Z [err]  INFO:core.hybrid_scraper_v2:🚨 TRYING BASIC HTTP for https://www.desmon.it - FORCED!
+2025-11-24T09:53:32.846659936Z [err]  INFO:core.hybrid_scraper_v2:🚀 Basic HTTP starting for: https://www.desmon.it
+2025-11-24T09:53:32.846665502Z [err]  INFO:core.hybrid_scraper_v2:🎭 Using rotated UA: Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) Ap...
+2025-11-24T09:53:32.846670808Z [err]  INFO:core.hybrid_scraper_v2:🔧 Basic HTTP: Creating session with EXPERT timeouts (5s total)
+2025-11-24T09:53:32.846674880Z [err]  INFO:core.hybrid_scraper_v2:🌐 Basic HTTP: Attempt 1/2 - Making request to https://www.desmon.it
+2025-11-24T09:53:33.536624992Z [err]  INFO:core.hybrid_scraper_v2:📊 Basic HTTP: Got response status 200
+2025-11-24T09:53:33.536631873Z [err]  INFO:core.hybrid_scraper_v2:✅ Basic HTTP SUCCESS (200): 136670 characters received
+2025-11-24T09:53:33.536638462Z [err]  INFO:core.hybrid_scraper_v2:🔍 Basic HTTP result: success=True, error=
+2025-11-24T09:53:33.536644645Z [err]  INFO:core.hybrid_scraper_v2:✅ Basic HTTP SUCCESS: 20 keywords
+2025-11-24T09:53:33.825631471Z [err]  INFO:core.matching:🔍 Keyword splitting: 2 phrases → 4 words
+2025-11-24T09:53:33.825638336Z [err]  INFO:core.matching:📊 Matching analysis: 2 original keywords → 4 words
+2025-11-24T09:53:33.825642849Z [err]  INFO:core.semantic_filter:Starting semantic analysis with 4 keywords
+2025-11-24T09:53:34.116024086Z [err]  INFO:httpx:HTTP Request: POST https://api.openai.com/v1/embeddings "HTTP/1.1 200 OK"
+2025-11-24T09:53:34.132942070Z [err]  INFO:root:✅ https://www.desmon.it: 31% match
+2025-11-24T09:53:34.132949758Z [err]  ERROR:root:❌ Error processing https://www.desmon.it: update_analysis_progress() got an unexpected keyword argument 'result'
+2025-11-24T09:53:34.132955324Z [err]  INFO:root:📊 Streaming analysis 39/91: https://mionmosole.it
+2025-11-24T09:53:34.132960313Z [err]  INFO:core.hybrid_scraper_v2:🎯 Starting ULTRA-INTELLIGENT scrape for: https://mionmosole.it
+2025-11-24T09:53:38.022595097Z [err]  INFO:core.browser_pool:🕐 Human-like delay: 6.0s
+2025-11-24T09:54:18.114652756Z [err]  INFO:core.hybrid_scraper_v2:🚨 TRYING BASIC HTTP for https://mionmosole.it - FORCED!
+2025-11-24T09:54:18.114709986Z [err]  INFO:core.hybrid_scraper_v2:🚀 Basic HTTP starting for: https://mionmosole.it
+2025-11-24T09:54:18.114719652Z [err]  INFO:core.hybrid_scraper_v2:🎭 Using rotated UA: Mozilla/5.0 (X11; Linux x86_64; rv:121.0) Gecko/20...
+2025-11-24T09:54:18.114725458Z [err]  INFO:core.hybrid_scraper_v2:🔧 Basic HTTP: Creating session with EXPERT timeouts (5s total)
+2025-11-24T09:54:18.114731423Z [err]  INFO:core.hybrid_scraper_v2:🌐 Basic HTTP: Attempt 1/2 - Making request to https://mionmosole.it
+2025-11-24T09:54:18.114739098Z [err]  INFO:core.hybrid_scraper_v2:📊 Basic HTTP: Got response status 200
+2025-11-24T09:54:18.114745512Z [err]  INFO:core.hybrid_scraper_v2:✅ Basic HTTP SUCCESS (200): 431339 characters received
+2025-11-24T09:54:18.114752610Z [err]  INFO:core.hybrid_scraper_v2:🔍 Basic HTTP result: success=True, error=
+2025-11-24T09:54:18.114758218Z [err]  INFO:core.hybrid_scraper_v2:✅ Basic HTTP SUCCESS: 20 keywords
+2025-11-24T09:54:18.114765056Z [err]  INFO:core.matching:🔍 Keyword splitting: 2 phrases → 4 words
+2025-11-24T09:54:18.114770766Z [err]  INFO:core.matching:📊 Matching analysis: 2 original keywords → 4 words
+2025-11-24T09:54:18.114776584Z [err]  INFO:core.semantic_filter:Starting semantic analysis with 4 keywords
+2025-11-24T09:54:18.114781991Z [err]  INFO:httpx:HTTP Request: POST https://api.openai.com/v1/embeddings "HTTP/1.1 200 OK"
+2025-11-24T09:54:18.114787680Z [err]  INFO:root:✅ https://mionmosole.it: 48% match
+2025-11-24T09:54:18.114794281Z [err]  ERROR:root:❌ Error processing https://mionmosole.it: update_analysis_progress() got an unexpected keyword argument 'result'
+2025-11-24T09:54:18.114800099Z [err]  INFO:root:📊 Streaming analysis 40/91: https://www.kfl-est.com
+2025-11-24T09:54:18.114807055Z [err]  INFO:core.hybrid_scraper_v2:🎯 Starting ULTRA-INTELLIGENT scrape for: https://www.kfl-est.com
+2025-11-24T09:54:23.943446051Z [inf]  INFO:     100.64.0.5:10724 - "GET /health HTTP/1.1" 200 OK
+2025-11-24T09:54:53.712829037Z [err]  INFO:core.hybrid_scraper_v2:🚨 TRYING BASIC HTTP for https://www.kfl-est.com - FORCED!
+2025-11-24T09:54:53.712835462Z [err]  INFO:httpx:HTTP Request: POST https://api.openai.com/v1/embeddings "HTTP/1.1 200 OK"
+2025-11-24T09:54:53.712836768Z [err]  INFO:core.hybrid_scraper_v2:🚀 Basic HTTP starting for: https://www.kfl-est.com
+2025-11-24T09:54:53.712842335Z [err]  INFO:core.hybrid_scraper_v2:🎭 Using rotated UA: Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) Ap...
+2025-11-24T09:54:53.712848277Z [err]  INFO:root:✅ https://www.kfl-est.com: 36% match
+2025-11-24T09:54:53.712849361Z [err]  INFO:core.hybrid_scraper_v2:🔧 Basic HTTP: Creating session with EXPERT timeouts (5s total)
+2025-11-24T09:54:53.712855530Z [err]  INFO:core.hybrid_scraper_v2:🌐 Basic HTTP: Attempt 1/2 - Making request to https://www.kfl-est.com
+2025-11-24T09:54:53.712856570Z [err]  ERROR:root:❌ Error processing https://www.kfl-est.com: update_analysis_progress() got an unexpected keyword argument 'result'
+2025-11-24T09:54:53.712865163Z [err]  INFO:core.hybrid_scraper_v2:📊 Basic HTTP: Got response status 200
+2025-11-24T09:54:53.712865514Z [err]  INFO:root:📊 Streaming analysis 41/91: https://www.gemm-srl.com
+2025-11-24T09:54:53.712873408Z [err]  INFO:core.hybrid_scraper_v2:✅ Basic HTTP SUCCESS (200): 138741 characters received
+2025-11-24T09:54:53.712874585Z [err]  INFO:core.hybrid_scraper_v2:🎯 Starting ULTRA-INTELLIGENT scrape for: https://www.gemm-srl.com
+2025-11-24T09:54:53.712880154Z [err]  INFO:core.hybrid_scraper_v2:🔍 Basic HTTP result: success=True, error=
+2025-11-24T09:54:53.712886570Z [err]  INFO:core.hybrid_scraper_v2:✅ Basic HTTP SUCCESS: 20 keywords
+2025-11-24T09:54:53.712891531Z [err]  INFO:core.matching:🔍 Keyword splitting: 2 phrases → 4 words
+2025-11-24T09:54:53.712896696Z [err]  INFO:core.matching:📊 Matching analysis: 2 original keywords → 4 words
+2025-11-24T09:54:53.712902265Z [err]  INFO:core.semantic_filter:Starting semantic analysis with 4 keywords
+2025-11-24T09:55:03.299449537Z [err]  ERROR:asyncio:Task exception was never retrieved
+2025-11-24T09:55:03.299460573Z [err]  future: <Task finished name='Task-797' coro=<Connection.run() done, defined at /usr/local/lib/python3.12/site-packages/playwright/_impl/_connection.py:305> exception=BlockingIOError(11, 'Resource temporarily unavailable')>
+2025-11-24T09:55:03.299460784Z [err]    File "uvloop/loop.pyx", line 2841, in subprocess_exec
+2025-11-24T09:55:03.299467519Z [err]  Traceback (most recent call last):
+2025-11-24T09:55:03.299473288Z [err]    File "uvloop/loop.pyx", line 2799, in __subprocess_run
+2025-11-24T09:55:03.299475296Z [err]    File "/usr/local/lib/python3.12/site-packages/playwright/_impl/_connection.py", line 312, in run
+2025-11-24T09:55:03.299480196Z [err]    File "uvloop/handles/process.pyx", line 611, in uvloop.loop.UVProcessTransport.new
+2025-11-24T09:55:03.299482405Z [err]      await self._transport.connect()
+2025-11-24T09:55:03.299485597Z [err]    File "uvloop/handles/process.pyx", line 112, in uvloop.loop.UVProcess._init
+2025-11-24T09:55:03.299490644Z [err]    File "/usr/local/lib/python3.12/site-packages/playwright/_impl/_transport.py", line 133, in connect
+2025-11-24T09:55:03.299491624Z [err]  BlockingIOError: [Errno 11] Resource temporarily unavailable
+2025-11-24T09:55:03.299497263Z [err]      raise exc
+2025-11-24T09:55:03.299503170Z [err]    File "/usr/local/lib/python3.12/site-packages/playwright/_impl/_transport.py", line 120, in connect
+2025-11-24T09:55:03.299509270Z [err]      self._proc = await asyncio.create_subprocess_exec(
+2025-11-24T09:55:03.299515444Z [err]                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+2025-11-24T09:55:03.299521293Z [err]    File "/usr/local/lib/python3.12/asyncio/subprocess.py", line 224, in create_subprocess_exec
+2025-11-24T09:55:03.299530304Z [err]      transport, protocol = await loop.subprocess_exec(
+2025-11-24T09:55:03.299535855Z [err]                            ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+2025-11-24T09:55:03.300348489Z [err]  ERROR:core.advanced_scraper:❌ Attempt 1 failed for https://www.gemm-srl.com: [Errno 11] Resource temporarily unavailable
+2025-11-24T09:55:23.114498555Z [err]  ERROR:core.advanced_scraper:🚫 All attempts failed for https://www.gemm-srl.com
+2025-11-24T09:55:23.114511939Z [err]  INFO:core.hybrid_scraper_v2:🚨 TRYING BASIC HTTP for https://www.gemm-srl.com - FORCED!
+2025-11-24T09:55:23.114521109Z [err]  INFO:core.hybrid_scraper_v2:🚀 Basic HTTP starting for: https://www.gemm-srl.com
+2025-11-24T09:55:23.114533567Z [err]  INFO:core.hybrid_scraper_v2:🎭 Using rotated UA: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWeb...
+2025-11-24T09:55:23.114538544Z [err]  INFO:core.hybrid_scraper_v2:🔧 Basic HTTP: Creating session with EXPERT timeouts (5s total)
+2025-11-24T09:55:23.114543126Z [err]  INFO:core.hybrid_scraper_v2:🌐 Basic HTTP: Attempt 1/2 - Making request to https://www.gemm-srl.com
+2025-11-24T09:55:23.114547855Z [err]  INFO:core.hybrid_scraper_v2:📊 Basic HTTP: Got response status 200
+2025-11-24T09:55:23.114552218Z [err]  INFO:core.hybrid_scraper_v2:✅ Basic HTTP SUCCESS (200): 162016 characters received
+2025-11-24T09:55:23.114556152Z [err]  INFO:core.hybrid_scraper_v2:🔍 Basic HTTP result: success=True, error=
+2025-11-24T09:55:23.114560472Z [err]  INFO:core.hybrid_scraper_v2:✅ Basic HTTP SUCCESS: 20 keywords
+2025-11-24T09:55:23.114564509Z [err]  INFO:core.matching:🔍 Keyword splitting: 2 phrases → 4 words
+2025-11-24T09:55:23.114568712Z [err]  INFO:core.matching:📊 Matching analysis: 2 original keywords → 4 words
+2025-11-24T09:55:23.114573065Z [err]  INFO:core.semantic_filter:Starting semantic analysis with 4 keywords
+2025-11-24T09:55:23.114577245Z [err]  INFO:httpx:HTTP Request: POST https://api.openai.com/v1/embeddings "HTTP/1.1 200 OK"
+2025-11-24T09:55:23.114581128Z [err]  INFO:root:✅ https://www.gemm-srl.com: 18% match
+2025-11-24T09:55:23.114585158Z [err]  ERROR:root:❌ Error processing https://www.gemm-srl.com: update_analysis_progress() got an unexpected keyword argument 'result'
+2025-11-24T09:55:23.114589268Z [err]  INFO:root:📊 Streaming analysis 42/91: https://www.cometfans.com
+2025-11-24T09:55:23.116682809Z [err]  INFO:core.hybrid_scraper_v2:🎯 Starting ULTRA-INTELLIGENT scrape for: https://www.cometfans.com
+2025-11-24T09:55:23.505744194Z [inf]  INFO:     100.64.0.5:19442 - "GET /health HTTP/1.1" 200 OK
+2025-11-24T09:55:43.201788769Z [err]  ERROR:asyncio:Task exception was never retrieved
+2025-11-24T09:55:43.201795182Z [err]  future: <Task finished name='Task-807' coro=<Connection.run() done, defined at /usr/local/lib/python3.12/site-packages/playwright/_impl/_connection.py:305> exception=BlockingIOError(11, 'Resource temporarily unavailable')>
+2025-11-24T09:55:43.201800618Z [err]  Traceback (most recent call last):
+2025-11-24T09:55:43.201806156Z [err]    File "/usr/local/lib/python3.12/site-packages/playwright/_impl/_connection.py", line 312, in run
+2025-11-24T09:55:43.201811055Z [err]      await self._transport.connect()
+2025-11-24T09:55:43.201826054Z [err]    File "/usr/local/lib/python3.12/site-packages/playwright/_impl/_transport.py", line 133, in connect
+2025-11-24T09:55:43.201832247Z [err]      raise exc
+2025-11-24T09:55:43.201837347Z [err]    File "/usr/local/lib/python3.12/site-packages/playwright/_impl/_transport.py", line 120, in connect
+2025-11-24T09:55:43.201844518Z [err]      self._proc = await asyncio.create_subprocess_exec(
+2025-11-24T09:55:43.201850014Z [err]                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+2025-11-24T09:55:43.201856226Z [err]    File "/usr/local/lib/python3.12/asyncio/subprocess.py", line 224, in create_subprocess_exec
+2025-11-24T09:55:43.201861486Z [err]      transport, protocol = await loop.subprocess_exec(
+2025-11-24T09:55:43.201867128Z [err]                            ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+2025-11-24T09:55:43.201872399Z [err]    File "uvloop/loop.pyx", line 2841, in subprocess_exec
+2025-11-24T09:55:43.201878491Z [err]    File "uvloop/loop.pyx", line 2799, in __subprocess_run
+2025-11-24T09:55:43.201883525Z [err]    File "uvloop/handles/process.pyx", line 611, in uvloop.loop.UVProcessTransport.new
+2025-11-24T09:55:43.201889164Z [err]    File "uvloop/handles/process.pyx", line 112, in uvloop.loop.UVProcess._init
+2025-11-24T09:55:43.201894494Z [err]  BlockingIOError: [Errno 11] Resource temporarily unavailable
+2025-11-24T09:55:43.203631845Z [err]  ERROR:core.advanced_scraper:❌ Attempt 1 failed for https://www.cometfans.com: [Errno 11] Resource temporarily unavailable
+2025-11-24T09:55:43.203641474Z [err]  ERROR:core.advanced_scraper:🚫 All attempts failed for https://www.cometfans.com
+2025-11-24T09:55:43.203646942Z [err]  INFO:core.hybrid_scraper_v2:🚨 TRYING BASIC HTTP for https://www.cometfans.com - FORCED!
+2025-11-24T09:55:43.203651811Z [err]  INFO:core.hybrid_scraper_v2:🚀 Basic HTTP starting for: https://www.cometfans.com
+2025-11-24T09:55:43.203656936Z [err]  INFO:core.hybrid_scraper_v2:🎭 Using rotated UA: Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) Ap...
+2025-11-24T09:55:43.203662446Z [err]  INFO:core.hybrid_scraper_v2:🔧 Basic HTTP: Creating session with EXPERT timeouts (5s total)
+2025-11-24T09:55:43.203666382Z [err]  INFO:core.hybrid_scraper_v2:🌐 Basic HTTP: Attempt 1/2 - Making request to https://www.cometfans.com
+2025-11-24T09:55:43.203670669Z [err]  INFO:core.hybrid_scraper_v2:📊 Basic HTTP: Got response status 200
+2025-11-24T09:55:43.203675848Z [err]  INFO:core.hybrid_scraper_v2:✅ Basic HTTP SUCCESS (200): 93393 characters received
+2025-11-24T09:55:43.203680374Z [err]  INFO:core.hybrid_scraper_v2:🔍 Basic HTTP result: success=True, error=
+2025-11-24T09:55:43.203684595Z [err]  INFO:core.hybrid_scraper_v2:✅ Basic HTTP SUCCESS: 20 keywords
+2025-11-24T09:55:43.203688520Z [err]  INFO:core.matching:🔍 Keyword splitting: 2 phrases → 4 words
+2025-11-24T09:55:43.203693231Z [err]  INFO:core.matching:📊 Matching analysis: 2 original keywords → 4 words
+2025-11-24T09:55:43.203697364Z [err]  INFO:core.semantic_filter:Starting semantic analysis with 4 keywords
+2025-11-24T09:55:43.717527523Z [err]  INFO:httpx:HTTP Request: POST https://api.openai.com/v1/embeddings "HTTP/1.1 200 OK"
+2025-11-24T09:55:43.717535241Z [err]  INFO:root:✅ https://www.cometfans.com: 71% match
+2025-11-24T09:55:43.717542238Z [err]  ERROR:root:❌ Error processing https://www.cometfans.com: update_analysis_progress() got an unexpected keyword argument 'result'
+2025-11-24T09:55:43.717549222Z [err]  INFO:root:📊 Streaming analysis 43/91: https://www.frigotech.it
+2025-11-24T09:55:43.717556463Z [err]  INFO:core.hybrid_scraper_v2:🎯 Starting ULTRA-INTELLIGENT scrape for: https://www.frigotech.it
+2025-11-24T09:55:43.717567219Z [err]  INFO:core.browser_pool:🔄 Session session_0 reached max requests, scheduling renewal...
+2025-11-24T09:55:43.717574988Z [err]  ERROR:core.browser_pool:❌ Scraping failed for https://www.frigotech.it: BrowserContext.new_page: Target page, context or browser has been closed
+2025-11-24T09:55:43.717582283Z [err]  INFO:core.browser_pool:✅ Renewed session session_0
+2025-11-24T09:55:43.898211338Z [err]  ERROR:core.advanced_scraper:❌ Attempt 1 failed for https://www.frigotech.it: BrowserType.launch: Connection closed while reading from the driver
+2025-11-24T09:55:51.915285508Z [err]  ERROR:core.advanced_scraper:🚫 All attempts failed for https://www.frigotech.it
+2025-11-24T09:55:51.915293526Z [err]  INFO:core.hybrid_scraper_v2:🚨 TRYING BASIC HTTP for https://www.frigotech.it - FORCED!
+2025-11-24T09:55:51.915300180Z [err]  INFO:core.hybrid_scraper_v2:🌐 Basic HTTP: Attempt 1/2 - Making request to https://www.frigotech.it
+2025-11-24T09:55:51.915303132Z [err]  INFO:core.hybrid_scraper_v2:🚀 Basic HTTP starting for: https://www.frigotech.it
+2025-11-24T09:55:51.915311425Z [err]  INFO:core.hybrid_scraper_v2:🎭 Using rotated UA: Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) Ap...
+2025-11-24T09:55:51.915319049Z [err]  INFO:core.hybrid_scraper_v2:🔧 Basic HTTP: Creating session with EXPERT timeouts (5s total)
+2025-11-24T09:55:52.844073105Z [err]  INFO:core.hybrid_scraper_v2:📊 Basic HTTP: Got response status 200
+2025-11-24T09:55:52.844078138Z [err]  INFO:core.hybrid_scraper_v2:✅ Basic HTTP SUCCESS (200): 76053 characters received
+2025-11-24T09:55:52.844083761Z [err]  INFO:core.hybrid_scraper_v2:🔍 Basic HTTP result: success=True, error=
+2025-11-24T09:55:52.844088368Z [err]  INFO:core.hybrid_scraper_v2:✅ Basic HTTP SUCCESS: 20 keywords
+2025-11-24T09:55:53.814064742Z [err]  INFO:core.matching:🔍 Keyword splitting: 2 phrases → 4 words
+2025-11-24T09:55:53.814072917Z [err]  INFO:core.matching:📊 Matching analysis: 2 original keywords → 4 words
+2025-11-24T09:55:53.814079040Z [err]  INFO:core.semantic_filter:Starting semantic analysis with 4 keywords
+2025-11-24T09:55:53.816095120Z [err]  INFO:httpx:HTTP Request: POST https://api.openai.com/v1/embeddings "HTTP/1.1 200 OK"
+2025-11-24T09:55:53.833820021Z [err]  INFO:root:✅ https://www.frigotech.it: 26% match
+2025-11-24T09:55:53.833827364Z [err]  ERROR:root:❌ Error processing https://www.frigotech.it: update_analysis_progress() got an unexpected keyword argument 'result'
+2025-11-24T09:55:53.833832934Z [err]  INFO:root:📊 Streaming analysis 44/91: https://www.mita-tech.it
+2025-11-24T09:55:53.833838313Z [err]  INFO:core.hybrid_scraper_v2:🎯 Starting ULTRA-INTELLIGENT scrape for: https://www.mita-tech.it
+2025-11-24T09:55:59.303796904Z [err]  WARNING:core.browser_pool:⚠️ Navigation attempt 1 failed: Page.goto: Page crashed
+2025-11-24T09:55:59.303804200Z [err]  Call log:
+2025-11-24T09:55:59.303809105Z [err]    - navigating to "https://www.mita-tech.it/", waiting until "networkidle"
+2025-11-24T09:55:59.303842175Z [err]  
+2025-11-24T09:56:01.284603701Z [err]  WARNING:core.browser_pool:⚠️ Navigation attempt 2 failed: Page.goto: Page crashed
+2025-11-24T09:56:01.284612545Z [err]  Call log:
+2025-11-24T09:56:01.284619430Z [err]    - navigating to "https://www.mita-tech.it/", waiting until "networkidle"
+2025-11-24T09:56:01.284625069Z [err]  
+2025-11-24T09:56:03.296927392Z [err]  ERROR:core.browser_pool:❌ Scraping failed for https://www.mita-tech.it: Page.goto: Page crashed
+2025-11-24T09:56:03.296937416Z [err]  Call log:
+2025-11-24T09:56:03.296942195Z [err]    - navigating to "https://www.mita-tech.it/", waiting until "networkidle"
+2025-11-24T09:56:03.296947257Z [err]  
+2025-11-24T09:56:03.958148308Z [err]  ERROR:core.advanced_scraper:❌ Attempt 1 failed for https://www.mita-tech.it: BrowserType.launch: Connection closed while reading from the driver
+2025-11-24T09:56:10.163686061Z [err]  ERROR:core.advanced_scraper:🚫 All attempts failed for https://www.mita-tech.it
+2025-11-24T09:56:10.163690412Z [err]  INFO:core.hybrid_scraper_v2:🚨 TRYING BASIC HTTP for https://www.mita-tech.it - FORCED!
+2025-11-24T09:56:10.163694813Z [err]  INFO:core.hybrid_scraper_v2:🚀 Basic HTTP starting for: https://www.mita-tech.it
+2025-11-24T09:56:10.163699313Z [err]  INFO:core.hybrid_scraper_v2:🎭 Using rotated UA: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWeb...
+2025-11-24T09:56:10.163703448Z [err]  INFO:core.hybrid_scraper_v2:🔧 Basic HTTP: Creating session with EXPERT timeouts (5s total)
+2025-11-24T09:56:10.163707727Z [err]  INFO:core.hybrid_scraper_v2:🌐 Basic HTTP: Attempt 1/2 - Making request to https://www.mita-tech.it
+2025-11-24T09:56:10.244769606Z [err]  WARNING:core.hybrid_scraper_v2:🌐 Connection Error on attempt 1: Cannot connect to host www.mita-tech.it:443 ssl:True [SSLCertVerificationError: (1, "[SSL: CERTIFICATE_VERIFY_FAILED] certificate verify failed: Hostname mismatch, certificate is not valid for 'www.mita-tech.it'. (_ssl.c:1010)")]
+2025-11-24T09:56:10.244778137Z [err]  INFO:core.hybrid_scraper_v2:🌐 Basic HTTP: Attempt 2/2 - Making request to https://www.mita-tech.it
+2025-11-24T09:56:14.546294738Z [err]  INFO:core.browser_pool:🔄 Session session_1 reached max requests, scheduling renewal...
+2025-11-24T09:56:14.546304300Z [err]  WARNING:core.hybrid_scraper_v2:⏰ Timeout on attempt 2: Timeout on reading data from socket
+2025-11-24T09:56:14.546315663Z [err]  ERROR:core.hybrid_scraper_v2:💥 Basic HTTP EXCEPTION: SocketTimeoutError: Timeout on reading data from socket
+2025-11-24T09:56:14.546322236Z [err]  ERROR:core.hybrid_scraper_v2:🔍 Exception details: SocketTimeoutError('Timeout on reading data from socket')
+2025-11-24T09:56:14.546330569Z [err]  ERROR:core.hybrid_scraper_v2:📝 Exception args: ('Timeout on reading data from socket',)
+2025-11-24T09:56:14.546338111Z [err]  INFO:core.hybrid_scraper_v2:🚨 All HTTP methods failed with exceptions - trying PROXY FALLBACK
+2025-11-24T09:56:14.546344617Z [err]  INFO:core.hybrid_scraper_v2:🚫 Site not in proxy whitelist - skipping ScraperAPI
+2025-11-24T09:56:14.546350352Z [err]  INFO:core.hybrid_scraper_v2:🔍 Basic HTTP result: success=False, error=SocketTimeoutError: Timeout on reading data from socket
+2025-11-24T09:56:14.546356592Z [err]  ERROR:core.hybrid_scraper_v2:❌ Basic HTTP FAILED: SocketTimeoutError: Timeout on reading data from socket
+2025-11-24T09:56:14.546368030Z [err]  ERROR:core.hybrid_scraper_v2:❌ ALL METHODS FAILED for https://www.mita-tech.it after 20.71s
+2025-11-24T09:56:14.546374501Z [err]  WARNING:root:⚠️ Scraping failed for https://www.mita-tech.it
+2025-11-24T09:56:14.546380475Z [err]  INFO:root:📊 Streaming analysis 45/91: https://www.3stc.it
+2025-11-24T09:56:14.546386472Z [err]  INFO:core.hybrid_scraper_v2:🎯 Starting ULTRA-INTELLIGENT scrape for: https://www.3stc.it
+2025-11-24T09:56:14.557645552Z [err]  ERROR:core.browser_pool:❌ Scraping failed for https://www.3stc.it: BrowserContext.new_page: Target page, context or browser has been closed
+2025-11-24T09:56:14.639747823Z [err]  INFO:core.browser_pool:✅ Renewed session session_1
+2025-11-24T09:56:15.064214096Z [err]  ERROR:core.advanced_scraper:❌ Attempt 1 failed for https://www.3stc.it: BrowserType.launch: Target page, context or browser has been closed
+2025-11-24T09:56:15.064219593Z [err]  Browser logs:
+2025-11-24T09:56:15.064225755Z [err]  
+2025-11-24T09:56:15.064231141Z [err]  <launching> /root/.cache/ms-playwright/chromium_headless_shell-1194/chrome-linux/headless_shell --disable-field-trial-config --disable-background-networking --disable-background-timer-throttling --disable-backgrounding-occluded-windows --disable-back-forward-cache --disable-breakpad --disable-client-side-phishing-detection --disable-component-extensions-with-background-pages --disable-component-update --no-default-browser-check --disable-default-apps --disable-dev-shm-usage --disable-extensions --disable-features=AcceptCHFrame,AvoidUnnecessaryBeforeUnloadCheckSync,DestroyProfileOnBrowserClose,DialMediaRouteProvider,GlobalMediaControls,HttpsUpgrades,LensOverlay,MediaRouter,PaintHolding,ThirdPartyStoragePartitioning,Translate,AutoDeElevate,RenderDocument --enable-features=CDPScreenshotNewSurface --allow-pre-commit-input --disable-hang-monitor --disable-ipc-flooding-protection --disable-popup-blocking --disable-prompt-on-repost --disable-renderer-backgrounding --force-color-profile=srgb --metrics-recording-only --no-first-run --password-store=basic --use-mock-keychain --no-service-autorun --export-tagged-pdf --disable-search-engine-choice-screen --unsafely-disable-devtools-self-xss-warnings --edge-skip-compat-layer-relaunch --enable-automation --headless --hide-scrollbars --mute-audio --blink-settings=primaryHoverType=2,availableHoverTypes=2,primaryPointerType=4,availablePointerTypes=4 --no-sandbox --no-sandbox --disable-blink-features=AutomationControlled --disable-dev-shm-usage --disable-gpu --no-first-run --disable-web-security --disable-features=VizDisplayCompositor --disable-background-timer-throttling --disable-backgrounding-occluded-windows --disable-renderer-backgrounding --disable-field-trial-config --disable-back-forward-cache --disable-hang-monitor --disable-prompt-on-repost --disable-sync --force-color-profile=srgb --metrics-recording-only --no-crash-upload --no-default-browser-check --no-pings --password-store=basic --use-mock-keychain --hide-scrollbars --mute-audio --user-data-dir=/tmp/playwright_chromiumdev_profile-i8nMR7 --remote-debugging-pipe --no-startup-window
+2025-11-24T09:56:15.065674834Z [err]  <launched> pid=18311
+2025-11-24T09:56:15.065681832Z [err]  [pid=18311][err] [1124/095615.001250:ERROR:dbus/bus.cc:408] Failed to connect to the bus: Failed to connect to socket /run/dbus/system_bus_socket: No such file or directory
+2025-11-24T09:56:15.065686840Z [err]  [pid=18311][err] [1124/095615.003055:ERROR:dbus/bus.cc:408] Failed to connect to the bus: Failed to connect to socket /run/dbus/system_bus_socket: No such file or directory
+2025-11-24T09:56:15.065691295Z [err]  [pid=18311][err] [1124/095615.003105:ERROR:dbus/bus.cc:408] Failed to connect to the bus: Failed to connect to socket /run/dbus/system_bus_socket: No such file or directory
+2025-11-24T09:56:15.065696533Z [err]  [pid=18311][err] [1124/095615.010714:ERROR:base/threading/platform_thread_posix.cc:162] pthread_create: Resource temporarily unavailable (11)
+2025-11-24T09:56:15.065701273Z [err]  [pid=18311][err] [1124/095615.011077:ERROR:base/threading/platform_thread_posix.cc:162] pthread_create: Resource temporarily unavailable (11)
+2025-11-24T09:56:15.065705836Z [err]  [pid=18311][err] [1124/095615.011409:WARNING:device/bluetooth/dbus/bluez_dbus_manager.cc:209] Floss manager service not available, cannot set Floss enable/disable.
+2025-11-24T09:56:15.065710201Z [err]  Call log:
+2025-11-24T09:56:15.065714298Z [err]    - <launching> /root/.cache/ms-playwright/chromium_headless_shell-1194/chrome-linux/headless_shell --disable-field-trial-config --disable-background-networking --disable-background-timer-throttling --disable-backgrounding-occluded-windows --disable-back-forward-cache --disable-breakpad --disable-client-side-phishing-detection --disable-component-extensions-with-background-pages --disable-component-update --no-default-browser-check --disable-default-apps --disable-dev-shm-usage --disable-extensions --disable-features=AcceptCHFrame,AvoidUnnecessaryBeforeUnloadCheckSync,DestroyProfileOnBrowserClose,DialMediaRouteProvider,GlobalMediaControls,HttpsUpgrades,LensOverlay,MediaRouter,PaintHolding,ThirdPartyStoragePartitioning,Translate,AutoDeElevate,RenderDocument --enable-features=CDPScreenshotNewSurface --allow-pre-commit-input --disable-hang-monitor --disable-ipc-flooding-protection --disable-popup-blocking --disable-prompt-on-repost --disable-renderer-backgrounding --force-color-profile=srgb --metrics-recording-only --no-first-run --password-store=basic --use-mock-keychain --no-service-autorun --export-tagged-pdf --disable-search-engine-choice-screen --unsafely-disable-devtools-self-xss-warnings --edge-skip-compat-layer-relaunch --enable-automation --headless --hide-scrollbars --mute-audio --blink-settings=primaryHoverType=2,availableHoverTypes=2,primaryPointerType=4,availablePointerTypes=4 --no-sandbox --no-sandbox --disable-blink-features=AutomationControlled --disable-dev-shm-usage --disable-gpu --no-first-run --disable-web-security --disable-features=VizDisplayCompositor --disable-background-timer-throttling --disable-backgrounding-occluded-windows --disable-renderer-backgrounding --disable-field-trial-config --disable-back-forward-cache --disable-hang-monitor --disable-prompt-on-repost --disable-sync --force-color-profile=srgb --metrics-recording-only --no-crash-upload --no-default-browser-check --no-pings --password-store=basic --use-mock-keychain --hide-scrollbars --mute-audio --user-data-dir=/tmp/playwright_chromiumdev_profile-i8nMR7 --remote-debugging-pipe --no-startup-window
+2025-11-24T09:56:15.066584315Z [err]    - [pid=18311] <gracefully close end>
+2025-11-24T09:56:15.066593184Z [err]    - <launched> pid=18311
+2025-11-24T09:56:15.066593757Z [err]  
+2025-11-24T09:56:15.066601956Z [err]    - [pid=18311][err] [1124/095615.001250:ERROR:dbus/bus.cc:408] Failed to connect to the bus: Failed to connect to socket /run/dbus/system_bus_socket: No such file or directory
+2025-11-24T09:56:15.066608589Z [err]    - [pid=18311][err] [1124/095615.003055:ERROR:dbus/bus.cc:408] Failed to connect to the bus: Failed to connect to socket /run/dbus/system_bus_socket: No such file or directory
+2025-11-24T09:56:15.066616282Z [err]    - [pid=18311][err] [1124/095615.003105:ERROR:dbus/bus.cc:408] Failed to connect to the bus: Failed to connect to socket /run/dbus/system_bus_socket: No such file or directory
+2025-11-24T09:56:15.066622216Z [err]    - [pid=18311][err] [1124/095615.010714:ERROR:base/threading/platform_thread_posix.cc:162] pthread_create: Resource temporarily unavailable (11)
+2025-11-24T09:56:15.066628796Z [err]    - [pid=18311][err] [1124/095615.011077:ERROR:base/threading/platform_thread_posix.cc:162] pthread_create: Resource temporarily unavailable (11)
+2025-11-24T09:56:15.066634565Z [err]    - [pid=18311][err] [1124/095615.011409:WARNING:device/bluetooth/dbus/bluez_dbus_manager.cc:209] Floss manager service not available, cannot set Floss enable/disable.
+2025-11-24T09:56:15.066642258Z [err]    - [pid=18311] <gracefully close start>
+2025-11-24T09:56:15.066648384Z [err]    - [pid=18311] <kill>
+2025-11-24T09:56:15.066654074Z [err]    - [pid=18311] <will force kill>
+2025-11-24T09:56:15.066659739Z [err]    - [pid=18311] <process did exit: exitCode=null, signal=SIGKILL>
+2025-11-24T09:56:15.066665498Z [err]    - [pid=18311] starting temporary directories cleanup
+2025-11-24T09:56:15.066671567Z [err]    - [pid=18311] finished temporary directories cleanup
+2025-11-24T09:56:23.619322193Z [inf]  INFO:     100.64.0.7:51844 - "GET /health HTTP/1.1" 200 OK
+2025-11-24T09:56:26.708557559Z [err]  ERROR:core.advanced_scraper:🚫 All attempts failed for https://www.3stc.it
+2025-11-24T09:56:26.708566150Z [err]  INFO:core.hybrid_scraper_v2:🚨 TRYING BASIC HTTP for https://www.3stc.it - FORCED!
+2025-11-24T09:56:26.708572444Z [err]  INFO:core.hybrid_scraper_v2:🚀 Basic HTTP starting for: https://www.3stc.it
+2025-11-24T09:56:26.708639208Z [err]  INFO:core.hybrid_scraper_v2:🎭 Using rotated UA: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWeb...
+2025-11-24T09:56:26.708643816Z [err]  INFO:core.hybrid_scraper_v2:🔧 Basic HTTP: Creating session with EXPERT timeouts (5s total)
+2025-11-24T09:56:26.710143083Z [err]  INFO:core.hybrid_scraper_v2:🌐 Basic HTTP: Attempt 1/2 - Making request to https://www.3stc.it
+2025-11-24T09:56:27.398545201Z [err]  INFO:core.hybrid_scraper_v2:📊 Basic HTTP: Got response status 200
+2025-11-24T09:56:27.398553679Z [err]  INFO:core.hybrid_scraper_v2:✅ Basic HTTP SUCCESS (200): 8173 characters received
+2025-11-24T09:56:27.398559931Z [err]  INFO:core.hybrid_scraper_v2:🔍 Basic HTTP result: success=True, error=
+2025-11-24T09:56:27.405515618Z [err]  INFO:core.hybrid_scraper_v2:✅ Basic HTTP SUCCESS: 1 keywords
+2025-11-24T09:56:27.730256356Z [err]  INFO:core.matching:🔍 Keyword splitting: 2 phrases → 4 words
+2025-11-24T09:56:27.730263006Z [err]  INFO:core.matching:📊 Matching analysis: 2 original keywords → 4 words
+2025-11-24T09:56:27.730272594Z [err]  INFO:core.semantic_filter:Starting semantic analysis with 4 keywords
+2025-11-24T09:56:28.321829519Z [err]  INFO:httpx:HTTP Request: POST https://api.openai.com/v1/embeddings "HTTP/1.1 200 OK"
+2025-11-24T09:56:28.321836418Z [err]  INFO:root:✅ https://www.3stc.it: 13% match
+2025-11-24T09:56:28.321842589Z [err]  ERROR:root:❌ Error processing https://www.3stc.it: update_analysis_progress() got an unexpected keyword argument 'result'
+2025-11-24T09:56:28.321848465Z [err]  INFO:root:📊 Streaming analysis 46/91: https://www.pastorfrigor.it
+2025-11-24T09:56:28.321855864Z [err]  INFO:core.hybrid_scraper_v2:🎯 Starting ULTRA-INTELLIGENT scrape for: https://www.pastorfrigor.it
+2025-11-24T09:56:48.324172057Z [err]  ERROR:asyncio:Task exception was never retrieved
+2025-11-24T09:56:48.324176511Z [err]  future: <Task finished name='Task-859' coro=<Connection.run() done, defined at /usr/local/lib/python3.12/site-packages/playwright/_impl/_connection.py:305> exception=BlockingIOError(11, 'Resource temporarily unavailable')>
+2025-11-24T09:56:48.324181152Z [err]  Traceback (most recent call last):
+2025-11-24T09:56:48.324185294Z [err]    File "/usr/local/lib/python3.12/site-packages/playwright/_impl/_connection.py", line 312, in run
+2025-11-24T09:56:48.324189539Z [err]      await self._transport.connect()
+2025-11-24T09:56:48.324193557Z [err]    File "/usr/local/lib/python3.12/site-packages/playwright/_impl/_transport.py", line 133, in connect
+2025-11-24T09:56:48.324197354Z [err]      raise exc
+2025-11-24T09:56:48.324201781Z [err]    File "/usr/local/lib/python3.12/site-packages/playwright/_impl/_transport.py", line 120, in connect
+2025-11-24T09:56:48.324206108Z [err]      self._proc = await asyncio.create_subprocess_exec(
+2025-11-24T09:56:48.324210811Z [err]                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+2025-11-24T09:56:48.324217199Z [err]    File "/usr/local/lib/python3.12/asyncio/subprocess.py", line 224, in create_subprocess_exec
+2025-11-24T09:56:48.324223161Z [err]      transport, protocol = await loop.subprocess_exec(
+2025-11-24T09:56:48.324229033Z [err]                            ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+2025-11-24T09:56:48.324233866Z [err]    File "uvloop/loop.pyx", line 2841, in subprocess_exec
+2025-11-24T09:56:48.324240723Z [err]    File "uvloop/loop.pyx", line 2799, in __subprocess_run
+2025-11-24T09:56:48.324246135Z [err]    File "uvloop/handles/process.pyx", line 611, in uvloop.loop.UVProcessTransport.new
+2025-11-24T09:56:48.324251282Z [err]    File "uvloop/handles/process.pyx", line 112, in uvloop.loop.UVProcess._init
+2025-11-24T09:56:48.324257647Z [err]  BlockingIOError: [Errno 11] Resource temporarily unavailable
+2025-11-24T09:56:48.324283345Z [err]  ERROR:core.advanced_scraper:❌ Attempt 1 failed for https://www.pastorfrigor.it: [Errno 11] Resource temporarily unavailable
+2025-11-24T09:56:54.659637720Z [err]  ERROR:core.advanced_scraper:🚫 All attempts failed for https://www.pastorfrigor.it
+2025-11-24T09:56:54.659645444Z [err]  INFO:core.hybrid_scraper_v2:🚨 TRYING BASIC HTTP for https://www.pastorfrigor.it - FORCED!
+2025-11-24T09:56:54.659652703Z [err]  INFO:core.hybrid_scraper_v2:🚀 Basic HTTP starting for: https://www.pastorfrigor.it
+2025-11-24T09:56:54.659660519Z [err]  INFO:core.hybrid_scraper_v2:🎭 Using rotated UA: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWeb...
+2025-11-24T09:56:54.659667158Z [err]  INFO:core.hybrid_scraper_v2:🔧 Basic HTTP: Creating session with EXPERT timeouts (5s total)
+2025-11-24T09:56:54.659675212Z [err]  INFO:core.hybrid_scraper_v2:🌐 Basic HTTP: Attempt 1/2 - Making request to https://www.pastorfrigor.it
+2025-11-24T09:56:55.727481998Z [err]  INFO:core.hybrid_scraper_v2:📊 Basic HTTP: Got response status 200
+2025-11-24T09:56:56.333000262Z [err]  INFO:core.hybrid_scraper_v2:✅ Basic HTTP SUCCESS (200): 188920 characters received
+2025-11-24T09:56:56.333013318Z [err]  INFO:core.hybrid_scraper_v2:🔍 Basic HTTP result: success=True, error=
+2025-11-24T09:56:56.333019220Z [err]  INFO:core.hybrid_scraper_v2:✅ Basic HTTP SUCCESS: 20 keywords
+2025-11-24T09:56:57.726303420Z [err]  INFO:core.matching:🔍 Keyword splitting: 2 phrases → 4 words
+2025-11-24T09:56:57.726314968Z [err]  INFO:core.matching:📊 Matching analysis: 2 original keywords → 4 words
+2025-11-24T09:56:57.726321456Z [err]  INFO:core.semantic_filter:Starting semantic analysis with 4 keywords
+2025-11-24T09:56:58.372899611Z [err]  INFO:httpx:HTTP Request: POST https://api.openai.com/v1/embeddings "HTTP/1.1 200 OK"
+2025-11-24T09:56:58.372912381Z [err]  INFO:root:✅ https://www.pastorfrigor.it: 23% match
+2025-11-24T09:56:58.372917037Z [err]  ERROR:root:❌ Error processing https://www.pastorfrigor.it: update_analysis_progress() got an unexpected keyword argument 'result'
+2025-11-24T09:56:58.372921545Z [err]  INFO:root:📊 Streaming analysis 47/91: https://www.vecamco.com
+2025-11-24T09:56:58.372926203Z [err]  INFO:core.hybrid_scraper_v2:🎯 Starting ULTRA-INTELLIGENT scrape for: https://www.vecamco.com
+2025-11-24T09:56:59.464847752Z [err]  INFO:core.browser_pool:🕐 Human-like delay: 5.0s
+2025-11-24T09:57:19.089423932Z [err]  ERROR:asyncio:Future exception was never retrieved
+2025-11-24T09:57:19.089430956Z [err]  future: <Future finished exception=TargetClosedError('Target page, context or browser has been closed')>
+2025-11-24T09:57:19.089435188Z [err]  playwright._impl._errors.TargetClosedError: Target page, context or browser has been closed
+2025-11-24T09:57:19.089439768Z [err]  ERROR:core.advanced_scraper:❌ Attempt 1 failed for https://www.vecamco.com: BrowserType.launch: Target page, context or browser has been closed
+2025-11-24T09:57:19.089443867Z [err]  Browser logs:
+2025-11-24T09:57:19.089448451Z [err]  
+2025-11-24T09:57:19.089452913Z [err]  <launching> /root/.cache/ms-playwright/chromium_headless_shell-1194/chrome-linux/headless_shell --disable-field-trial-config --disable-background-networking --disable-background-timer-throttling --disable-backgrounding-occluded-windows --disable-back-forward-cache --disable-breakpad --disable-client-side-phishing-detection --disable-component-extensions-with-background-pages --disable-component-update --no-default-browser-check --disable-default-apps --disable-dev-shm-usage --disable-extensions --disable-features=AcceptCHFrame,AvoidUnnecessaryBeforeUnloadCheckSync,DestroyProfileOnBrowserClose,DialMediaRouteProvider,GlobalMediaControls,HttpsUpgrades,LensOverlay,MediaRouter,PaintHolding,ThirdPartyStoragePartitioning,Translate,AutoDeElevate,RenderDocument --enable-features=CDPScreenshotNewSurface --allow-pre-commit-input --disable-hang-monitor --disable-ipc-flooding-protection --disable-popup-blocking --disable-prompt-on-repost --disable-renderer-backgrounding --force-color-profile=srgb --metrics-recording-only --no-first-run --password-store=basic --use-mock-keychain --no-service-autorun --export-tagged-pdf --disable-search-engine-choice-screen --unsafely-disable-devtools-self-xss-warnings --edge-skip-compat-layer-relaunch --enable-automation --headless --hide-scrollbars --mute-audio --blink-settings=primaryHoverType=2,availableHoverTypes=2,primaryPointerType=4,availablePointerTypes=4 --no-sandbox --no-sandbox --disable-blink-features=AutomationControlled --disable-dev-shm-usage --disable-gpu --no-first-run --disable-web-security --disable-features=VizDisplayCompositor --disable-background-timer-throttling --disable-backgrounding-occluded-windows --disable-renderer-backgrounding --disable-field-trial-config --disable-back-forward-cache --disable-hang-monitor --disable-prompt-on-repost --disable-sync --force-color-profile=srgb --metrics-recording-only --no-crash-upload --no-default-browser-check --no-pings --password-store=basic --use-mock-keychain --hide-scrollbars --mute-audio --user-data-dir=/tmp/playwright_chromiumdev_profile-FqRQ89 --remote-debugging-pipe --no-startup-window
+2025-11-24T09:57:19.091091064Z [err]  <launched> pid=18395
+2025-11-24T09:57:19.091098911Z [err]  [pid=18395][err] [1124/095714.163711:ERROR:base/threading/platform_thread_posix.cc:162] pthread_create: Resource temporarily unavailable (11)
+2025-11-24T09:57:19.091103966Z [err]  [pid=18395][err] [1124/095714.164133:ERROR:base/threading/platform_thread_posix.cc:162] pthread_create: Resource temporarily unavailable (11)
+2025-11-24T09:57:19.091108588Z [err]  [pid=18395][err] [1124/095714.164166:FATAL:content/browser/scheduler/browser_task_executor.cc:299] Failed to start BrowserThread:IO
+2025-11-24T09:57:19.091113391Z [err]  Call log:
+2025-11-24T09:57:19.091118155Z [err]    - <launching> /root/.cache/ms-playwright/chromium_headless_shell-1194/chrome-linux/headless_shell --disable-field-trial-config --disable-background-networking --disable-background-timer-throttling --disable-backgrounding-occluded-windows --disable-back-forward-cache --disable-breakpad --disable-client-side-phishing-detection --disable-component-extensions-with-background-pages --disable-component-update --no-default-browser-check --disable-default-apps --disable-dev-shm-usage --disable-extensions --disable-features=AcceptCHFrame,AvoidUnnecessaryBeforeUnloadCheckSync,DestroyProfileOnBrowserClose,DialMediaRouteProvider,GlobalMediaControls,HttpsUpgrades,LensOverlay,MediaRouter,PaintHolding,ThirdPartyStoragePartitioning,Translate,AutoDeElevate,RenderDocument --enable-features=CDPScreenshotNewSurface --allow-pre-commit-input --disable-hang-monitor --disable-ipc-flooding-protection --disable-popup-blocking --disable-prompt-on-repost --disable-renderer-backgrounding --force-color-profile=srgb --metrics-recording-only --no-first-run --password-store=basic --use-mock-keychain --no-service-autorun --export-tagged-pdf --disable-search-engine-choice-screen --unsafely-disable-devtools-self-xss-warnings --edge-skip-compat-layer-relaunch --enable-automation --headless --hide-scrollbars --mute-audio --blink-settings=primaryHoverType=2,availableHoverTypes=2,primaryPointerType=4,availablePointerTypes=4 --no-sandbox --no-sandbox --disable-blink-features=AutomationControlled --disable-dev-shm-usage --disable-gpu --no-first-run --disable-web-security --disable-features=VizDisplayCompositor --disable-background-timer-throttling --disable-backgrounding-occluded-windows --disable-renderer-backgrounding --disable-field-trial-config --disable-back-forward-cache --disable-hang-monitor --disable-prompt-on-repost --disable-sync --force-color-profile=srgb --metrics-recording-only --no-crash-upload --no-default-browser-check --no-pings --password-store=basic --use-mock-keychain --hide-scrollbars --mute-audio --user-data-dir=/tmp/playwright_chromiumdev_profile-FqRQ89 --remote-debugging-pipe --no-startup-window
+2025-11-24T09:57:19.093103456Z [err]    - <launched> pid=18395
+2025-11-24T09:57:19.093112192Z [err]    - [pid=18395][err] [1124/095714.163711:ERROR:base/threading/platform_thread_posix.cc:162] pthread_create: Resource temporarily unavailable (11)
+2025-11-24T09:57:19.093118137Z [err]    - [pid=18395][err] [1124/095714.164133:ERROR:base/threading/platform_thread_posix.cc:162] pthread_create: Resource temporarily unavailable (11)
+2025-11-24T09:57:19.093123132Z [err]    - [pid=18395][err] [1124/095714.164166:FATAL:content/browser/scheduler/browser_task_executor.cc:299] Failed to start BrowserThread:IO
+2025-11-24T09:57:19.093127669Z [err]    - [pid=18395] <gracefully close start>
+2025-11-24T09:57:19.093132466Z [err]    - [pid=18395] <kill>
+2025-11-24T09:57:19.093138566Z [err]    - [pid=18395] <will force kill>
+2025-11-24T09:57:19.093144142Z [err]    - [pid=18395] <process did exit: exitCode=null, signal=SIGTRAP>
+2025-11-24T09:57:19.093159604Z [err]    - [pid=18395] starting temporary directories cleanup
+2025-11-24T09:57:19.093167230Z [err]    - [pid=18395] finished temporary directories cleanup
+2025-11-24T09:57:19.093172158Z [err]    - [pid=18395] <gracefully close end>
+2025-11-24T09:57:19.093177524Z [err]  
+2025-11-24T09:57:19.977359302Z [err]  ERROR:core.advanced_scraper:🚫 All attempts failed for https://www.vecamco.com
+2025-11-24T09:57:19.977365739Z [err]  INFO:core.hybrid_scraper_v2:🚨 TRYING BASIC HTTP for https://www.vecamco.com - FORCED!
+2025-11-24T09:57:19.977370035Z [err]  INFO:core.hybrid_scraper_v2:🚀 Basic HTTP starting for: https://www.vecamco.com
+2025-11-24T09:57:19.977373955Z [err]  INFO:core.hybrid_scraper_v2:🎭 Using rotated UA: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWeb...
+2025-11-24T09:57:19.977377634Z [err]  INFO:core.hybrid_scraper_v2:🔧 Basic HTTP: Creating session with EXPERT timeouts (5s total)
+2025-11-24T09:57:19.977383404Z [err]  INFO:core.hybrid_scraper_v2:🌐 Basic HTTP: Attempt 1/2 - Making request to https://www.vecamco.com
+2025-11-24T09:57:20.036849988Z [err]  INFO:core.hybrid_scraper_v2:📊 Basic HTTP: Got response status 403
+2025-11-24T09:57:20.036858939Z [err]  ERROR:core.hybrid_scraper_v2:❌ Basic HTTP: Bad status code 403
+2025-11-24T09:57:20.036864008Z [err]  INFO:core.hybrid_scraper_v2:🌐 Basic HTTP: Attempt 2/2 - Making request to https://www.vecamco.com
+2025-11-24T09:57:20.070042691Z [err]  INFO:core.hybrid_scraper_v2:📊 Basic HTTP: Got response status 403
+2025-11-24T09:57:20.070049703Z [err]  ERROR:core.hybrid_scraper_v2:❌ Basic HTTP: Bad status code 403
+2025-11-24T09:57:20.070054949Z [err]  INFO:core.hybrid_scraper_v2:🔍 Basic HTTP result: success=False, error=HTTP 403
+2025-11-24T09:57:20.070059845Z [err]  ERROR:core.hybrid_scraper_v2:❌ Basic HTTP FAILED: HTTP 403
+2025-11-24T09:57:20.070064229Z [err]  ERROR:core.hybrid_scraper_v2:❌ ALL METHODS FAILED for https://www.vecamco.com after 21.95s
+2025-11-24T09:57:20.070069060Z [err]  WARNING:root:⚠️ Scraping failed for https://www.vecamco.com
+2025-11-24T09:57:20.070073631Z [err]  INFO:root:📊 Streaming analysis 48/91: https://www.euroventilatori-int.com
+2025-11-24T09:57:20.070078756Z [err]  INFO:core.hybrid_scraper_v2:🎯 Starting ULTRA-INTELLIGENT scrape for: https://www.euroventilatori-int.com
+2025-11-24T09:57:23.581177520Z [inf]  INFO:     100.64.0.7:38020 - "GET /health HTTP/1.1" 200 OK
+2025-11-24T09:59:33.724590132Z [inf]  INFO:     100.64.0.8:37502 - "GET /health HTTP/1.1" 200 OK
+2025-11-24T09:59:35.230151840Z [inf]  INFO:     100.64.0.8:37502 - "GET /health HTTP/1.1" 200 OK
+2025-11-24T10:00:15.237573293Z [inf]  INFO:     100.64.0.8:24522 - "GET /health HTTP/1.1" 200 OK
+2025-11-24T10:00:44.823326098Z [inf]  INFO:     100.64.0.8:62362 - "GET /health HTTP/1.1" 200 OK
+2025-11-24T10:01:25.297550670Z [inf]  INFO:     100.64.0.8:21624 - "GET /health HTTP/1.1" 200 OK
+2025-11-24T10:02:25.064788252Z [inf]  INFO:     100.64.0.4:59378 - "GET /health HTTP/1.1" 200 OK
+2025-11-24T10:03:24.744939997Z [inf]  INFO:     100.64.0.4:23582 - "GET /health HTTP/1.1" 200 OK
+2025-11-24T10:04:25.024049648Z [inf]  INFO:     100.64.0.10:33338 - "GET /health HTTP/1.1" 200 OK
+2025-11-24T10:05:24.881799044Z [inf]  INFO:     100.64.0.10:59444 - "GET /health HTTP/1.1" 200 OK
+2025-11-24T10:06:05.005114748Z [inf]  INFO:     100.64.0.10:60074 - "GET /health HTTP/1.1" 200 OK
+2025-11-24T17:04:38.616084175Z [inf]  INFO:     100.64.0.3:43784 - "GET /api/analyze-bulk HTTP/1.1" 200 OK
+2025-11-24T17:04:38.616092656Z [inf]  INFO:     100.64.0.3:43790 - "GET /health HTTP/1.1" 200 OK
+2025-11-24T17:04:38.616097468Z [inf]  INFO:     100.64.0.3:43790 - "GET /health HTTP/1.1" 200 OK
+2025-11-24T17:07:29.374312772Z [inf]  INFO:     100.64.0.7:47614 - "GET /api/analyze-bulk HTTP/1.1" 200 OK
+2025-11-24T17:07:29.374326695Z [inf]  INFO:     100.64.0.7:47628 - "GET /health HTTP/1.1" 200 OK
+2025-11-24T17:07:29.374335190Z [inf]  INFO:     100.64.0.7:47628 - "GET /health HTTP/1.1" 200 OK
+2025-11-26T15:12:39.472758352Z [inf]  INFO:     100.64.0.6:43156 - "GET /api/analyses/20251124_094234 HTTP/1.1" 200 OK
+2025-11-26T15:12:39.472764747Z [inf]  INFO:     100.64.0.6:43142 - "GET /health HTTP/1.1" 200 OK
+2025-11-26T15:12:39.472769350Z [inf]  INFO:     100.64.0.6:43142 - "GET /api/analyze-bulk HTTP/1.1" 200 OK
+2025-11-26T15:12:39.472777457Z [inf]  INFO:     100.64.0.6:43156 - "GET /health HTTP/1.1" 200 OK

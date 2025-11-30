@@ -1,29 +1,4 @@
 {
-  "analyses": [
-    {
-      "id": "20251110_012457",
-      "status": "completed",
-      "client_url": "bulk_analysis",
-      "client_name": "Analisi bulk_analysis - 10/11/2025",
-      "total_sites": 6,
-      "processed_sites": 0,
-      "progress": 100,
-      "started_at": "2025-11-10T01:24:57.005034",
-      "completed_at": "2025-11-10T01:26:27.205923",
-      "file_path": "completed/20251110_012457.json"
-    },
-    {
-      "id": "20251110_013726",
-      "status": "in_progress",
-      "client_url": "bulk_analysis",
-      "client_name": "Analisi bulk_analysis - 10/11/2025",
-      "total_sites": 6,
-      "processed_sites": 0,
-      "progress": 0,
-      "started_at": "2025-11-10T01:37:26.279022",
-      "completed_at": null,
-      "file_path": "in-progress/20251110_013726.json"
-    }
-  ],
-  "last_updated": "2025-11-10T01:37:26.280279"
+  "analyses": [],
+  "last_updated": null
 }

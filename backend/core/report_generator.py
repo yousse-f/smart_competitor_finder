@@ -57,7 +57,8 @@ class ReportGenerator:
         client_url: str,
         client_keywords: List[str],
         analysis_results: List[Dict],
-        output_path: str = None
+        output_path: str = None,
+        failed_sites: List[Dict] = None  # 🆕 FASE 1: Failed sites for dedicated sheet
     ) -> str:
         """
         Generate comprehensive Excel report with multiple sheets
@@ -67,6 +68,7 @@ class ReportGenerator:
             client_keywords: Selected keywords for analysis
             analysis_results: List of competitor analysis results
             output_path: Custom output file path
+            failed_sites: List of failed sites with error details (FASE 1)
             
         Returns:
             str: Path to generated Excel file
@@ -84,6 +86,10 @@ class ReportGenerator:
         self._create_sector_analysis_sheet(analysis_results)
         self._create_keyword_analysis_sheet(analysis_results, client_keywords)
         self._create_semantic_analysis_sheet(analysis_results)
+        
+        # 🆕 FASE 1: Create failed sites sheet if there are failures
+        if failed_sites and len(failed_sites) > 0:
+            self._create_failed_sites_sheet(failed_sites)
         
         # Generate output path if not provided
         if not output_path:
@@ -447,6 +453,80 @@ class ReportGenerator:
             
             adjusted_width = min(max_length + 2, 50)  # Cap at 50 characters
             worksheet.column_dimensions[column_letter].width = adjusted_width
+    
+    def _create_failed_sites_sheet(self, failed_sites: List[Dict]):
+        """
+        🚨 FASE 1: Create sheet for failed sites with error details and suggestions
+        
+        Args:
+            failed_sites: List of dicts with keys: url, error, suggestion, timestamp
+        """
+        ws = self.workbook.create_sheet("Siti Non Analizzati")
+        
+        # Headers with red styling (alert color)
+        headers = ['URL', 'Motivo Errore', 'Suggerimento', 'Timestamp']
+        for col_idx, header in enumerate(headers, start=1):
+            cell = ws.cell(row=1, column=col_idx, value=header)
+            cell.font = Font(bold=True, color='FFFFFF', size=12)
+            cell.fill = PatternFill(start_color='DC3545', end_color='DC3545', fill_type='solid')  # Bootstrap danger red
+            cell.alignment = Alignment(horizontal='center', vertical='center')
+            cell.border = self.styles['border']
+        
+        # Data rows
+        for row_idx, site in enumerate(failed_sites, start=2):
+            # URL column
+            url_cell = ws.cell(row=row_idx, column=1, value=site.get('url', 'N/A'))
+            url_cell.font = Font(size=10, underline='single', color='0563C1')  # Link style
+            url_cell.alignment = Alignment(horizontal='left', vertical='center', wrap_text=True)
+            url_cell.border = self.styles['border']
+            
+            # Error column
+            error_cell = ws.cell(row=row_idx, column=2, value=site.get('error', 'Errore sconosciuto'))
+            error_cell.font = Font(size=10)
+            error_cell.alignment = Alignment(horizontal='left', vertical='center', wrap_text=True)
+            error_cell.border = self.styles['border']
+            
+            # Suggestion column (bold for emphasis)
+            suggestion_cell = ws.cell(row=row_idx, column=3, value=site.get('suggestion', 'Verifica manualmente'))
+            suggestion_cell.font = Font(size=10, bold=True, color='856404')  # Warning brown
+            suggestion_cell.alignment = Alignment(horizontal='left', vertical='center', wrap_text=True)
+            suggestion_cell.border = self.styles['border']
+            
+            # Timestamp column
+            timestamp_cell = ws.cell(row=row_idx, column=4, value=site.get('timestamp', datetime.now().strftime('%Y-%m-%d %H:%M:%S')))
+            timestamp_cell.font = Font(size=9, color='6C757D')  # Muted gray
+            timestamp_cell.alignment = Alignment(horizontal='center', vertical='center')
+            timestamp_cell.border = self.styles['border']
+        
+        # Auto-size columns with max width constraint
+        for col in ws.columns:
+            max_length = 0
+            column_letter = col[0].column_letter
+            
+            for cell in col:
+                try:
+                    if cell.value:
+                        # Handle wrapped text by checking actual content length
+                        max_length = max(max_length, len(str(cell.value)))
+                except:
+                    pass
+            
+            # Set width with reasonable constraints
+            adjusted_width = min(max(max_length + 2, 15), 60)  # Min 15, Max 60
+            ws.column_dimensions[column_letter].width = adjusted_width
+        
+        # Add note at the bottom
+        note_row = len(failed_sites) + 3
+        ws.merge_cells(f'A{note_row}:D{note_row}')
+        note_cell = ws[f'A{note_row}']
+        note_cell.value = "ℹ️ Nota: Questi siti non sono stati analizzati a causa degli errori elencati. Si consiglia di verificarli manualmente o contattare il supporto tecnico."
+        note_cell.font = Font(size=9, italic=True, color='6C757D')
+        note_cell.alignment = Alignment(horizontal='left', vertical='center', wrap_text=True)
+        
+        # Summary stats
+        summary_row = note_row + 2
+        ws[f'A{summary_row}'] = f"Totale siti falliti: {len(failed_sites)}"
+        ws[f'A{summary_row}'].font = Font(bold=True, size=11, color='DC3545')
 
 
 def create_sample_report():

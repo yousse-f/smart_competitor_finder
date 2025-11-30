@@ -111,6 +111,14 @@ export default function AnalyzePage() {
   const [analysisProgress, setAnalysisProgress] = useState(0);
   const [currentAnalyzingUrl, setCurrentAnalyzingUrl] = useState<string>(''); // 🆕 URL corrente in analisi
   const [totalCompetitorsToAnalyze, setTotalCompetitorsToAnalyze] = useState<number>(0); // 🆕 Totale da analizzare
+  
+  // 📦 FASE 2: Batch state
+  const [batchInfo, setBatchInfo] = useState<{
+    currentBatch: number;
+    totalBatches: number;
+    totalSites: number;
+  } | null>(null);
+  
   const [extractedKeywords, setExtractedKeywords] = useState<KeywordData[]>([]);
   const [analysisResult, setAnalysisResult] = useState<any>(null);
   const [siteSummary, setSiteSummary] = useState<SiteSummary | null>(null);
@@ -488,6 +496,31 @@ export default function AnalyzePage() {
                 }
                 break;
               
+              // 📦 FASE 2: Batch info event
+              case 'batch_info':
+                console.log(`📦 BATCH MODE: ${data.total_sites} sites in ${data.num_batches} batches`);
+                setBatchInfo({
+                  currentBatch: 1,
+                  totalBatches: data.num_batches,
+                  totalSites: data.total_sites
+                });
+                break;
+              
+              // 📦 FASE 2: Batch start event
+              case 'batch_start':
+                console.log(`🔄 BATCH ${data.batch_num}/${data.total_batches} started (${data.batch_size} sites)`);
+                setBatchInfo(prev => ({
+                  currentBatch: data.batch_num,
+                  totalBatches: data.total_batches,
+                  totalSites: prev?.totalSites || 0
+                }));
+                break;
+              
+              // 📦 FASE 2: Batch complete event
+              case 'batch_complete':
+                console.log(`✅ BATCH ${data.batch_num} completed (${data.sites_processed} sites processed)`);
+                break;
+              
               case 'start':
                 // Backward compatibility con vecchio evento
                 console.log('🚀 Analysis started, total sites:', data.total);
@@ -502,6 +535,11 @@ export default function AnalyzePage() {
                 
               case 'result':
                 console.log(`✅ Result: ${data.url} → ${data.score}%`);
+                break;
+                
+              case 'site_failed':
+                // 🚨 FASE 1: Failed site event
+                console.warn(`⚠️ Site failed: ${data.url} (${data.reason})`);
                 break;
                 
               case 'error':
@@ -959,6 +997,17 @@ export default function AnalyzePage() {
                         {analysisProgress}%
                       </span>
                     </div>
+                    
+                    {/* 📦 FASE 2: Batch info display */}
+                    {batchInfo && batchInfo.totalBatches > 1 && (
+                      <div className="mb-3 p-3 bg-slate-800/50 rounded-lg border border-purple-500/20">
+                        <div className="flex items-center gap-2 text-sm">
+                          <span className="text-purple-400 font-semibold">📦 Batch {batchInfo.currentBatch} di {batchInfo.totalBatches}</span>
+                          <span className="text-slate-500">•</span>
+                          <span className="text-slate-400">({batchInfo.totalSites} siti totali)</span>
+                        </div>
+                      </div>
+                    )}
                     
                     {/* Progress bar */}
                     <div className="w-full bg-slate-700/50 rounded-full h-3 mb-4 overflow-hidden">
