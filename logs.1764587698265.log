@@ -1,0 +1,1001 @@
+2025-12-01T11:03:34.972188516Z [err]  ERROR:asyncio:Task exception was never retrieved
+2025-12-01T11:03:34.972191441Z [err]  INFO:core.hybrid_scraper_v2:📊 Basic HTTP: Got response status 200
+2025-12-01T11:03:34.972195938Z [err]  future: <Task finished name='Task-535' coro=<Connection.run.<locals>.init() done, defined at /usr/local/lib/python3.12/site-packages/playwright/_impl/_connection.py:309> exception=Exception('Connection.init: Connection closed while reading from the driver')>
+2025-12-01T11:03:34.972199176Z [err]  INFO:core.hybrid_scraper_v2:✅ Basic HTTP SUCCESS (200): 35250 characters received
+2025-12-01T11:03:34.972202597Z [err]  Traceback (most recent call last):
+2025-12-01T11:03:34.972208265Z [err]    File "/usr/local/lib/python3.12/site-packages/playwright/_impl/_connection.py", line 310, in init
+2025-12-01T11:03:34.976125658Z [err]  INFO:core.hybrid_scraper_v2:✅ Basic HTTP SUCCESS: 20 keywords
+2025-12-01T11:03:34.976133556Z [err]  INFO:core.matching:🔍 Keyword splitting: 2 phrases → 3 words
+2025-12-01T11:03:34.976144705Z [err]  INFO:core.matching:📊 Matching analysis: 2 original keywords → 3 words
+2025-12-01T11:03:34.976154063Z [err]  INFO:core.semantic_filter:Starting semantic analysis with 3 keywords
+2025-12-01T11:03:35.168959391Z [err]  INFO:httpx:HTTP Request: POST https://api.openai.com/v1/embeddings "HTTP/1.1 200 OK"
+2025-12-01T11:03:35.179970369Z [err]  INFO:root:✅ https://emmegi-heat-exchangers.com: 20% match
+2025-12-01T11:03:35.179978096Z [err]  INFO:root:📊 Streaming analysis 12/47: https://coldcar.com
+2025-12-01T11:03:35.179983054Z [err]  INFO:core.hybrid_scraper_v2:🎯 Starting ULTRA-INTELLIGENT scrape for: https://coldcar.com
+2025-12-01T11:03:35.277810140Z [inf]  INFO:     100.64.0.5:45448 - "GET /health HTTP/1.1" 200 OK
+2025-12-01T11:03:55.319137281Z [err]   4: 0xf36f9e  [/usr/local/lib/python3.12/site-packages/playwright/driver/node]
+2025-12-01T11:03:55.319148564Z [err]   5: 0xf3857c node::Start(int, char**) [/usr/local/lib/python3.12/site-packages/playwright/driver/node]
+2025-12-01T11:03:55.319156485Z [err]   6: 0x7f04cb8de24a  [/lib/x86_64-linux-gnu/libc.so.6]
+2025-12-01T11:03:55.319164407Z [err]   7: 0x7f04cb8de305 __libc_start_main [/lib/x86_64-linux-gnu/libc.so.6]
+2025-12-01T11:03:55.319164996Z [err]    #  Assertion failed: (0) == (uv_thread_create(t.get(), start_thread, this))
+2025-12-01T11:03:55.319171791Z [err]   8: 0xe7dc7e _start [/usr/local/lib/python3.12/site-packages/playwright/driver/node]
+2025-12-01T11:03:55.319177059Z [err]  
+2025-12-01T11:03:55.319181355Z [err]  ERROR:core.advanced_scraper:❌ Attempt 1 failed for https://coldcar.com: Connection closed while reading from the driver
+2025-12-01T11:03:55.319186705Z [err]  ----- Native stack trace -----
+2025-12-01T11:03:55.319196271Z [err]  
+2025-12-01T11:03:55.319201575Z [err]   1: 0xf8b177 node::Assert(node::AssertionInfo const&) [/usr/local/lib/python3.12/site-packages/playwright/driver/node]
+2025-12-01T11:03:55.319208339Z [err]   2: 0x101807a node::WorkerThreadsTaskRunner::WorkerThreadsTaskRunner(int, node::PlatformDebugLogLevel) [/usr/local/lib/python3.12/site-packages/playwright/driver/node]
+2025-12-01T11:03:55.319214632Z [err]   3: 0x1018180 node::NodePlatform::NodePlatform(int, v8::TracingController*, v8::PageAllocator*) [/usr/local/lib/python3.12/site-packages/playwright/driver/node]
+2025-12-01T11:03:55.319345335Z [err]  
+2025-12-01T11:03:55.319353051Z [err]    #  /usr/local/lib/python3.12/site-packages/playwright/driver/node[3550]: std::unique_ptr<long unsigned int> node::WorkerThreadsTaskRunner::DelayedTaskScheduler::Start() at ../src/node_platform.cc:104
+2025-12-01T11:04:00.301422771Z [err]  ERROR:core.advanced_scraper:🚫 All attempts failed for https://coldcar.com
+2025-12-01T11:04:00.301434195Z [err]  INFO:core.hybrid_scraper_v2:🚨 TRYING BASIC HTTP for https://coldcar.com - FORCED!
+2025-12-01T11:04:00.301442159Z [err]  INFO:core.hybrid_scraper_v2:🚀 Basic HTTP starting for: https://coldcar.com
+2025-12-01T11:04:00.301450012Z [err]  INFO:core.hybrid_scraper_v2:🎭 Using rotated UA: Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) Ap...
+2025-12-01T11:04:00.301460641Z [err]  INFO:core.hybrid_scraper_v2:🔧 Basic HTTP: Creating session with EXPERT timeouts (5s total)
+2025-12-01T11:04:00.301469539Z [err]  INFO:core.hybrid_scraper_v2:🌐 Basic HTTP: Attempt 1/2 - Making request to https://coldcar.com
+2025-12-01T11:04:03.479816761Z [err]  Traceback (most recent call last):
+2025-12-01T11:04:03.480342358Z [err]    File "/usr/local/lib/python3.12/site-packages/playwright/_impl/_connection.py", line 310, in init
+2025-12-01T11:04:03.480355259Z [err]      self.playwright_future.set_result(await self._root_object.initialize())
+2025-12-01T11:04:03.480363991Z [err]                                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+2025-12-01T11:04:03.480370715Z [err]    File "/usr/local/lib/python3.12/site-packages/playwright/_impl/_connection.py", line 251, in initialize
+2025-12-01T11:04:03.480377272Z [err]      await self._channel.send(
+2025-12-01T11:04:03.480384392Z [err]    File "/usr/local/lib/python3.12/site-packages/playwright/_impl/_connection.py", line 69, in send
+2025-12-01T11:04:03.480391055Z [err]      return await self._connection.wrap_api_call(
+2025-12-01T11:04:03.480396217Z [err]             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+2025-12-01T11:04:03.480401783Z [err]    File "/usr/local/lib/python3.12/site-packages/playwright/_impl/_connection.py", line 559, in wrap_api_call
+2025-12-01T11:04:03.480411651Z [err]      raise rewrite_error(error, f"{parsed_st['apiName']}: {error}") from None
+2025-12-01T11:04:03.480419536Z [err]  Exception: Connection.init: Connection closed while reading from the driver
+2025-12-01T11:04:03.480682218Z [err]  INFO:core.hybrid_scraper_v2:📊 Basic HTTP: Got response status 200
+2025-12-01T11:04:03.480689528Z [err]  INFO:core.hybrid_scraper_v2:✅ Basic HTTP SUCCESS (200): 86159 characters received
+2025-12-01T11:04:03.480696451Z [err]  INFO:core.hybrid_scraper_v2:🔍 Basic HTTP result: success=True, error=
+2025-12-01T11:04:03.480703293Z [err]  ERROR:asyncio:Task exception was never retrieved
+2025-12-01T11:04:03.480710666Z [err]  future: <Task finished name='Task-551' coro=<Connection.run.<locals>.init() done, defined at /usr/local/lib/python3.12/site-packages/playwright/_impl/_connection.py:309> exception=Exception('Connection.init: Connection closed while reading from the driver')>
+2025-12-01T11:04:03.481108828Z [err]  INFO:core.hybrid_scraper_v2:✅ Basic HTTP SUCCESS: 20 keywords
+2025-12-01T11:04:05.194564135Z [inf]  INFO:     100.64.0.5:16738 - "GET /health HTTP/1.1" 200 OK
+2025-12-01T11:04:05.542010335Z [err]  INFO:core.matching:🔍 Keyword splitting: 2 phrases → 3 words
+2025-12-01T11:04:05.542020954Z [err]  INFO:core.matching:📊 Matching analysis: 2 original keywords → 3 words
+2025-12-01T11:04:05.542027701Z [err]  INFO:core.semantic_filter:Starting semantic analysis with 3 keywords
+2025-12-01T11:04:05.550500254Z [err]  INFO:root:✅ https://coldcar.com: 22% match
+2025-12-01T11:04:05.550507966Z [err]  INFO:root:📊 Streaming analysis 13/47: https://www.frigomeccanica.it
+2025-12-01T11:04:05.550514493Z [err]  INFO:core.hybrid_scraper_v2:🎯 Starting ULTRA-INTELLIGENT scrape for: https://www.frigomeccanica.it
+2025-12-01T11:04:25.588381636Z [err]   4: 0xf36f9e  [/usr/local/lib/python3.12/site-packages/playwright/driver/node]
+2025-12-01T11:04:25.588392379Z [err]   5: 0xf3857c node::Start(int, char**) [/usr/local/lib/python3.12/site-packages/playwright/driver/node]
+2025-12-01T11:04:25.588399691Z [err]   6: 0x7fdc2437624a  [/lib/x86_64-linux-gnu/libc.so.6]
+2025-12-01T11:04:25.588405528Z [err]   7: 0x7fdc24376305 __libc_start_main [/lib/x86_64-linux-gnu/libc.so.6]
+2025-12-01T11:04:25.588411229Z [err]   8: 0xe7dc7e _start [/usr/local/lib/python3.12/site-packages/playwright/driver/node]
+2025-12-01T11:04:25.588416600Z [err]  ERROR:core.advanced_scraper:❌ Attempt 1 failed for https://www.frigomeccanica.it: Connection closed while reading from the driver
+2025-12-01T11:04:25.588458048Z [err]  
+2025-12-01T11:04:25.588464668Z [err]    #  /usr/local/lib/python3.12/site-packages/playwright/driver/node[3554]: std::unique_ptr<long unsigned int> node::WorkerThreadsTaskRunner::DelayedTaskScheduler::Start() at ../src/node_platform.cc:104
+2025-12-01T11:04:25.588469836Z [err]    #  Assertion failed: (0) == (uv_thread_create(t.get(), start_thread, this))
+2025-12-01T11:04:25.588474534Z [err]  
+2025-12-01T11:04:25.588480111Z [err]  ----- Native stack trace -----
+2025-12-01T11:04:25.588492316Z [err]  
+2025-12-01T11:04:25.588499085Z [err]   1: 0xf8b177 node::Assert(node::AssertionInfo const&) [/usr/local/lib/python3.12/site-packages/playwright/driver/node]
+2025-12-01T11:04:25.588504386Z [err]   2: 0x101807a node::WorkerThreadsTaskRunner::WorkerThreadsTaskRunner(int, node::PlatformDebugLogLevel) [/usr/local/lib/python3.12/site-packages/playwright/driver/node]
+2025-12-01T11:04:25.588509749Z [err]   3: 0x1018180 node::NodePlatform::NodePlatform(int, v8::TracingController*, v8::PageAllocator*) [/usr/local/lib/python3.12/site-packages/playwright/driver/node]
+2025-12-01T11:04:33.540055047Z [err]  ERROR:core.advanced_scraper:🚫 All attempts failed for https://www.frigomeccanica.it
+2025-12-01T11:04:33.540061203Z [err]  INFO:core.hybrid_scraper_v2:🚨 TRYING BASIC HTTP for https://www.frigomeccanica.it - FORCED!
+2025-12-01T11:04:33.540066281Z [err]  INFO:core.hybrid_scraper_v2:🚀 Basic HTTP starting for: https://www.frigomeccanica.it
+2025-12-01T11:04:33.540072056Z [err]  INFO:core.hybrid_scraper_v2:🎭 Using rotated UA: Mozilla/5.0 (iPhone; CPU iPhone OS 17_1 like Mac O...
+2025-12-01T11:04:33.540077942Z [err]  INFO:core.hybrid_scraper_v2:🔧 Basic HTTP: Creating session with EXPERT timeouts (5s total)
+2025-12-01T11:04:33.540089018Z [err]  INFO:core.hybrid_scraper_v2:🌐 Basic HTTP: Attempt 1/2 - Making request to https://www.frigomeccanica.it
+2025-12-01T11:04:33.752634418Z [err]  INFO:core.hybrid_scraper_v2:📊 Basic HTTP: Got response status 200
+2025-12-01T11:04:33.752643607Z [err]  INFO:core.hybrid_scraper_v2:✅ Basic HTTP SUCCESS (200): 26374 characters received
+2025-12-01T11:04:33.752649774Z [err]  INFO:core.hybrid_scraper_v2:🔍 Basic HTTP result: success=True, error=
+2025-12-01T11:04:33.752650184Z [err]      raise rewrite_error(error, f"{parsed_st['apiName']}: {error}") from None
+2025-12-01T11:04:33.752655384Z [err]  ERROR:asyncio:Task exception was never retrieved
+2025-12-01T11:04:33.752661524Z [err]  future: <Task finished name='Task-564' coro=<Connection.run.<locals>.init() done, defined at /usr/local/lib/python3.12/site-packages/playwright/_impl/_connection.py:309> exception=Exception('Connection.init: Connection closed while reading from the driver')>
+2025-12-01T11:04:33.752666183Z [err]  Exception: Connection.init: Connection closed while reading from the driver
+2025-12-01T11:04:33.752667273Z [err]  Traceback (most recent call last):
+2025-12-01T11:04:33.752677252Z [err]    File "/usr/local/lib/python3.12/site-packages/playwright/_impl/_connection.py", line 310, in init
+2025-12-01T11:04:33.752684295Z [err]      self.playwright_future.set_result(await self._root_object.initialize())
+2025-12-01T11:04:33.752744234Z [err]                                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+2025-12-01T11:04:33.752749614Z [err]    File "/usr/local/lib/python3.12/site-packages/playwright/_impl/_connection.py", line 251, in initialize
+2025-12-01T11:04:33.752754339Z [err]      await self._channel.send(
+2025-12-01T11:04:33.752759606Z [err]    File "/usr/local/lib/python3.12/site-packages/playwright/_impl/_connection.py", line 69, in send
+2025-12-01T11:04:33.752764431Z [err]      return await self._connection.wrap_api_call(
+2025-12-01T11:04:33.752770640Z [err]             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+2025-12-01T11:04:33.752775021Z [err]    File "/usr/local/lib/python3.12/site-packages/playwright/_impl/_connection.py", line 559, in wrap_api_call
+2025-12-01T11:04:33.762231710Z [err]  INFO:core.hybrid_scraper_v2:✅ Basic HTTP SUCCESS: 20 keywords
+2025-12-01T11:04:34.362949453Z [err]  INFO:core.matching:🔍 Keyword splitting: 2 phrases → 3 words
+2025-12-01T11:04:34.362957224Z [err]  INFO:core.matching:📊 Matching analysis: 2 original keywords → 3 words
+2025-12-01T11:04:34.362966204Z [err]  INFO:core.semantic_filter:Starting semantic analysis with 3 keywords
+2025-12-01T11:04:34.362974059Z [err]  INFO:root:✅ https://www.frigomeccanica.it: 37% match
+2025-12-01T11:04:34.362981340Z [err]  INFO:root:📊 Streaming analysis 14/47: https://www.mzaspiratori.eu
+2025-12-01T11:04:34.362998359Z [err]  INFO:core.hybrid_scraper_v2:🎯 Starting ULTRA-INTELLIGENT scrape for: https://www.mzaspiratori.eu
+2025-12-01T11:04:35.313350156Z [inf]  INFO:     100.64.0.5:49602 - "GET /health HTTP/1.1" 200 OK
+2025-12-01T11:04:55.086529130Z [err]  
+2025-12-01T11:04:55.086539134Z [err]    #  /usr/local/lib/python3.12/site-packages/playwright/driver/node[3558]: std::unique_ptr<long unsigned int> node::WorkerThreadsTaskRunner::DelayedTaskScheduler::Start() at ../src/node_platform.cc:104
+2025-12-01T11:04:55.086547263Z [err]    #  Assertion failed: (0) == (uv_thread_create(t.get(), start_thread, this))
+2025-12-01T11:04:55.086556639Z [err]  
+2025-12-01T11:04:55.086566318Z [err]  ----- Native stack trace -----
+2025-12-01T11:04:55.086574280Z [err]  
+2025-12-01T11:04:55.086582423Z [err]   1: 0xf8b177 node::Assert(node::AssertionInfo const&) [/usr/local/lib/python3.12/site-packages/playwright/driver/node]
+2025-12-01T11:04:55.086590229Z [err]   2: 0x101807a node::WorkerThreadsTaskRunner::WorkerThreadsTaskRunner(int, node::PlatformDebugLogLevel) [/usr/local/lib/python3.12/site-packages/playwright/driver/node]
+2025-12-01T11:04:55.086597675Z [err]   3: 0x1018180 node::NodePlatform::NodePlatform(int, v8::TracingController*, v8::PageAllocator*) [/usr/local/lib/python3.12/site-packages/playwright/driver/node]
+2025-12-01T11:04:55.086608565Z [err]   4: 0xf36f9e  [/usr/local/lib/python3.12/site-packages/playwright/driver/node]
+2025-12-01T11:04:55.086618321Z [err]   5: 0xf3857c node::Start(int, char**) [/usr/local/lib/python3.12/site-packages/playwright/driver/node]
+2025-12-01T11:04:55.086625780Z [err]   6: 0x7f96ae45e24a  [/lib/x86_64-linux-gnu/libc.so.6]
+2025-12-01T11:04:55.086635316Z [err]   7: 0x7f96ae45e305 __libc_start_main [/lib/x86_64-linux-gnu/libc.so.6]
+2025-12-01T11:04:55.086642507Z [err]   8: 0xe7dc7e _start [/usr/local/lib/python3.12/site-packages/playwright/driver/node]
+2025-12-01T11:04:55.086650663Z [err]  ERROR:core.advanced_scraper:❌ Attempt 1 failed for https://www.mzaspiratori.eu: Connection closed while reading from the driver
+2025-12-01T11:04:58.022262325Z [err]  ERROR:core.advanced_scraper:🚫 All attempts failed for https://www.mzaspiratori.eu
+2025-12-01T11:04:58.022269793Z [err]  INFO:core.hybrid_scraper_v2:🚨 TRYING BASIC HTTP for https://www.mzaspiratori.eu - FORCED!
+2025-12-01T11:04:58.022276002Z [err]  INFO:core.hybrid_scraper_v2:🚀 Basic HTTP starting for: https://www.mzaspiratori.eu
+2025-12-01T11:04:58.022285810Z [err]  INFO:core.hybrid_scraper_v2:🎭 Using rotated UA: Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) Ap...
+2025-12-01T11:04:58.022292763Z [err]  INFO:core.hybrid_scraper_v2:🔧 Basic HTTP: Creating session with EXPERT timeouts (5s total)
+2025-12-01T11:04:58.022301050Z [err]  INFO:core.hybrid_scraper_v2:🌐 Basic HTTP: Attempt 1/2 - Making request to https://www.mzaspiratori.eu
+2025-12-01T11:04:58.667981555Z [err]             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+2025-12-01T11:04:58.667997277Z [err]    File "/usr/local/lib/python3.12/site-packages/playwright/_impl/_connection.py", line 559, in wrap_api_call
+2025-12-01T11:04:58.668006547Z [err]      raise rewrite_error(error, f"{parsed_st['apiName']}: {error}") from None
+2025-12-01T11:04:58.668030269Z [err]  INFO:core.hybrid_scraper_v2:📊 Basic HTTP: Got response status 200
+2025-12-01T11:04:58.668037921Z [err]  Traceback (most recent call last):
+2025-12-01T11:04:58.668041728Z [err]  INFO:core.hybrid_scraper_v2:✅ Basic HTTP SUCCESS (200): 61013 characters received
+2025-12-01T11:04:58.668049488Z [err]    File "/usr/local/lib/python3.12/site-packages/playwright/_impl/_connection.py", line 310, in init
+2025-12-01T11:04:58.668052931Z [err]  INFO:core.hybrid_scraper_v2:🔍 Basic HTTP result: success=True, error=
+2025-12-01T11:04:58.668061570Z [err]      self.playwright_future.set_result(await self._root_object.initialize())
+2025-12-01T11:04:58.668064908Z [err]  ERROR:asyncio:Task exception was never retrieved
+2025-12-01T11:04:58.668069686Z [err]  Exception: Connection.init: Connection closed while reading from the driver
+2025-12-01T11:04:58.668075296Z [err]                                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+2025-12-01T11:04:58.668079682Z [err]  future: <Task finished name='Task-577' coro=<Connection.run.<locals>.init() done, defined at /usr/local/lib/python3.12/site-packages/playwright/_impl/_connection.py:309> exception=Exception('Connection.init: Connection closed while reading from the driver')>
+2025-12-01T11:04:58.668084378Z [err]    File "/usr/local/lib/python3.12/site-packages/playwright/_impl/_connection.py", line 251, in initialize
+2025-12-01T11:04:58.668092374Z [err]      await self._channel.send(
+2025-12-01T11:04:58.668101272Z [err]    File "/usr/local/lib/python3.12/site-packages/playwright/_impl/_connection.py", line 69, in send
+2025-12-01T11:04:58.668103850Z [err]  INFO:core.semantic_filter:Starting semantic analysis with 3 keywords
+2025-12-01T11:04:58.668111680Z [err]      return await self._connection.wrap_api_call(
+2025-12-01T11:04:58.668118000Z [err]  INFO:root:✅ https://www.mzaspiratori.eu: 43% match
+2025-12-01T11:04:58.668127798Z [err]  INFO:root:📊 Streaming analysis 15/47: https://www.tamaaernova.com
+2025-12-01T11:04:58.668139884Z [err]  INFO:core.hybrid_scraper_v2:🎯 Starting ULTRA-INTELLIGENT scrape for: https://www.tamaaernova.com
+2025-12-01T11:04:58.668180368Z [err]  INFO:core.hybrid_scraper_v2:✅ Basic HTTP SUCCESS: 20 keywords
+2025-12-01T11:04:58.668190567Z [err]  INFO:core.matching:🔍 Keyword splitting: 2 phrases → 3 words
+2025-12-01T11:04:58.668197929Z [err]  INFO:core.matching:📊 Matching analysis: 2 original keywords → 3 words
+2025-12-01T11:05:05.008649703Z [inf]  INFO:     100.64.0.5:55576 - "GET /health HTTP/1.1" 200 OK
+2025-12-01T11:05:13.917164113Z [err]  
+2025-12-01T11:05:13.917194594Z [err]   1: 0xf8b177 node::Assert(node::AssertionInfo const&) [/usr/local/lib/python3.12/site-packages/playwright/driver/node]
+2025-12-01T11:05:13.917217836Z [err]   2: 0x101807a node::WorkerThreadsTaskRunner::WorkerThreadsTaskRunner(int, node::PlatformDebugLogLevel) [/usr/local/lib/python3.12/site-packages/playwright/driver/node]
+2025-12-01T11:05:13.917226360Z [err]   3: 0x1018180 node::NodePlatform::NodePlatform(int, v8::TracingController*, v8::PageAllocator*) [/usr/local/lib/python3.12/site-packages/playwright/driver/node]
+2025-12-01T11:05:13.917246929Z [err]   4: 0xf36f9e  [/usr/local/lib/python3.12/site-packages/playwright/driver/node]
+2025-12-01T11:05:13.917254684Z [err]   5: 0xf3857c node::Start(int, char**) [/usr/local/lib/python3.12/site-packages/playwright/driver/node]
+2025-12-01T11:05:13.917262099Z [err]   6: 0x7fcdead8d24a  [/lib/x86_64-linux-gnu/libc.so.6]
+2025-12-01T11:05:13.917274309Z [err]   7: 0x7fcdead8d305 __libc_start_main [/lib/x86_64-linux-gnu/libc.so.6]
+2025-12-01T11:05:13.917282676Z [err]  
+2025-12-01T11:05:13.917286882Z [err]   8: 0xe7dc7e _start [/usr/local/lib/python3.12/site-packages/playwright/driver/node]
+2025-12-01T11:05:13.917294329Z [err]    #  /usr/local/lib/python3.12/site-packages/playwright/driver/node[3562]: std::unique_ptr<long unsigned int> node::WorkerThreadsTaskRunner::DelayedTaskScheduler::Start() at ../src/node_platform.cc:104
+2025-12-01T11:05:13.917298951Z [err]  ERROR:core.advanced_scraper:❌ Attempt 1 failed for https://www.tamaaernova.com: Connection closed while reading from the driver
+2025-12-01T11:05:13.917309967Z [err]    #  Assertion failed: (0) == (uv_thread_create(t.get(), start_thread, this))
+2025-12-01T11:05:13.917318298Z [err]  
+2025-12-01T11:05:13.917326097Z [err]  ----- Native stack trace -----
+2025-12-01T11:05:33.910004693Z [err]  Traceback (most recent call last):
+2025-12-01T11:05:33.910008703Z [err]  ERROR:core.advanced_scraper:🚫 All attempts failed for https://www.tamaaernova.com
+2025-12-01T11:05:33.910022469Z [err]  INFO:core.hybrid_scraper_v2:🚨 TRYING BASIC HTTP for https://www.tamaaernova.com - FORCED!
+2025-12-01T11:05:33.910026747Z [err]    File "/usr/local/lib/python3.12/site-packages/playwright/_impl/_connection.py", line 310, in init
+2025-12-01T11:05:33.910038762Z [err]      self.playwright_future.set_result(await self._root_object.initialize())
+2025-12-01T11:05:33.910047068Z [err]                                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+2025-12-01T11:05:33.910051177Z [err]  INFO:core.hybrid_scraper_v2:🚀 Basic HTTP starting for: https://www.tamaaernova.com
+2025-12-01T11:05:33.910059359Z [err]  INFO:core.hybrid_scraper_v2:🎭 Using rotated UA: Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) Ap...
+2025-12-01T11:05:33.910065299Z [err]  INFO:core.hybrid_scraper_v2:🔧 Basic HTTP: Creating session with EXPERT timeouts (5s total)
+2025-12-01T11:05:33.910071795Z [err]  INFO:core.hybrid_scraper_v2:🌐 Basic HTTP: Attempt 1/2 - Making request to https://www.tamaaernova.com
+2025-12-01T11:05:33.910078792Z [err]  INFO:core.hybrid_scraper_v2:📊 Basic HTTP: Got response status 200
+2025-12-01T11:05:33.910086267Z [err]  INFO:core.hybrid_scraper_v2:✅ Basic HTTP SUCCESS (200): 135635 characters received
+2025-12-01T11:05:33.910092388Z [err]  INFO:core.hybrid_scraper_v2:🔍 Basic HTTP result: success=True, error=
+2025-12-01T11:05:33.910098255Z [err]  ERROR:asyncio:Task exception was never retrieved
+2025-12-01T11:05:33.910104087Z [err]  future: <Task finished name='Task-592' coro=<Connection.run.<locals>.init() done, defined at /usr/local/lib/python3.12/site-packages/playwright/_impl/_connection.py:309> exception=Exception('Connection.init: Connection closed while reading from the driver')>
+2025-12-01T11:05:33.915516175Z [err]  INFO:root:✅ https://www.tamaaernova.com: 43% match
+2025-12-01T11:05:33.915531367Z [err]  INFO:root:📊 Streaming analysis 16/47: https://www.villascambiatori.com
+2025-12-01T11:05:33.915543149Z [err]  INFO:core.hybrid_scraper_v2:🎯 Starting ULTRA-INTELLIGENT scrape for: https://www.villascambiatori.com
+2025-12-01T11:05:33.915656825Z [err]    File "/usr/local/lib/python3.12/site-packages/playwright/_impl/_connection.py", line 251, in initialize
+2025-12-01T11:05:33.915669629Z [err]      await self._channel.send(
+2025-12-01T11:05:33.915677513Z [err]    File "/usr/local/lib/python3.12/site-packages/playwright/_impl/_connection.py", line 69, in send
+2025-12-01T11:05:33.915686160Z [err]      return await self._connection.wrap_api_call(
+2025-12-01T11:05:33.915777332Z [err]             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+2025-12-01T11:05:33.915786076Z [err]    File "/usr/local/lib/python3.12/site-packages/playwright/_impl/_connection.py", line 559, in wrap_api_call
+2025-12-01T11:05:33.915794915Z [err]      raise rewrite_error(error, f"{parsed_st['apiName']}: {error}") from None
+2025-12-01T11:05:33.915804775Z [err]  Exception: Connection.init: Connection closed while reading from the driver
+2025-12-01T11:05:33.915813646Z [err]  INFO:core.hybrid_scraper_v2:✅ Basic HTTP SUCCESS: 20 keywords
+2025-12-01T11:05:33.915821956Z [err]  INFO:core.matching:🔍 Keyword splitting: 2 phrases → 3 words
+2025-12-01T11:05:33.915835399Z [err]  INFO:core.matching:📊 Matching analysis: 2 original keywords → 3 words
+2025-12-01T11:05:33.915863838Z [err]  INFO:core.semantic_filter:Starting semantic analysis with 3 keywords
+2025-12-01T11:05:34.971175253Z [inf]  INFO:     100.64.0.5:56954 - "GET /health HTTP/1.1" 200 OK
+2025-12-01T11:05:54.980448076Z [err]   7: 0x7f1cf018f305 __libc_start_main [/lib/x86_64-linux-gnu/libc.so.6]
+2025-12-01T11:05:54.980464617Z [err]  
+2025-12-01T11:05:54.980465201Z [err]   8: 0xe7dc7e _start [/usr/local/lib/python3.12/site-packages/playwright/driver/node]
+2025-12-01T11:05:54.980480180Z [err]  ERROR:core.advanced_scraper:❌ Attempt 1 failed for https://www.villascambiatori.com: Connection closed while reading from the driver
+2025-12-01T11:05:54.980482749Z [err]    #  /usr/local/lib/python3.12/site-packages/playwright/driver/node[3566]: std::unique_ptr<long unsigned int> node::WorkerThreadsTaskRunner::DelayedTaskScheduler::Start() at ../src/node_platform.cc:104
+2025-12-01T11:05:54.980493260Z [err]    #  Assertion failed: (0) == (uv_thread_create(t.get(), start_thread, this))
+2025-12-01T11:05:54.980500004Z [err]  
+2025-12-01T11:05:54.980508354Z [err]  ----- Native stack trace -----
+2025-12-01T11:05:54.980516148Z [err]  
+2025-12-01T11:05:54.980523350Z [err]   1: 0xf8b177 node::Assert(node::AssertionInfo const&) [/usr/local/lib/python3.12/site-packages/playwright/driver/node]
+2025-12-01T11:05:54.980529529Z [err]   2: 0x101807a node::WorkerThreadsTaskRunner::WorkerThreadsTaskRunner(int, node::PlatformDebugLogLevel) [/usr/local/lib/python3.12/site-packages/playwright/driver/node]
+2025-12-01T11:05:54.980536711Z [err]   3: 0x1018180 node::NodePlatform::NodePlatform(int, v8::TracingController*, v8::PageAllocator*) [/usr/local/lib/python3.12/site-packages/playwright/driver/node]
+2025-12-01T11:05:54.980544369Z [err]   4: 0xf36f9e  [/usr/local/lib/python3.12/site-packages/playwright/driver/node]
+2025-12-01T11:05:54.980550754Z [err]   5: 0xf3857c node::Start(int, char**) [/usr/local/lib/python3.12/site-packages/playwright/driver/node]
+2025-12-01T11:05:54.980557064Z [err]   6: 0x7f1cf018f24a  [/lib/x86_64-linux-gnu/libc.so.6]
+2025-12-01T11:05:59.989010930Z [err]  ERROR:core.advanced_scraper:🚫 All attempts failed for https://www.villascambiatori.com
+2025-12-01T11:05:59.989037391Z [err]  INFO:core.hybrid_scraper_v2:🚨 TRYING BASIC HTTP for https://www.villascambiatori.com - FORCED!
+2025-12-01T11:05:59.989037546Z [err]  INFO:core.hybrid_scraper_v2:🎭 Using rotated UA: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWeb...
+2025-12-01T11:05:59.989049867Z [err]  INFO:core.hybrid_scraper_v2:🚀 Basic HTTP starting for: https://www.villascambiatori.com
+2025-12-01T11:05:59.989051854Z [err]  INFO:core.hybrid_scraper_v2:🔧 Basic HTTP: Creating session with EXPERT timeouts (5s total)
+2025-12-01T11:05:59.989058624Z [err]  INFO:core.hybrid_scraper_v2:🌐 Basic HTTP: Attempt 1/2 - Making request to https://www.villascambiatori.com
+2025-12-01T11:06:00.063411210Z [err]  INFO:core.hybrid_scraper_v2:📊 Basic HTTP: Got response status 200
+2025-12-01T11:06:00.063419047Z [err]  INFO:core.hybrid_scraper_v2:✅ Basic HTTP SUCCESS (200): 24273 characters received
+2025-12-01T11:06:00.063425493Z [err]  INFO:core.hybrid_scraper_v2:🔍 Basic HTTP result: success=True, error=
+2025-12-01T11:06:00.063432173Z [err]  ERROR:asyncio:Task exception was never retrieved
+2025-12-01T11:06:00.063438430Z [err]  future: <Task finished name='Task-605' coro=<Connection.run.<locals>.init() done, defined at /usr/local/lib/python3.12/site-packages/playwright/_impl/_connection.py:309> exception=Exception('Connection.init: Connection closed while reading from the driver')>
+2025-12-01T11:06:00.063452714Z [err]  Traceback (most recent call last):
+2025-12-01T11:06:00.063459401Z [err]    File "/usr/local/lib/python3.12/site-packages/playwright/_impl/_connection.py", line 310, in init
+2025-12-01T11:06:00.063467611Z [err]      self.playwright_future.set_result(await self._root_object.initialize())
+2025-12-01T11:06:00.063474433Z [err]                                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+2025-12-01T11:06:00.063480319Z [err]    File "/usr/local/lib/python3.12/site-packages/playwright/_impl/_connection.py", line 251, in initialize
+2025-12-01T11:06:00.063485694Z [err]      await self._channel.send(
+2025-12-01T11:06:00.063491244Z [err]    File "/usr/local/lib/python3.12/site-packages/playwright/_impl/_connection.py", line 69, in send
+2025-12-01T11:06:00.063495759Z [err]      return await self._connection.wrap_api_call(
+2025-12-01T11:06:00.063500653Z [err]             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+2025-12-01T11:06:00.063505735Z [err]    File "/usr/local/lib/python3.12/site-packages/playwright/_impl/_connection.py", line 559, in wrap_api_call
+2025-12-01T11:06:00.063510852Z [err]      raise rewrite_error(error, f"{parsed_st['apiName']}: {error}") from None
+2025-12-01T11:06:00.063519038Z [err]  Exception: Connection.init: Connection closed while reading from the driver
+2025-12-01T11:06:00.080202755Z [err]  INFO:core.hybrid_scraper_v2:✅ Basic HTTP SUCCESS: 20 keywords
+2025-12-01T11:06:00.953272057Z [err]  INFO:core.matching:🔍 Keyword splitting: 2 phrases → 3 words
+2025-12-01T11:06:00.953285517Z [err]  INFO:core.matching:📊 Matching analysis: 2 original keywords → 3 words
+2025-12-01T11:06:00.953296805Z [err]  INFO:core.semantic_filter:Starting semantic analysis with 3 keywords
+2025-12-01T11:06:00.953308236Z [err]  INFO:root:✅ https://www.villascambiatori.com: 23% match
+2025-12-01T11:06:00.953379641Z [err]  INFO:root:📊 Streaming analysis 17/47: https://zudek.com
+2025-12-01T11:06:00.953386291Z [err]  INFO:core.hybrid_scraper_v2:🎯 Starting ULTRA-INTELLIGENT scrape for: https://zudek.com
+2025-12-01T11:06:04.990176135Z [inf]  INFO:     100.64.0.5:48522 - "GET /health HTTP/1.1" 200 OK
+2025-12-01T11:06:24.568632265Z [err]  
+2025-12-01T11:06:24.568639447Z [err]    #  /usr/local/lib/python3.12/site-packages/playwright/driver/node[3570]: std::unique_ptr<long unsigned int> node::WorkerThreadsTaskRunner::DelayedTaskScheduler::Start() at ../src/node_platform.cc:104
+2025-12-01T11:06:24.568646538Z [err]    #  Assertion failed: (0) == (uv_thread_create(t.get(), start_thread, this))
+2025-12-01T11:06:24.568653072Z [err]  
+2025-12-01T11:06:24.568658211Z [err]  ----- Native stack trace -----
+2025-12-01T11:06:24.568664757Z [err]  
+2025-12-01T11:06:24.568671176Z [err]   1: 0xf8b177 node::Assert(node::AssertionInfo const&) [/usr/local/lib/python3.12/site-packages/playwright/driver/node]
+2025-12-01T11:06:24.568678069Z [err]   2: 0x101807a node::WorkerThreadsTaskRunner::WorkerThreadsTaskRunner(int, node::PlatformDebugLogLevel) [/usr/local/lib/python3.12/site-packages/playwright/driver/node]
+2025-12-01T11:06:24.568684157Z [err]   3: 0x1018180 node::NodePlatform::NodePlatform(int, v8::TracingController*, v8::PageAllocator*) [/usr/local/lib/python3.12/site-packages/playwright/driver/node]
+2025-12-01T11:06:24.568689292Z [err]   4: 0xf36f9e  [/usr/local/lib/python3.12/site-packages/playwright/driver/node]
+2025-12-01T11:06:24.568693716Z [err]   5: 0xf3857c node::Start(int, char**) [/usr/local/lib/python3.12/site-packages/playwright/driver/node]
+2025-12-01T11:06:24.568698368Z [err]   6: 0x7f11dfce924a  [/lib/x86_64-linux-gnu/libc.so.6]
+2025-12-01T11:06:24.568703357Z [err]   7: 0x7f11dfce9305 __libc_start_main [/lib/x86_64-linux-gnu/libc.so.6]
+2025-12-01T11:06:24.568709157Z [err]   8: 0xe7dc7e _start [/usr/local/lib/python3.12/site-packages/playwright/driver/node]
+2025-12-01T11:06:24.568715078Z [err]  ERROR:core.advanced_scraper:❌ Attempt 1 failed for https://zudek.com: Connection closed while reading from the driver
+2025-12-01T11:06:27.232747383Z [err]  ERROR:core.advanced_scraper:🚫 All attempts failed for https://zudek.com
+2025-12-01T11:06:27.232754693Z [err]  INFO:core.hybrid_scraper_v2:🚨 TRYING BASIC HTTP for https://zudek.com - FORCED!
+2025-12-01T11:06:27.232761839Z [err]  INFO:core.hybrid_scraper_v2:🚀 Basic HTTP starting for: https://zudek.com
+2025-12-01T11:06:27.232769441Z [err]  INFO:core.hybrid_scraper_v2:🎭 Using rotated UA: Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) Ap...
+2025-12-01T11:06:27.232777356Z [err]  INFO:core.hybrid_scraper_v2:🔧 Basic HTTP: Creating session with EXPERT timeouts (5s total)
+2025-12-01T11:06:27.232785845Z [err]  INFO:core.hybrid_scraper_v2:🌐 Basic HTTP: Attempt 1/2 - Making request to https://zudek.com
+2025-12-01T11:06:28.202975377Z [err]  INFO:core.hybrid_scraper_v2:📊 Basic HTTP: Got response status 200
+2025-12-01T11:06:28.202986359Z [err]  INFO:core.hybrid_scraper_v2:✅ Basic HTTP SUCCESS (200): 160956 characters received
+2025-12-01T11:06:28.202993555Z [err]  INFO:core.hybrid_scraper_v2:🔍 Basic HTTP result: success=True, error=
+2025-12-01T11:06:28.203000300Z [err]  ERROR:asyncio:Task exception was never retrieved
+2025-12-01T11:06:28.203006700Z [err]  future: <Task finished name='Task-618' coro=<Connection.run.<locals>.init() done, defined at /usr/local/lib/python3.12/site-packages/playwright/_impl/_connection.py:309> exception=Exception('Connection.init: Connection closed while reading from the driver')>
+2025-12-01T11:06:28.203013411Z [err]  Traceback (most recent call last):
+2025-12-01T11:06:28.203166693Z [err]    File "/usr/local/lib/python3.12/site-packages/playwright/_impl/_connection.py", line 310, in init
+2025-12-01T11:06:28.203177263Z [err]      self.playwright_future.set_result(await self._root_object.initialize())
+2025-12-01T11:06:28.203186005Z [err]                                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+2025-12-01T11:06:28.203192634Z [err]    File "/usr/local/lib/python3.12/site-packages/playwright/_impl/_connection.py", line 251, in initialize
+2025-12-01T11:06:28.203199006Z [err]      await self._channel.send(
+2025-12-01T11:06:28.203204762Z [err]    File "/usr/local/lib/python3.12/site-packages/playwright/_impl/_connection.py", line 69, in send
+2025-12-01T11:06:28.203222322Z [err]      return await self._connection.wrap_api_call(
+2025-12-01T11:06:28.203227715Z [err]             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+2025-12-01T11:06:28.203233185Z [err]    File "/usr/local/lib/python3.12/site-packages/playwright/_impl/_connection.py", line 559, in wrap_api_call
+2025-12-01T11:06:28.203240718Z [err]      raise rewrite_error(error, f"{parsed_st['apiName']}: {error}") from None
+2025-12-01T11:06:28.203247781Z [err]  Exception: Connection.init: Connection closed while reading from the driver
+2025-12-01T11:06:28.383755134Z [err]  INFO:core.hybrid_scraper_v2:✅ Basic HTTP SUCCESS: 20 keywords
+2025-12-01T11:06:28.617534193Z [err]  INFO:core.matching:🔍 Keyword splitting: 2 phrases → 3 words
+2025-12-01T11:06:28.617541324Z [err]  INFO:core.matching:📊 Matching analysis: 2 original keywords → 3 words
+2025-12-01T11:06:28.617548047Z [err]  INFO:core.semantic_filter:Starting semantic analysis with 3 keywords
+2025-12-01T11:06:28.617555086Z [err]  INFO:root:✅ https://zudek.com: 8% match
+2025-12-01T11:06:28.638538435Z [err]  INFO:root:📊 Streaming analysis 18/47: https://www.saiver.com
+2025-12-01T11:06:28.638545702Z [err]  INFO:core.hybrid_scraper_v2:🎯 Starting ULTRA-INTELLIGENT scrape for: https://www.saiver.com
+2025-12-01T11:06:35.135475326Z [inf]  INFO:     100.64.0.5:26956 - "GET /health HTTP/1.1" 200 OK
+2025-12-01T11:06:44.233990406Z [err]  
+2025-12-01T11:06:44.234000315Z [err]    #  /usr/local/lib/python3.12/site-packages/playwright/driver/node[3574]: std::unique_ptr<long unsigned int> node::WorkerThreadsTaskRunner::DelayedTaskScheduler::Start() at ../src/node_platform.cc:104
+2025-12-01T11:06:44.234007429Z [err]    #  Assertion failed: (0) == (uv_thread_create(t.get(), start_thread, this))
+2025-12-01T11:06:44.234015732Z [err]  
+2025-12-01T11:06:44.234026074Z [err]  ----- Native stack trace -----
+2025-12-01T11:06:44.234033838Z [err]  
+2025-12-01T11:06:44.234044277Z [err]   1: 0xf8b177 node::Assert(node::AssertionInfo const&) [/usr/local/lib/python3.12/site-packages/playwright/driver/node]
+2025-12-01T11:06:44.234052875Z [err]   2: 0x101807a node::WorkerThreadsTaskRunner::WorkerThreadsTaskRunner(int, node::PlatformDebugLogLevel) [/usr/local/lib/python3.12/site-packages/playwright/driver/node]
+2025-12-01T11:06:44.234059675Z [err]   3: 0x1018180 node::NodePlatform::NodePlatform(int, v8::TracingController*, v8::PageAllocator*) [/usr/local/lib/python3.12/site-packages/playwright/driver/node]
+2025-12-01T11:06:44.234067468Z [err]   4: 0xf36f9e  [/usr/local/lib/python3.12/site-packages/playwright/driver/node]
+2025-12-01T11:06:44.234076696Z [err]   5: 0xf3857c node::Start(int, char**) [/usr/local/lib/python3.12/site-packages/playwright/driver/node]
+2025-12-01T11:06:44.234089809Z [err]   6: 0x7f7377e1c24a  [/lib/x86_64-linux-gnu/libc.so.6]
+2025-12-01T11:06:44.234097093Z [err]   7: 0x7f7377e1c305 __libc_start_main [/lib/x86_64-linux-gnu/libc.so.6]
+2025-12-01T11:06:44.234103729Z [err]   8: 0xe7dc7e _start [/usr/local/lib/python3.12/site-packages/playwright/driver/node]
+2025-12-01T11:06:44.234112347Z [err]  ERROR:core.advanced_scraper:❌ Attempt 1 failed for https://www.saiver.com: Connection closed while reading from the driver
+2025-12-01T11:07:03.761050030Z [err]  ERROR:core.advanced_scraper:🚫 All attempts failed for https://www.saiver.com
+2025-12-01T11:07:03.761062399Z [err]  INFO:core.hybrid_scraper_v2:🚨 TRYING BASIC HTTP for https://www.saiver.com - FORCED!
+2025-12-01T11:07:03.761071599Z [err]  INFO:core.hybrid_scraper_v2:🚀 Basic HTTP starting for: https://www.saiver.com
+2025-12-01T11:07:03.761080204Z [err]  INFO:core.hybrid_scraper_v2:🎭 Using rotated UA: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWeb...
+2025-12-01T11:07:03.761086717Z [err]  INFO:core.hybrid_scraper_v2:🔧 Basic HTTP: Creating session with EXPERT timeouts (5s total)
+2025-12-01T11:07:03.761095149Z [err]  INFO:core.hybrid_scraper_v2:🌐 Basic HTTP: Attempt 1/2 - Making request to https://www.saiver.com
+2025-12-01T11:07:03.761102586Z [err]  WARNING:core.hybrid_scraper_v2:🌐 Connection Error on attempt 1: Cannot connect to host www.saiver.com:443 ssl:default [Connection reset by peer]
+2025-12-01T11:07:03.761112575Z [err]  INFO:core.hybrid_scraper_v2:🌐 Basic HTTP: Attempt 2/2 - Making request to https://www.saiver.com
+2025-12-01T11:07:03.761122001Z [err]  WARNING:core.hybrid_scraper_v2:🌐 Connection Error on attempt 2: Cannot connect to host www.saiver.com:443 ssl:default [Connection reset by peer]
+2025-12-01T11:07:03.761129814Z [err]  ERROR:core.hybrid_scraper_v2:💥 Basic HTTP EXCEPTION: ClientConnectorError: Cannot connect to host www.saiver.com:443 ssl:default [Connection reset by peer]
+2025-12-01T11:07:03.761136642Z [err]  ERROR:core.hybrid_scraper_v2:🔍 Exception details: ClientConnectorError(ConnectionKey(host='www.saiver.com', port=443, is_ssl=True, ssl=True, proxy=None, proxy_auth=None, proxy_headers_hash=None), ConnectionResetError(104, 'Connection reset by peer'))
+2025-12-01T11:07:03.761143105Z [err]  ERROR:core.hybrid_scraper_v2:📝 Exception args: (ConnectionKey(host='www.saiver.com', port=443, is_ssl=True, ssl=True, proxy=None, proxy_auth=None, proxy_headers_hash=None), ConnectionResetError(104, 'Connection reset by peer'))
+2025-12-01T11:07:03.762779113Z [err]  INFO:core.hybrid_scraper_v2:🚨 All HTTP methods failed with exceptions - trying PROXY FALLBACK
+2025-12-01T11:07:03.762784758Z [err]  INFO:core.hybrid_scraper_v2:🚫 Site not in proxy whitelist - skipping ScraperAPI
+2025-12-01T11:07:03.762789092Z [err]  INFO:core.hybrid_scraper_v2:🔍 Basic HTTP result: success=False, error=ClientConnectorError: Cannot connect to host www.saiver.com:443 ssl:default [Connection reset by peer]
+2025-12-01T11:07:03.762793837Z [err]  ERROR:core.hybrid_scraper_v2:❌ Basic HTTP FAILED: ClientConnectorError: Cannot connect to host www.saiver.com:443 ssl:default [Connection reset by peer]
+2025-12-01T11:07:03.762798072Z [err]  ERROR:core.hybrid_scraper_v2:❌ ALL METHODS FAILED for https://www.saiver.com after 28.15s
+2025-12-01T11:07:03.762802016Z [err]  WARNING:root:⚠️ Scraping failed for https://www.saiver.com: All scraping methods failed. Last error: ClientConnectorError: Cannot connect to host www.saiver.com:443 ssl:default [Connection reset by peer]
+2025-12-01T11:07:03.762805739Z [err]  INFO:root:📊 Streaming analysis 19/47: https://www.stefaniexchangers.com
+2025-12-01T11:07:03.762809419Z [err]  INFO:core.hybrid_scraper_v2:🎯 Starting ULTRA-INTELLIGENT scrape for: https://www.stefaniexchangers.com
+2025-12-01T11:07:05.314232783Z [inf]  INFO:     100.64.0.5:20610 - "GET /health HTTP/1.1" 200 OK
+2025-12-01T11:07:11.894380272Z [err]  ERROR:asyncio:Task exception was never retrieved
+2025-12-01T11:07:11.894387424Z [err]  future: <Task finished name='Task-630' coro=<Connection.run.<locals>.init() done, defined at /usr/local/lib/python3.12/site-packages/playwright/_impl/_connection.py:309> exception=Exception('Connection.init: Connection closed while reading from the driver')>
+2025-12-01T11:07:11.894392164Z [err]  Traceback (most recent call last):
+2025-12-01T11:07:11.894396450Z [err]    File "/usr/local/lib/python3.12/site-packages/playwright/_impl/_connection.py", line 310, in init
+2025-12-01T11:07:11.894401772Z [err]      self.playwright_future.set_result(await self._root_object.initialize())
+2025-12-01T11:07:11.894409663Z [err]                                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+2025-12-01T11:07:11.894414447Z [err]    File "/usr/local/lib/python3.12/site-packages/playwright/_impl/_connection.py", line 251, in initialize
+2025-12-01T11:07:11.894419229Z [err]      await self._channel.send(
+2025-12-01T11:07:11.894423508Z [err]    File "/usr/local/lib/python3.12/site-packages/playwright/_impl/_connection.py", line 69, in send
+2025-12-01T11:07:11.894428204Z [err]      return await self._connection.wrap_api_call(
+2025-12-01T11:07:11.894432420Z [err]             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+2025-12-01T11:07:11.894437197Z [err]    File "/usr/local/lib/python3.12/site-packages/playwright/_impl/_connection.py", line 559, in wrap_api_call
+2025-12-01T11:07:11.894442638Z [err]      raise rewrite_error(error, f"{parsed_st['apiName']}: {error}") from None
+2025-12-01T11:07:11.894446504Z [err]  Exception: Connection.init: Connection closed while reading from the driver
+2025-12-01T11:07:11.902511731Z [err]  
+2025-12-01T11:07:11.902522888Z [err]    #  /usr/local/lib/python3.12/site-packages/playwright/driver/node[3578]: std::unique_ptr<long unsigned int> node::WorkerThreadsTaskRunner::DelayedTaskScheduler::Start() at ../src/node_platform.cc:104
+2025-12-01T11:07:11.902529860Z [err]    #  Assertion failed: (0) == (uv_thread_create(t.get(), start_thread, this))
+2025-12-01T11:07:11.902534895Z [err]  
+2025-12-01T11:07:11.902540604Z [err]  ----- Native stack trace -----
+2025-12-01T11:07:11.902547358Z [err]  
+2025-12-01T11:07:11.902553549Z [err]   1: 0xf8b177 node::Assert(node::AssertionInfo const&) [/usr/local/lib/python3.12/site-packages/playwright/driver/node]
+2025-12-01T11:07:11.902559626Z [err]   2: 0x101807a node::WorkerThreadsTaskRunner::WorkerThreadsTaskRunner(int, node::PlatformDebugLogLevel) [/usr/local/lib/python3.12/site-packages/playwright/driver/node]
+2025-12-01T11:07:11.902567090Z [err]   3: 0x1018180 node::NodePlatform::NodePlatform(int, v8::TracingController*, v8::PageAllocator*) [/usr/local/lib/python3.12/site-packages/playwright/driver/node]
+2025-12-01T11:07:11.902573422Z [err]   4: 0xf36f9e  [/usr/local/lib/python3.12/site-packages/playwright/driver/node]
+2025-12-01T11:07:11.902579838Z [err]   5: 0xf3857c node::Start(int, char**) [/usr/local/lib/python3.12/site-packages/playwright/driver/node]
+2025-12-01T11:07:11.902585915Z [err]   6: 0x7fa9d65ef24a  [/lib/x86_64-linux-gnu/libc.so.6]
+2025-12-01T11:07:11.902591982Z [err]   7: 0x7fa9d65ef305 __libc_start_main [/lib/x86_64-linux-gnu/libc.so.6]
+2025-12-01T11:07:11.902597821Z [err]   8: 0xe7dc7e _start [/usr/local/lib/python3.12/site-packages/playwright/driver/node]
+2025-12-01T11:07:11.904083223Z [err]  ERROR:core.advanced_scraper:❌ Attempt 1 failed for https://www.stefaniexchangers.com: Connection closed while reading from the driver
+2025-12-01T11:07:31.910871644Z [err]  ERROR:core.advanced_scraper:🚫 All attempts failed for https://www.stefaniexchangers.com
+2025-12-01T11:07:31.910889624Z [err]  INFO:core.hybrid_scraper_v2:🚨 TRYING BASIC HTTP for https://www.stefaniexchangers.com - FORCED!
+2025-12-01T11:07:31.910898632Z [err]  INFO:core.hybrid_scraper_v2:🚀 Basic HTTP starting for: https://www.stefaniexchangers.com
+2025-12-01T11:07:31.910907943Z [err]  INFO:core.hybrid_scraper_v2:🎭 Using rotated UA: Mozilla/5.0 (iPhone; CPU iPhone OS 17_1 like Mac O...
+2025-12-01T11:07:31.910925562Z [err]  INFO:core.hybrid_scraper_v2:🔧 Basic HTTP: Creating session with EXPERT timeouts (5s total)
+2025-12-01T11:07:31.910934466Z [err]  INFO:core.hybrid_scraper_v2:🌐 Basic HTTP: Attempt 1/2 - Making request to https://www.stefaniexchangers.com
+2025-12-01T11:07:31.910942246Z [err]  INFO:core.hybrid_scraper_v2:📊 Basic HTTP: Got response status 200
+2025-12-01T11:07:31.910949553Z [err]  INFO:core.hybrid_scraper_v2:✅ Basic HTTP SUCCESS (200): 264664 characters received
+2025-12-01T11:07:31.910959250Z [err]  INFO:core.hybrid_scraper_v2:🔍 Basic HTTP result: success=True, error=
+2025-12-01T11:07:31.910966495Z [err]  ERROR:asyncio:Task exception was never retrieved
+2025-12-01T11:07:31.910974388Z [err]  future: <Task finished name='Task-641' coro=<Connection.run.<locals>.init() done, defined at /usr/local/lib/python3.12/site-packages/playwright/_impl/_connection.py:309> exception=Exception('Connection.init: Connection closed while reading from the driver')>
+2025-12-01T11:07:31.910981969Z [err]  Traceback (most recent call last):
+2025-12-01T11:07:31.910991719Z [err]    File "/usr/local/lib/python3.12/site-packages/playwright/_impl/_connection.py", line 310, in init
+2025-12-01T11:07:31.910998791Z [err]      self.playwright_future.set_result(await self._root_object.initialize())
+2025-12-01T11:07:31.911005105Z [err]                                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+2025-12-01T11:07:31.913391815Z [err]    File "/usr/local/lib/python3.12/site-packages/playwright/_impl/_connection.py", line 251, in initialize
+2025-12-01T11:07:31.913396150Z [err]  INFO:core.matching:🔍 Keyword splitting: 2 phrases → 3 words
+2025-12-01T11:07:31.913404994Z [err]      await self._channel.send(
+2025-12-01T11:07:31.913414439Z [err]  INFO:core.matching:📊 Matching analysis: 2 original keywords → 3 words
+2025-12-01T11:07:31.913416387Z [err]    File "/usr/local/lib/python3.12/site-packages/playwright/_impl/_connection.py", line 69, in send
+2025-12-01T11:07:31.913429309Z [err]      return await self._connection.wrap_api_call(
+2025-12-01T11:07:31.913429590Z [err]  INFO:core.semantic_filter:Starting semantic analysis with 3 keywords
+2025-12-01T11:07:31.913442450Z [err]  INFO:root:✅ https://www.stefaniexchangers.com: 27% match
+2025-12-01T11:07:31.913442762Z [err]             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+2025-12-01T11:07:31.913453107Z [err]    File "/usr/local/lib/python3.12/site-packages/playwright/_impl/_connection.py", line 559, in wrap_api_call
+2025-12-01T11:07:31.913461189Z [err]  INFO:root:📊 Streaming analysis 20/47: https://www.rodigas.it
+2025-12-01T11:07:31.913465618Z [err]      raise rewrite_error(error, f"{parsed_st['apiName']}: {error}") from None
+2025-12-01T11:07:31.913474861Z [err]  INFO:core.hybrid_scraper_v2:🎯 Starting ULTRA-INTELLIGENT scrape for: https://www.rodigas.it
+2025-12-01T11:07:31.913475208Z [err]  Exception: Connection.init: Connection closed while reading from the driver
+2025-12-01T11:07:31.913484377Z [err]  INFO:core.hybrid_scraper_v2:✅ Basic HTTP SUCCESS: 20 keywords
+2025-12-01T11:07:34.974169649Z [inf]  INFO:     100.64.0.5:39752 - "GET /health HTTP/1.1" 200 OK
+2025-12-01T11:07:41.508168056Z [err]  
+2025-12-01T11:07:41.508173625Z [err]    #  /usr/local/lib/python3.12/site-packages/playwright/driver/node[3582]: std::unique_ptr<long unsigned int> node::WorkerThreadsTaskRunner::DelayedTaskScheduler::Start() at ../src/node_platform.cc:104
+2025-12-01T11:07:41.508183690Z [err]    #  Assertion failed: (0) == (uv_thread_create(t.get(), start_thread, this))
+2025-12-01T11:07:41.508189388Z [err]  
+2025-12-01T11:07:41.508210129Z [err]  ----- Native stack trace -----
+2025-12-01T11:07:41.508216129Z [err]  
+2025-12-01T11:07:41.508219256Z [err]   8: 0xe7dc7e _start [/usr/local/lib/python3.12/site-packages/playwright/driver/node]
+2025-12-01T11:07:41.508225062Z [err]  ERROR:core.advanced_scraper:❌ Attempt 1 failed for https://www.rodigas.it: Connection closed while reading from the driver
+2025-12-01T11:07:41.508234663Z [err]   1: 0xf8b177 node::Assert(node::AssertionInfo const&) [/usr/local/lib/python3.12/site-packages/playwright/driver/node]
+2025-12-01T11:07:41.508242673Z [err]   2: 0x101807a node::WorkerThreadsTaskRunner::WorkerThreadsTaskRunner(int, node::PlatformDebugLogLevel) [/usr/local/lib/python3.12/site-packages/playwright/driver/node]
+2025-12-01T11:07:41.508250674Z [err]   4: 0xf36f9e  [/usr/local/lib/python3.12/site-packages/playwright/driver/node]
+2025-12-01T11:07:41.508252808Z [err]   3: 0x1018180 node::NodePlatform::NodePlatform(int, v8::TracingController*, v8::PageAllocator*) [/usr/local/lib/python3.12/site-packages/playwright/driver/node]
+2025-12-01T11:07:41.508259639Z [err]   5: 0xf3857c node::Start(int, char**) [/usr/local/lib/python3.12/site-packages/playwright/driver/node]
+2025-12-01T11:07:41.508271566Z [err]   6: 0x7fd9675c124a  [/lib/x86_64-linux-gnu/libc.so.6]
+2025-12-01T11:07:41.508279600Z [err]   7: 0x7fd9675c1305 __libc_start_main [/lib/x86_64-linux-gnu/libc.so.6]
+2025-12-01T11:08:01.133302089Z [err]                                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+2025-12-01T11:08:01.133320055Z [err]    File "/usr/local/lib/python3.12/site-packages/playwright/_impl/_connection.py", line 251, in initialize
+2025-12-01T11:08:01.133333737Z [err]  ERROR:core.advanced_scraper:🚫 All attempts failed for https://www.rodigas.it
+2025-12-01T11:08:01.133348065Z [err]  INFO:core.hybrid_scraper_v2:🚨 TRYING BASIC HTTP for https://www.rodigas.it - FORCED!
+2025-12-01T11:08:01.133355222Z [err]  INFO:core.hybrid_scraper_v2:🚀 Basic HTTP starting for: https://www.rodigas.it
+2025-12-01T11:08:01.133363457Z [err]  INFO:core.hybrid_scraper_v2:🎭 Using rotated UA: Mozilla/5.0 (X11; Linux x86_64; rv:121.0) Gecko/20...
+2025-12-01T11:08:01.133371422Z [err]  INFO:core.hybrid_scraper_v2:🔧 Basic HTTP: Creating session with EXPERT timeouts (5s total)
+2025-12-01T11:08:01.133379243Z [err]  INFO:core.hybrid_scraper_v2:🌐 Basic HTTP: Attempt 1/2 - Making request to https://www.rodigas.it
+2025-12-01T11:08:01.133387897Z [err]  INFO:core.hybrid_scraper_v2:📊 Basic HTTP: Got response status 200
+2025-12-01T11:08:01.133395207Z [err]  INFO:core.hybrid_scraper_v2:✅ Basic HTTP SUCCESS (200): 104191 characters received
+2025-12-01T11:08:01.133401726Z [err]  INFO:core.hybrid_scraper_v2:🔍 Basic HTTP result: success=True, error=
+2025-12-01T11:08:01.133408880Z [err]  ERROR:asyncio:Task exception was never retrieved
+2025-12-01T11:08:01.133416223Z [err]  future: <Task finished name='Task-654' coro=<Connection.run.<locals>.init() done, defined at /usr/local/lib/python3.12/site-packages/playwright/_impl/_connection.py:309> exception=Exception('Connection.init: Connection closed while reading from the driver')>
+2025-12-01T11:08:01.133423102Z [err]  Traceback (most recent call last):
+2025-12-01T11:08:01.133431868Z [err]    File "/usr/local/lib/python3.12/site-packages/playwright/_impl/_connection.py", line 310, in init
+2025-12-01T11:08:01.133439451Z [err]      self.playwright_future.set_result(await self._root_object.initialize())
+2025-12-01T11:08:01.138309259Z [err]      await self._channel.send(
+2025-12-01T11:08:01.138316051Z [err]    File "/usr/local/lib/python3.12/site-packages/playwright/_impl/_connection.py", line 69, in send
+2025-12-01T11:08:01.138323133Z [err]      return await self._connection.wrap_api_call(
+2025-12-01T11:08:01.138329627Z [err]             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+2025-12-01T11:08:01.138337731Z [err]    File "/usr/local/lib/python3.12/site-packages/playwright/_impl/_connection.py", line 559, in wrap_api_call
+2025-12-01T11:08:01.138344825Z [err]      raise rewrite_error(error, f"{parsed_st['apiName']}: {error}") from None
+2025-12-01T11:08:01.138351042Z [err]  Exception: Connection.init: Connection closed while reading from the driver
+2025-12-01T11:08:01.138358070Z [err]  INFO:core.hybrid_scraper_v2:✅ Basic HTTP SUCCESS: 20 keywords
+2025-12-01T11:08:01.138363617Z [err]  INFO:core.matching:🔍 Keyword splitting: 2 phrases → 3 words
+2025-12-01T11:08:01.138369307Z [err]  INFO:core.matching:📊 Matching analysis: 2 original keywords → 3 words
+2025-12-01T11:08:01.138374936Z [err]  INFO:core.semantic_filter:Starting semantic analysis with 3 keywords
+2025-12-01T11:08:01.138380808Z [err]  INFO:root:✅ https://www.rodigas.it: 38% match
+2025-12-01T11:08:01.138387063Z [err]  INFO:root:📊 Streaming analysis 21/47: https://www.tecnoventil.it
+2025-12-01T11:08:01.138393429Z [err]  INFO:core.hybrid_scraper_v2:🎯 Starting ULTRA-INTELLIGENT scrape for: https://www.tecnoventil.it
+2025-12-01T11:08:04.999497195Z [inf]  INFO:     100.64.0.5:50324 - "GET /health HTTP/1.1" 200 OK
+2025-12-01T11:08:08.978569329Z [err]  
+2025-12-01T11:08:08.978577139Z [err]    #  /usr/local/lib/python3.12/site-packages/playwright/driver/node[3586]: std::unique_ptr<long unsigned int> node::WorkerThreadsTaskRunner::DelayedTaskScheduler::Start() at ../src/node_platform.cc:104
+2025-12-01T11:08:08.978583480Z [err]    #  Assertion failed: (0) == (uv_thread_create(t.get(), start_thread, this))
+2025-12-01T11:08:08.978589100Z [err]  
+2025-12-01T11:08:08.978595407Z [err]  ----- Native stack trace -----
+2025-12-01T11:08:08.978600407Z [err]  
+2025-12-01T11:08:08.980887390Z [err]   1: 0xf8b177 node::Assert(node::AssertionInfo const&) [/usr/local/lib/python3.12/site-packages/playwright/driver/node]
+2025-12-01T11:08:08.980895419Z [err]   2: 0x101807a node::WorkerThreadsTaskRunner::WorkerThreadsTaskRunner(int, node::PlatformDebugLogLevel) [/usr/local/lib/python3.12/site-packages/playwright/driver/node]
+2025-12-01T11:08:08.980901718Z [err]   3: 0x1018180 node::NodePlatform::NodePlatform(int, v8::TracingController*, v8::PageAllocator*) [/usr/local/lib/python3.12/site-packages/playwright/driver/node]
+2025-12-01T11:08:08.983536552Z [err]   4: 0xf36f9e  [/usr/local/lib/python3.12/site-packages/playwright/driver/node]
+2025-12-01T11:08:08.983544094Z [err]   5: 0xf3857c node::Start(int, char**) [/usr/local/lib/python3.12/site-packages/playwright/driver/node]
+2025-12-01T11:08:08.983550233Z [err]   6: 0x7f6885dd024a  [/lib/x86_64-linux-gnu/libc.so.6]
+2025-12-01T11:08:08.983561424Z [err]   7: 0x7f6885dd0305 __libc_start_main [/lib/x86_64-linux-gnu/libc.so.6]
+2025-12-01T11:08:08.983568340Z [err]   8: 0xe7dc7e _start [/usr/local/lib/python3.12/site-packages/playwright/driver/node]
+2025-12-01T11:08:08.985344727Z [err]  ERROR:core.advanced_scraper:❌ Attempt 1 failed for https://www.tecnoventil.it: Connection closed while reading from the driver
+2025-12-01T11:08:28.970024551Z [err]  future: <Task finished name='Task-667' coro=<Connection.run.<locals>.init() done, defined at /usr/local/lib/python3.12/site-packages/playwright/_impl/_connection.py:309> exception=Exception('Connection.init: Connection closed while reading from the driver')>
+2025-12-01T11:08:28.970035674Z [err]  Traceback (most recent call last):
+2025-12-01T11:08:28.970043300Z [err]  ERROR:core.advanced_scraper:🚫 All attempts failed for https://www.tecnoventil.it
+2025-12-01T11:08:28.970043715Z [err]    File "/usr/local/lib/python3.12/site-packages/playwright/_impl/_connection.py", line 310, in init
+2025-12-01T11:08:28.970052303Z [err]  INFO:core.hybrid_scraper_v2:🚨 TRYING BASIC HTTP for https://www.tecnoventil.it - FORCED!
+2025-12-01T11:08:28.970054572Z [err]      self.playwright_future.set_result(await self._root_object.initialize())
+2025-12-01T11:08:28.970059905Z [err]  INFO:core.hybrid_scraper_v2:🚀 Basic HTTP starting for: https://www.tecnoventil.it
+2025-12-01T11:08:28.970062195Z [err]                                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+2025-12-01T11:08:28.970068556Z [err]  INFO:core.hybrid_scraper_v2:🎭 Using rotated UA: Mozilla/5.0 (iPhone; CPU iPhone OS 17_1 like Mac O...
+2025-12-01T11:08:28.970069452Z [err]    File "/usr/local/lib/python3.12/site-packages/playwright/_impl/_connection.py", line 251, in initialize
+2025-12-01T11:08:28.970074650Z [err]  INFO:core.hybrid_scraper_v2:🔧 Basic HTTP: Creating session with EXPERT timeouts (5s total)
+2025-12-01T11:08:28.970080919Z [err]  INFO:core.hybrid_scraper_v2:🌐 Basic HTTP: Attempt 1/2 - Making request to https://www.tecnoventil.it
+2025-12-01T11:08:28.970086607Z [err]  INFO:core.hybrid_scraper_v2:📊 Basic HTTP: Got response status 200
+2025-12-01T11:08:28.970091813Z [err]  INFO:core.hybrid_scraper_v2:✅ Basic HTTP SUCCESS (200): 247262 characters received
+2025-12-01T11:08:28.970096968Z [err]  INFO:core.hybrid_scraper_v2:🔍 Basic HTTP result: success=True, error=
+2025-12-01T11:08:28.970102439Z [err]  ERROR:asyncio:Task exception was never retrieved
+2025-12-01T11:08:28.972746421Z [err]      await self._channel.send(
+2025-12-01T11:08:28.972755040Z [err]    File "/usr/local/lib/python3.12/site-packages/playwright/_impl/_connection.py", line 69, in send
+2025-12-01T11:08:28.972762680Z [err]      return await self._connection.wrap_api_call(
+2025-12-01T11:08:28.972769622Z [err]             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+2025-12-01T11:08:28.972775701Z [err]    File "/usr/local/lib/python3.12/site-packages/playwright/_impl/_connection.py", line 559, in wrap_api_call
+2025-12-01T11:08:28.972781476Z [err]      raise rewrite_error(error, f"{parsed_st['apiName']}: {error}") from None
+2025-12-01T11:08:28.972788103Z [err]  Exception: Connection.init: Connection closed while reading from the driver
+2025-12-01T11:08:28.972795992Z [err]  INFO:core.hybrid_scraper_v2:✅ Basic HTTP SUCCESS: 20 keywords
+2025-12-01T11:08:28.972803214Z [err]  INFO:core.matching:🔍 Keyword splitting: 2 phrases → 3 words
+2025-12-01T11:08:28.972809441Z [err]  INFO:core.matching:📊 Matching analysis: 2 original keywords → 3 words
+2025-12-01T11:08:28.972815880Z [err]  INFO:core.semantic_filter:Starting semantic analysis with 3 keywords
+2025-12-01T11:08:28.972823825Z [err]  INFO:root:✅ https://www.tecnoventil.it: 50% match
+2025-12-01T11:08:28.972829318Z [err]  INFO:root:📊 Streaming analysis 22/47: https://www.milanodispensers.com
+2025-12-01T11:08:28.972834741Z [err]  INFO:core.hybrid_scraper_v2:🎯 Starting ULTRA-INTELLIGENT scrape for: https://www.milanodispensers.com
+2025-12-01T11:08:34.974256632Z [inf]  INFO:     100.64.0.5:35964 - "GET /health HTTP/1.1" 200 OK
+2025-12-01T11:08:40.788922127Z [err]  
+2025-12-01T11:08:40.788930047Z [err]    #  /usr/local/lib/python3.12/site-packages/playwright/driver/node[3590]: std::unique_ptr<long unsigned int> node::WorkerThreadsTaskRunner::DelayedTaskScheduler::Start() at ../src/node_platform.cc:104
+2025-12-01T11:08:40.788939663Z [err]    #  Assertion failed: (0) == (uv_thread_create(t.get(), start_thread, this))
+2025-12-01T11:08:40.788949162Z [err]  
+2025-12-01T11:08:40.788958056Z [err]  ----- Native stack trace -----
+2025-12-01T11:08:40.788968551Z [err]  
+2025-12-01T11:08:40.788979783Z [err]   1: 0xf8b177 node::Assert(node::AssertionInfo const&) [/usr/local/lib/python3.12/site-packages/playwright/driver/node]
+2025-12-01T11:08:40.788988766Z [err]   2: 0x101807a node::WorkerThreadsTaskRunner::WorkerThreadsTaskRunner(int, node::PlatformDebugLogLevel) [/usr/local/lib/python3.12/site-packages/playwright/driver/node]
+2025-12-01T11:08:40.788998311Z [err]   3: 0x1018180 node::NodePlatform::NodePlatform(int, v8::TracingController*, v8::PageAllocator*) [/usr/local/lib/python3.12/site-packages/playwright/driver/node]
+2025-12-01T11:08:40.789009939Z [err]   4: 0xf36f9e  [/usr/local/lib/python3.12/site-packages/playwright/driver/node]
+2025-12-01T11:08:40.789017436Z [err]   5: 0xf3857c node::Start(int, char**) [/usr/local/lib/python3.12/site-packages/playwright/driver/node]
+2025-12-01T11:08:40.789026170Z [err]   6: 0x7fa87ab0524a  [/lib/x86_64-linux-gnu/libc.so.6]
+2025-12-01T11:08:40.789033269Z [err]   7: 0x7fa87ab05305 __libc_start_main [/lib/x86_64-linux-gnu/libc.so.6]
+2025-12-01T11:08:40.789039001Z [err]   8: 0xe7dc7e _start [/usr/local/lib/python3.12/site-packages/playwright/driver/node]
+2025-12-01T11:08:40.789046289Z [err]  ERROR:core.advanced_scraper:❌ Attempt 1 failed for https://www.milanodispensers.com: Connection closed while reading from the driver
+2025-12-01T11:09:00.411089233Z [err]  ERROR:core.advanced_scraper:🚫 All attempts failed for https://www.milanodispensers.com
+2025-12-01T11:09:00.411091824Z [err]    File "/usr/local/lib/python3.12/site-packages/playwright/_impl/_connection.py", line 310, in init
+2025-12-01T11:09:00.411102025Z [err]  INFO:core.hybrid_scraper_v2:🚨 TRYING BASIC HTTP for https://www.milanodispensers.com - FORCED!
+2025-12-01T11:09:00.411105162Z [err]      self.playwright_future.set_result(await self._root_object.initialize())
+2025-12-01T11:09:00.411109565Z [err]  INFO:core.hybrid_scraper_v2:🚀 Basic HTTP starting for: https://www.milanodispensers.com
+2025-12-01T11:09:00.411115713Z [err]                                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+2025-12-01T11:09:00.411118349Z [err]  INFO:core.hybrid_scraper_v2:🎭 Using rotated UA: Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) Ap...
+2025-12-01T11:09:00.411126821Z [err]  INFO:core.hybrid_scraper_v2:🔧 Basic HTTP: Creating session with EXPERT timeouts (5s total)
+2025-12-01T11:09:00.411135300Z [err]  INFO:core.hybrid_scraper_v2:🌐 Basic HTTP: Attempt 1/2 - Making request to https://www.milanodispensers.com
+2025-12-01T11:09:00.411142780Z [err]  INFO:core.hybrid_scraper_v2:📊 Basic HTTP: Got response status 200
+2025-12-01T11:09:00.411149207Z [err]  INFO:core.hybrid_scraper_v2:✅ Basic HTTP SUCCESS (200): 63602 characters received
+2025-12-01T11:09:00.411155453Z [err]  INFO:core.hybrid_scraper_v2:🔍 Basic HTTP result: success=True, error=
+2025-12-01T11:09:00.411161836Z [err]  ERROR:asyncio:Task exception was never retrieved
+2025-12-01T11:09:00.411166993Z [err]  future: <Task finished name='Task-682' coro=<Connection.run.<locals>.init() done, defined at /usr/local/lib/python3.12/site-packages/playwright/_impl/_connection.py:309> exception=Exception('Connection.init: Connection closed while reading from the driver')>
+2025-12-01T11:09:00.411172894Z [err]  Traceback (most recent call last):
+2025-12-01T11:09:00.414495544Z [err]    File "/usr/local/lib/python3.12/site-packages/playwright/_impl/_connection.py", line 251, in initialize
+2025-12-01T11:09:00.414504973Z [err]      await self._channel.send(
+2025-12-01T11:09:00.414510816Z [err]    File "/usr/local/lib/python3.12/site-packages/playwright/_impl/_connection.py", line 69, in send
+2025-12-01T11:09:00.415084573Z [err]      return await self._connection.wrap_api_call(
+2025-12-01T11:09:00.415091428Z [err]             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+2025-12-01T11:09:00.415096609Z [err]    File "/usr/local/lib/python3.12/site-packages/playwright/_impl/_connection.py", line 559, in wrap_api_call
+2025-12-01T11:09:00.415100842Z [err]      raise rewrite_error(error, f"{parsed_st['apiName']}: {error}") from None
+2025-12-01T11:09:00.415105315Z [err]  Exception: Connection.init: Connection closed while reading from the driver
+2025-12-01T11:09:00.415110673Z [err]  INFO:core.hybrid_scraper_v2:✅ Basic HTTP SUCCESS: 20 keywords
+2025-12-01T11:09:00.415115766Z [err]  INFO:core.matching:🔍 Keyword splitting: 2 phrases → 3 words
+2025-12-01T11:09:00.415120687Z [err]  INFO:core.matching:📊 Matching analysis: 2 original keywords → 3 words
+2025-12-01T11:09:00.415124948Z [err]  INFO:core.semantic_filter:Starting semantic analysis with 3 keywords
+2025-12-01T11:09:00.415129375Z [err]  INFO:root:✅ https://www.milanodispensers.com: 19% match
+2025-12-01T11:09:00.415133463Z [err]  INFO:root:📊 Streaming analysis 23/47: https://www.fral.it
+2025-12-01T11:09:00.415138274Z [err]  INFO:core.hybrid_scraper_v2:🎯 Starting ULTRA-INTELLIGENT scrape for: https://www.fral.it
+2025-12-01T11:09:05.118755108Z [inf]  INFO:     100.64.0.5:44558 - "GET /health HTTP/1.1" 200 OK
+2025-12-01T11:09:11.101455805Z [err]  
+2025-12-01T11:09:11.101460265Z [err]    #  /usr/local/lib/python3.12/site-packages/playwright/driver/node[3594]: std::unique_ptr<long unsigned int> node::WorkerThreadsTaskRunner::DelayedTaskScheduler::Start() at ../src/node_platform.cc:104
+2025-12-01T11:09:11.101464455Z [err]    #  Assertion failed: (0) == (uv_thread_create(t.get(), start_thread, this))
+2025-12-01T11:09:11.101469152Z [err]  
+2025-12-01T11:09:11.101475710Z [err]  ----- Native stack trace -----
+2025-12-01T11:09:11.101480601Z [err]  
+2025-12-01T11:09:11.101484932Z [err]   1: 0xf8b177 node::Assert(node::AssertionInfo const&) [/usr/local/lib/python3.12/site-packages/playwright/driver/node]
+2025-12-01T11:09:11.101488788Z [err]   2: 0x101807a node::WorkerThreadsTaskRunner::WorkerThreadsTaskRunner(int, node::PlatformDebugLogLevel) [/usr/local/lib/python3.12/site-packages/playwright/driver/node]
+2025-12-01T11:09:11.103904219Z [err]   3: 0x1018180 node::NodePlatform::NodePlatform(int, v8::TracingController*, v8::PageAllocator*) [/usr/local/lib/python3.12/site-packages/playwright/driver/node]
+2025-12-01T11:09:11.103908455Z [err]   4: 0xf36f9e  [/usr/local/lib/python3.12/site-packages/playwright/driver/node]
+2025-12-01T11:09:11.103912258Z [err]   5: 0xf3857c node::Start(int, char**) [/usr/local/lib/python3.12/site-packages/playwright/driver/node]
+2025-12-01T11:09:11.103916498Z [err]   6: 0x7f4a321ce24a  [/lib/x86_64-linux-gnu/libc.so.6]
+2025-12-01T11:09:11.103921530Z [err]   7: 0x7f4a321ce305 __libc_start_main [/lib/x86_64-linux-gnu/libc.so.6]
+2025-12-01T11:09:11.103925226Z [err]   8: 0xe7dc7e _start [/usr/local/lib/python3.12/site-packages/playwright/driver/node]
+2025-12-01T11:09:11.106758120Z [err]  ERROR:core.advanced_scraper:❌ Attempt 1 failed for https://www.fral.it: Connection closed while reading from the driver
+2025-12-01T11:09:19.388022087Z [err]  ERROR:core.advanced_scraper:🚫 All attempts failed for https://www.fral.it
+2025-12-01T11:09:19.388029042Z [err]  INFO:core.hybrid_scraper_v2:🚨 TRYING BASIC HTTP for https://www.fral.it - FORCED!
+2025-12-01T11:09:19.388036167Z [err]  INFO:core.hybrid_scraper_v2:🚀 Basic HTTP starting for: https://www.fral.it
+2025-12-01T11:09:19.388042039Z [err]  INFO:core.hybrid_scraper_v2:🎭 Using rotated UA: Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) Ap...
+2025-12-01T11:09:19.388048471Z [err]  INFO:core.hybrid_scraper_v2:🔧 Basic HTTP: Creating session with EXPERT timeouts (5s total)
+2025-12-01T11:09:19.388055681Z [err]  INFO:core.hybrid_scraper_v2:🌐 Basic HTTP: Attempt 1/2 - Making request to https://www.fral.it
+2025-12-01T11:09:20.088749379Z [err]  INFO:core.hybrid_scraper_v2:✅ Basic HTTP SUCCESS (200): 100319 characters received
+2025-12-01T11:09:20.088765321Z [err]  INFO:core.hybrid_scraper_v2:🔍 Basic HTTP result: success=True, error=
+2025-12-01T11:09:20.088777149Z [err]  ERROR:asyncio:Task exception was never retrieved
+2025-12-01T11:09:20.088808003Z [err]  INFO:core.hybrid_scraper_v2:📊 Basic HTTP: Got response status 200
+2025-12-01T11:09:20.088904680Z [err]      await self._channel.send(
+2025-12-01T11:09:20.088914441Z [err]  future: <Task finished name='Task-695' coro=<Connection.run.<locals>.init() done, defined at /usr/local/lib/python3.12/site-packages/playwright/_impl/_connection.py:309> exception=Exception('Connection.init: Connection closed while reading from the driver')>
+2025-12-01T11:09:20.088922396Z [err]    File "/usr/local/lib/python3.12/site-packages/playwright/_impl/_connection.py", line 69, in send
+2025-12-01T11:09:20.088928794Z [err]  Traceback (most recent call last):
+2025-12-01T11:09:20.088939870Z [err]      return await self._connection.wrap_api_call(
+2025-12-01T11:09:20.088940448Z [err]    File "/usr/local/lib/python3.12/site-packages/playwright/_impl/_connection.py", line 310, in init
+2025-12-01T11:09:20.088949468Z [err]      self.playwright_future.set_result(await self._root_object.initialize())
+2025-12-01T11:09:20.088959047Z [err]                                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+2025-12-01T11:09:20.088964117Z [err]             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+2025-12-01T11:09:20.088971321Z [err]    File "/usr/local/lib/python3.12/site-packages/playwright/_impl/_connection.py", line 251, in initialize
+2025-12-01T11:09:20.088978476Z [err]    File "/usr/local/lib/python3.12/site-packages/playwright/_impl/_connection.py", line 559, in wrap_api_call
+2025-12-01T11:09:20.088986210Z [err]      raise rewrite_error(error, f"{parsed_st['apiName']}: {error}") from None
+2025-12-01T11:09:20.088992915Z [err]  Exception: Connection.init: Connection closed while reading from the driver
+2025-12-01T11:09:20.092588506Z [err]  INFO:core.hybrid_scraper_v2:✅ Basic HTTP SUCCESS: 20 keywords
+2025-12-01T11:09:20.092593751Z [err]  INFO:core.matching:🔍 Keyword splitting: 2 phrases → 3 words
+2025-12-01T11:09:20.092601258Z [err]  INFO:core.matching:📊 Matching analysis: 2 original keywords → 3 words
+2025-12-01T11:09:20.092606367Z [err]  INFO:core.semantic_filter:Starting semantic analysis with 3 keywords
+2025-12-01T11:09:20.092610561Z [err]  INFO:root:✅ https://www.fral.it: 52% match
+2025-12-01T11:09:20.092621254Z [err]  INFO:root:📊 Streaming analysis 24/47: https://www.hitema.it
+2025-12-01T11:09:20.092626924Z [err]  INFO:core.hybrid_scraper_v2:🎯 Starting ULTRA-INTELLIGENT scrape for: https://www.hitema.it
+2025-12-01T11:09:40.219881841Z [err]  
+2025-12-01T11:09:40.219890853Z [err]    #  /usr/local/lib/python3.12/site-packages/playwright/driver/node[3598]: std::unique_ptr<long unsigned int> node::WorkerThreadsTaskRunner::DelayedTaskScheduler::Start() at ../src/node_platform.cc:104
+2025-12-01T11:09:40.219897399Z [err]    #  Assertion failed: (0) == (uv_thread_create(t.get(), start_thread, this))
+2025-12-01T11:09:40.219902496Z [err]  
+2025-12-01T11:09:40.219907235Z [err]  ----- Native stack trace -----
+2025-12-01T11:09:40.219913335Z [err]  
+2025-12-01T11:09:40.219918976Z [err]   1: 0xf8b177 node::Assert(node::AssertionInfo const&) [/usr/local/lib/python3.12/site-packages/playwright/driver/node]
+2025-12-01T11:09:40.219925784Z [err]   2: 0x101807a node::WorkerThreadsTaskRunner::WorkerThreadsTaskRunner(int, node::PlatformDebugLogLevel) [/usr/local/lib/python3.12/site-packages/playwright/driver/node]
+2025-12-01T11:09:40.219931440Z [err]   3: 0x1018180 node::NodePlatform::NodePlatform(int, v8::TracingController*, v8::PageAllocator*) [/usr/local/lib/python3.12/site-packages/playwright/driver/node]
+2025-12-01T11:09:40.219937659Z [err]   4: 0xf36f9e  [/usr/local/lib/python3.12/site-packages/playwright/driver/node]
+2025-12-01T11:09:40.219949075Z [err]   5: 0xf3857c node::Start(int, char**) [/usr/local/lib/python3.12/site-packages/playwright/driver/node]
+2025-12-01T11:09:40.219954651Z [err]   6: 0x7ff903b3224a  [/lib/x86_64-linux-gnu/libc.so.6]
+2025-12-01T11:09:40.219960118Z [err]   7: 0x7ff903b32305 __libc_start_main [/lib/x86_64-linux-gnu/libc.so.6]
+2025-12-01T11:09:40.219965790Z [err]   8: 0xe7dc7e _start [/usr/local/lib/python3.12/site-packages/playwright/driver/node]
+2025-12-01T11:09:40.219973743Z [err]  ERROR:core.advanced_scraper:❌ Attempt 1 failed for https://www.hitema.it: Connection closed while reading from the driver
+2025-12-01T11:09:40.219980137Z [inf]  INFO:     100.64.0.5:54256 - "GET /health HTTP/1.1" 200 OK
+2025-12-01T11:09:44.492629587Z [err]  ERROR:core.advanced_scraper:🚫 All attempts failed for https://www.hitema.it
+2025-12-01T11:09:44.492637463Z [err]  INFO:core.hybrid_scraper_v2:🚨 TRYING BASIC HTTP for https://www.hitema.it - FORCED!
+2025-12-01T11:09:44.492644838Z [err]  INFO:core.hybrid_scraper_v2:🚀 Basic HTTP starting for: https://www.hitema.it
+2025-12-01T11:09:44.492650223Z [err]  INFO:core.hybrid_scraper_v2:🎭 Using rotated UA: Mozilla/5.0 (X11; Linux x86_64; rv:121.0) Gecko/20...
+2025-12-01T11:09:44.492655855Z [err]  INFO:core.hybrid_scraper_v2:🔧 Basic HTTP: Creating session with EXPERT timeouts (5s total)
+2025-12-01T11:09:44.492662214Z [err]  INFO:core.hybrid_scraper_v2:🌐 Basic HTTP: Attempt 1/2 - Making request to https://www.hitema.it
+2025-12-01T11:09:45.185568492Z [err]      return await self._connection.wrap_api_call(
+2025-12-01T11:09:45.185579047Z [err]             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+2025-12-01T11:09:45.185587091Z [err]    File "/usr/local/lib/python3.12/site-packages/playwright/_impl/_connection.py", line 559, in wrap_api_call
+2025-12-01T11:09:45.185595452Z [err]      raise rewrite_error(error, f"{parsed_st['apiName']}: {error}") from None
+2025-12-01T11:09:45.185602619Z [err]  Exception: Connection.init: Connection closed while reading from the driver
+2025-12-01T11:09:45.185884800Z [err]  INFO:core.hybrid_scraper_v2:📊 Basic HTTP: Got response status 200
+2025-12-01T11:09:45.185894433Z [err]  INFO:core.hybrid_scraper_v2:✅ Basic HTTP SUCCESS (200): 147627 characters received
+2025-12-01T11:09:45.185899566Z [err]  INFO:core.hybrid_scraper_v2:🔍 Basic HTTP result: success=True, error=
+2025-12-01T11:09:45.185903723Z [err]  ERROR:asyncio:Task exception was never retrieved
+2025-12-01T11:09:45.185907749Z [err]  future: <Task finished name='Task-707' coro=<Connection.run.<locals>.init() done, defined at /usr/local/lib/python3.12/site-packages/playwright/_impl/_connection.py:309> exception=Exception('Connection.init: Connection closed while reading from the driver')>
+2025-12-01T11:09:45.185912378Z [err]  Traceback (most recent call last):
+2025-12-01T11:09:45.185916689Z [err]    File "/usr/local/lib/python3.12/site-packages/playwright/_impl/_connection.py", line 310, in init
+2025-12-01T11:09:45.185922201Z [err]      self.playwright_future.set_result(await self._root_object.initialize())
+2025-12-01T11:09:45.185927071Z [err]                                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+2025-12-01T11:09:45.185932034Z [err]    File "/usr/local/lib/python3.12/site-packages/playwright/_impl/_connection.py", line 251, in initialize
+2025-12-01T11:09:45.185936829Z [err]      await self._channel.send(
+2025-12-01T11:09:45.185945667Z [err]    File "/usr/local/lib/python3.12/site-packages/playwright/_impl/_connection.py", line 69, in send
+2025-12-01T11:09:45.189056922Z [err]  INFO:core.hybrid_scraper_v2:✅ Basic HTTP SUCCESS: 20 keywords
+2025-12-01T11:09:45.213939558Z [err]  INFO:core.matching:🔍 Keyword splitting: 2 phrases → 3 words
+2025-12-01T11:09:45.213948994Z [err]  INFO:core.matching:📊 Matching analysis: 2 original keywords → 3 words
+2025-12-01T11:09:45.213957129Z [err]  INFO:core.semantic_filter:Starting semantic analysis with 3 keywords
+2025-12-01T11:09:45.228753986Z [err]  INFO:root:✅ https://www.hitema.it: 23% match
+2025-12-01T11:09:45.228761451Z [err]  INFO:root:📊 Streaming analysis 25/47: https://www.fic.com
+2025-12-01T11:09:45.228766505Z [err]  INFO:core.hybrid_scraper_v2:🎯 Starting ULTRA-INTELLIGENT scrape for: https://www.fic.com
+2025-12-01T11:10:05.296960734Z [err]   7: 0x7fc8d3887305 __libc_start_main [/lib/x86_64-linux-gnu/libc.so.6]
+2025-12-01T11:10:05.296968329Z [err]   8: 0xe7dc7e _start [/usr/local/lib/python3.12/site-packages/playwright/driver/node]
+2025-12-01T11:10:05.296976704Z [err]  ERROR:core.advanced_scraper:❌ Attempt 1 failed for https://www.fic.com: Connection closed while reading from the driver
+2025-12-01T11:10:05.296987881Z [inf]  INFO:     100.64.0.5:53414 - "GET /health HTTP/1.1" 200 OK
+2025-12-01T11:10:05.297049820Z [err]  
+2025-12-01T11:10:05.297058975Z [err]    #  /usr/local/lib/python3.12/site-packages/playwright/driver/node[3602]: std::unique_ptr<long unsigned int> node::WorkerThreadsTaskRunner::DelayedTaskScheduler::Start() at ../src/node_platform.cc:104
+2025-12-01T11:10:05.297067815Z [err]    #  Assertion failed: (0) == (uv_thread_create(t.get(), start_thread, this))
+2025-12-01T11:10:05.297075608Z [err]  
+2025-12-01T11:10:05.297086560Z [err]  ----- Native stack trace -----
+2025-12-01T11:10:05.297096563Z [err]  
+2025-12-01T11:10:05.297105247Z [err]   1: 0xf8b177 node::Assert(node::AssertionInfo const&) [/usr/local/lib/python3.12/site-packages/playwright/driver/node]
+2025-12-01T11:10:05.297117039Z [err]   2: 0x101807a node::WorkerThreadsTaskRunner::WorkerThreadsTaskRunner(int, node::PlatformDebugLogLevel) [/usr/local/lib/python3.12/site-packages/playwright/driver/node]
+2025-12-01T11:10:05.297127905Z [err]   3: 0x1018180 node::NodePlatform::NodePlatform(int, v8::TracingController*, v8::PageAllocator*) [/usr/local/lib/python3.12/site-packages/playwright/driver/node]
+2025-12-01T11:10:05.297136525Z [err]   4: 0xf36f9e  [/usr/local/lib/python3.12/site-packages/playwright/driver/node]
+2025-12-01T11:10:05.297145038Z [err]   5: 0xf3857c node::Start(int, char**) [/usr/local/lib/python3.12/site-packages/playwright/driver/node]
+2025-12-01T11:10:05.297151909Z [err]   6: 0x7fc8d388724a  [/lib/x86_64-linux-gnu/libc.so.6]
+2025-12-01T11:10:10.411336712Z [err]  INFO:core.hybrid_scraper_v2:🚨 TRYING BASIC HTTP for https://www.fic.com - FORCED!
+2025-12-01T11:10:10.411351139Z [err]  INFO:core.hybrid_scraper_v2:🚀 Basic HTTP starting for: https://www.fic.com
+2025-12-01T11:10:10.411359052Z [err]  INFO:core.hybrid_scraper_v2:🎭 Using rotated UA: Mozilla/5.0 (Linux; Android 14; SM-G998B) AppleWeb...
+2025-12-01T11:10:10.411366812Z [err]  INFO:core.hybrid_scraper_v2:🔧 Basic HTTP: Creating session with EXPERT timeouts (5s total)
+2025-12-01T11:10:10.411369399Z [err]  ERROR:core.advanced_scraper:🚫 All attempts failed for https://www.fic.com
+2025-12-01T11:10:10.411373823Z [err]  INFO:core.hybrid_scraper_v2:🌐 Basic HTTP: Attempt 1/2 - Making request to https://www.fic.com
+2025-12-01T11:10:10.691018862Z [err]  INFO:core.hybrid_scraper_v2:📊 Basic HTTP: Got response status 200
+2025-12-01T11:10:10.691025661Z [err]  INFO:core.hybrid_scraper_v2:✅ Basic HTTP SUCCESS (200): 81064 characters received
+2025-12-01T11:10:10.691031454Z [err]  INFO:core.hybrid_scraper_v2:🔍 Basic HTTP result: success=True, error=
+2025-12-01T11:10:10.691037577Z [err]  ERROR:asyncio:Task exception was never retrieved
+2025-12-01T11:10:10.691044260Z [err]  future: <Task finished name='Task-722' coro=<Connection.run.<locals>.init() done, defined at /usr/local/lib/python3.12/site-packages/playwright/_impl/_connection.py:309> exception=Exception('Connection.init: Connection closed while reading from the driver')>
+2025-12-01T11:10:10.691050572Z [err]  Traceback (most recent call last):
+2025-12-01T11:10:10.691056688Z [err]    File "/usr/local/lib/python3.12/site-packages/playwright/_impl/_connection.py", line 310, in init
+2025-12-01T11:10:10.691063422Z [err]      self.playwright_future.set_result(await self._root_object.initialize())
+2025-12-01T11:10:10.691069458Z [err]                                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+2025-12-01T11:10:10.691074973Z [err]    File "/usr/local/lib/python3.12/site-packages/playwright/_impl/_connection.py", line 251, in initialize
+2025-12-01T11:10:10.691081206Z [err]      await self._channel.send(
+2025-12-01T11:10:10.691087403Z [err]    File "/usr/local/lib/python3.12/site-packages/playwright/_impl/_connection.py", line 69, in send
+2025-12-01T11:10:10.691092699Z [err]      return await self._connection.wrap_api_call(
+2025-12-01T11:10:10.691098956Z [err]             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+2025-12-01T11:10:10.691104773Z [err]    File "/usr/local/lib/python3.12/site-packages/playwright/_impl/_connection.py", line 559, in wrap_api_call
+2025-12-01T11:10:10.691110945Z [err]      raise rewrite_error(error, f"{parsed_st['apiName']}: {error}") from None
+2025-12-01T11:10:10.691134709Z [err]  Exception: Connection.init: Connection closed while reading from the driver
+2025-12-01T11:10:10.692918265Z [err]  INFO:core.hybrid_scraper_v2:✅ Basic HTTP SUCCESS: 20 keywords
+2025-12-01T11:10:10.799663022Z [err]  INFO:core.matching:🔍 Keyword splitting: 2 phrases → 3 words
+2025-12-01T11:10:10.799668622Z [err]  INFO:core.matching:📊 Matching analysis: 2 original keywords → 3 words
+2025-12-01T11:10:10.799672423Z [err]  INFO:core.semantic_filter:Starting semantic analysis with 3 keywords
+2025-12-01T11:10:10.808781885Z [err]  INFO:root:✅ https://www.fic.com: 35% match
+2025-12-01T11:10:10.808789883Z [err]  INFO:root:📊 Streaming analysis 26/47: https://www.mth.it
+2025-12-01T11:10:10.808798663Z [err]  INFO:core.hybrid_scraper_v2:🎯 Starting ULTRA-INTELLIGENT scrape for: https://www.mth.it
+2025-12-01T11:10:30.777609339Z [err]  
+2025-12-01T11:10:30.777622680Z [err]    #  /usr/local/lib/python3.12/site-packages/playwright/driver/node[3606]: std::unique_ptr<long unsigned int> node::WorkerThreadsTaskRunner::DelayedTaskScheduler::Start() at ../src/node_platform.cc:104
+2025-12-01T11:10:30.777630940Z [err]    #  Assertion failed: (0) == (uv_thread_create(t.get(), start_thread, this))
+2025-12-01T11:10:30.777636420Z [err]  
+2025-12-01T11:10:30.777642881Z [err]  ----- Native stack trace -----
+2025-12-01T11:10:30.777649618Z [err]  
+2025-12-01T11:10:30.777655901Z [err]   1: 0xf8b177 node::Assert(node::AssertionInfo const&) [/usr/local/lib/python3.12/site-packages/playwright/driver/node]
+2025-12-01T11:10:30.777661685Z [err]   2: 0x101807a node::WorkerThreadsTaskRunner::WorkerThreadsTaskRunner(int, node::PlatformDebugLogLevel) [/usr/local/lib/python3.12/site-packages/playwright/driver/node]
+2025-12-01T11:10:30.777667397Z [err]   3: 0x1018180 node::NodePlatform::NodePlatform(int, v8::TracingController*, v8::PageAllocator*) [/usr/local/lib/python3.12/site-packages/playwright/driver/node]
+2025-12-01T11:10:30.777673709Z [err]   4: 0xf36f9e  [/usr/local/lib/python3.12/site-packages/playwright/driver/node]
+2025-12-01T11:10:30.777682711Z [err]   5: 0xf3857c node::Start(int, char**) [/usr/local/lib/python3.12/site-packages/playwright/driver/node]
+2025-12-01T11:10:30.777689192Z [err]   6: 0x7f12ddba624a  [/lib/x86_64-linux-gnu/libc.so.6]
+2025-12-01T11:10:30.777696755Z [err]   7: 0x7f12ddba6305 __libc_start_main [/lib/x86_64-linux-gnu/libc.so.6]
+2025-12-01T11:10:30.777710154Z [err]   8: 0xe7dc7e _start [/usr/local/lib/python3.12/site-packages/playwright/driver/node]
+2025-12-01T11:10:30.777726046Z [err]  ERROR:core.advanced_scraper:❌ Attempt 1 failed for https://www.mth.it: Connection closed while reading from the driver
+2025-12-01T11:10:32.511274055Z [err]  ERROR:core.advanced_scraper:🚫 All attempts failed for https://www.mth.it
+2025-12-01T11:10:32.511282391Z [err]  INFO:core.hybrid_scraper_v2:🚨 TRYING BASIC HTTP for https://www.mth.it - FORCED!
+2025-12-01T11:10:32.511290698Z [err]  INFO:core.hybrid_scraper_v2:🚀 Basic HTTP starting for: https://www.mth.it
+2025-12-01T11:10:32.511297736Z [err]  INFO:core.hybrid_scraper_v2:🎭 Using rotated UA: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:1...
+2025-12-01T11:10:32.511305234Z [err]  INFO:core.hybrid_scraper_v2:🔧 Basic HTTP: Creating session with EXPERT timeouts (5s total)
+2025-12-01T11:10:32.511313723Z [err]  INFO:core.hybrid_scraper_v2:🌐 Basic HTTP: Attempt 1/2 - Making request to https://www.mth.it
+2025-12-01T11:10:32.511321205Z [err]  ERROR:asyncio:Task exception was never retrieved
+2025-12-01T11:10:32.511329677Z [err]  future: <Task finished name='Task-737' coro=<Connection.run.<locals>.init() done, defined at /usr/local/lib/python3.12/site-packages/playwright/_impl/_connection.py:309> exception=Exception('Connection.init: Connection closed while reading from the driver')>
+2025-12-01T11:10:32.511337382Z [err]  Traceback (most recent call last):
+2025-12-01T11:10:32.511344631Z [err]    File "/usr/local/lib/python3.12/site-packages/playwright/_impl/_connection.py", line 310, in init
+2025-12-01T11:10:32.511351592Z [err]      self.playwright_future.set_result(await self._root_object.initialize())
+2025-12-01T11:10:32.511360191Z [err]                                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+2025-12-01T11:10:32.511367556Z [err]    File "/usr/local/lib/python3.12/site-packages/playwright/_impl/_connection.py", line 251, in initialize
+2025-12-01T11:10:32.511374549Z [err]      await self._channel.send(
+2025-12-01T11:10:32.511381429Z [err]    File "/usr/local/lib/python3.12/site-packages/playwright/_impl/_connection.py", line 69, in send
+2025-12-01T11:10:32.511392269Z [err]      return await self._connection.wrap_api_call(
+2025-12-01T11:10:32.513871698Z [err]             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+2025-12-01T11:10:32.513878469Z [err]    File "/usr/local/lib/python3.12/site-packages/playwright/_impl/_connection.py", line 559, in wrap_api_call
+2025-12-01T11:10:32.513885583Z [err]      raise rewrite_error(error, f"{parsed_st['apiName']}: {error}") from None
+2025-12-01T11:10:32.513892403Z [err]  Exception: Connection.init: Connection closed while reading from the driver
+2025-12-01T11:10:32.574160011Z [err]  INFO:core.hybrid_scraper_v2:📊 Basic HTTP: Got response status 200
+2025-12-01T11:10:32.604636149Z [err]  INFO:core.hybrid_scraper_v2:✅ Basic HTTP SUCCESS (200): 60338 characters received
+2025-12-01T11:10:32.604643690Z [err]  INFO:core.hybrid_scraper_v2:🔍 Basic HTTP result: success=True, error=
+2025-12-01T11:10:32.635524861Z [err]  INFO:core.hybrid_scraper_v2:✅ Basic HTTP SUCCESS: 20 keywords
+2025-12-01T11:10:33.555350743Z [err]  INFO:core.matching:🔍 Keyword splitting: 2 phrases → 3 words
+2025-12-01T11:10:33.555363543Z [err]  INFO:core.matching:📊 Matching analysis: 2 original keywords → 3 words
+2025-12-01T11:10:33.555432661Z [err]  INFO:core.semantic_filter:Starting semantic analysis with 3 keywords
+2025-12-01T11:10:33.555443497Z [err]  INFO:root:✅ https://www.mth.it: 36% match
+2025-12-01T11:10:33.555451559Z [err]  INFO:root:📊 Streaming analysis 27/47: https://www.enginiasrl.com
+2025-12-01T11:10:33.555459042Z [err]  INFO:core.hybrid_scraper_v2:🎯 Starting ULTRA-INTELLIGENT scrape for: https://www.enginiasrl.com
+2025-12-01T11:10:34.977924099Z [inf]  INFO:     100.64.0.5:50216 - "GET /health HTTP/1.1" 200 OK
+2025-12-01T11:10:54.972641524Z [err]  
+2025-12-01T11:10:54.972648779Z [err]    #  /usr/local/lib/python3.12/site-packages/playwright/driver/node[3610]: std::unique_ptr<long unsigned int> node::WorkerThreadsTaskRunner::DelayedTaskScheduler::Start() at ../src/node_platform.cc:104
+2025-12-01T11:10:54.972653035Z [err]    #  Assertion failed: (0) == (uv_thread_create(t.get(), start_thread, this))
+2025-12-01T11:10:54.972657983Z [err]  
+2025-12-01T11:10:54.972663513Z [err]  ----- Native stack trace -----
+2025-12-01T11:10:54.972668070Z [err]  
+2025-12-01T11:10:54.972672408Z [err]   1: 0xf8b177 node::Assert(node::AssertionInfo const&) [/usr/local/lib/python3.12/site-packages/playwright/driver/node]
+2025-12-01T11:10:54.972676802Z [err]   2: 0x101807a node::WorkerThreadsTaskRunner::WorkerThreadsTaskRunner(int, node::PlatformDebugLogLevel) [/usr/local/lib/python3.12/site-packages/playwright/driver/node]
+2025-12-01T11:10:54.972680737Z [err]   3: 0x1018180 node::NodePlatform::NodePlatform(int, v8::TracingController*, v8::PageAllocator*) [/usr/local/lib/python3.12/site-packages/playwright/driver/node]
+2025-12-01T11:10:54.972685800Z [err]   4: 0xf36f9e  [/usr/local/lib/python3.12/site-packages/playwright/driver/node]
+2025-12-01T11:10:54.972689949Z [err]   5: 0xf3857c node::Start(int, char**) [/usr/local/lib/python3.12/site-packages/playwright/driver/node]
+2025-12-01T11:10:54.972695721Z [err]   6: 0x7f93692d624a  [/lib/x86_64-linux-gnu/libc.so.6]
+2025-12-01T11:10:54.972699753Z [err]   7: 0x7f93692d6305 __libc_start_main [/lib/x86_64-linux-gnu/libc.so.6]
+2025-12-01T11:10:54.972704553Z [err]   8: 0xe7dc7e _start [/usr/local/lib/python3.12/site-packages/playwright/driver/node]
+2025-12-01T11:10:54.972709824Z [err]  ERROR:core.advanced_scraper:❌ Attempt 1 failed for https://www.enginiasrl.com: Connection closed while reading from the driver
+2025-12-01T11:11:01.689061343Z [err]  ERROR:core.advanced_scraper:🚫 All attempts failed for https://www.enginiasrl.com
+2025-12-01T11:11:01.689068405Z [err]  INFO:core.hybrid_scraper_v2:🚨 TRYING BASIC HTTP for https://www.enginiasrl.com - FORCED!
+2025-12-01T11:11:01.689072896Z [err]  INFO:core.hybrid_scraper_v2:🚀 Basic HTTP starting for: https://www.enginiasrl.com
+2025-12-01T11:11:01.689077922Z [err]  INFO:core.hybrid_scraper_v2:🎭 Using rotated UA: Mozilla/5.0 (Android 14; Mobile; rv:121.0) Gecko/1...
+2025-12-01T11:11:01.689082498Z [err]  INFO:core.hybrid_scraper_v2:🔧 Basic HTTP: Creating session with EXPERT timeouts (5s total)
+2025-12-01T11:11:01.689090089Z [err]  INFO:core.hybrid_scraper_v2:🌐 Basic HTTP: Attempt 1/2 - Making request to https://www.enginiasrl.com
+2025-12-01T11:11:04.616304364Z [err]  WARNING:core.hybrid_scraper_v2:⏰ Timeout on attempt 1: Timeout on reading data from socket
+2025-12-01T11:11:04.616310816Z [err]  INFO:core.hybrid_scraper_v2:🌐 Basic HTTP: Attempt 2/2 - Making request to https://www.enginiasrl.com
+2025-12-01T11:11:05.017902132Z [inf]  INFO:     100.64.0.5:38626 - "GET /health HTTP/1.1" 200 OK
+2025-12-01T11:11:07.693837155Z [err]  WARNING:core.hybrid_scraper_v2:⏰ Timeout on attempt 2: Timeout on reading data from socket
+2025-12-01T11:11:07.693843751Z [err]  ERROR:core.hybrid_scraper_v2:💥 Basic HTTP EXCEPTION: SocketTimeoutError: Timeout on reading data from socket
+2025-12-01T11:11:07.693850231Z [err]  ERROR:core.hybrid_scraper_v2:🔍 Exception details: SocketTimeoutError('Timeout on reading data from socket')
+2025-12-01T11:11:07.693857463Z [err]  ERROR:core.hybrid_scraper_v2:📝 Exception args: ('Timeout on reading data from socket',)
+2025-12-01T11:11:07.693863924Z [err]  INFO:core.hybrid_scraper_v2:🚨 All HTTP methods failed with exceptions - trying PROXY FALLBACK
+2025-12-01T11:11:07.693870642Z [err]  INFO:core.hybrid_scraper_v2:🚫 Site not in proxy whitelist - skipping ScraperAPI
+2025-12-01T11:11:07.693877150Z [err]  INFO:core.hybrid_scraper_v2:🔍 Basic HTTP result: success=False, error=SocketTimeoutError: Timeout on reading data from socket
+2025-12-01T11:11:07.693884165Z [err]  ERROR:core.hybrid_scraper_v2:❌ Basic HTTP FAILED: SocketTimeoutError: Timeout on reading data from socket
+2025-12-01T11:11:07.693894867Z [err]  ERROR:core.hybrid_scraper_v2:❌ ALL METHODS FAILED for https://www.enginiasrl.com after 34.25s
+2025-12-01T11:11:07.693902723Z [err]  WARNING:root:⚠️ Scraping failed for https://www.enginiasrl.com: All scraping methods failed. Last error: SocketTimeoutError: Timeout on reading data from socket
+2025-12-01T11:11:07.693909822Z [err]  INFO:root:📊 Streaming analysis 28/47: http://www.euroklimat.it
+2025-12-01T11:11:07.693917231Z [err]  INFO:core.hybrid_scraper_v2:🎯 Starting ULTRA-INTELLIGENT scrape for: http://www.euroklimat.it
+2025-12-01T11:11:27.752884719Z [err]  ERROR:asyncio:Task exception was never retrieved
+2025-12-01T11:11:27.752889082Z [err]  future: <Task finished name='Task-750' coro=<Connection.run.<locals>.init() done, defined at /usr/local/lib/python3.12/site-packages/playwright/_impl/_connection.py:309> exception=Exception('Connection.init: Connection closed while reading from the driver')>
+2025-12-01T11:11:27.752893298Z [err]  Traceback (most recent call last):
+2025-12-01T11:11:27.752897911Z [err]    File "/usr/local/lib/python3.12/site-packages/playwright/_impl/_connection.py", line 310, in init
+2025-12-01T11:11:27.752901894Z [err]      self.playwright_future.set_result(await self._root_object.initialize())
+2025-12-01T11:11:27.752906020Z [err]                                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+2025-12-01T11:11:27.752911011Z [err]    File "/usr/local/lib/python3.12/site-packages/playwright/_impl/_connection.py", line 251, in initialize
+2025-12-01T11:11:27.752915449Z [err]      await self._channel.send(
+2025-12-01T11:11:27.752920502Z [err]    File "/usr/local/lib/python3.12/site-packages/playwright/_impl/_connection.py", line 69, in send
+2025-12-01T11:11:27.752926486Z [err]      return await self._connection.wrap_api_call(
+2025-12-01T11:11:27.752931004Z [err]             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+2025-12-01T11:11:27.752935228Z [err]    File "/usr/local/lib/python3.12/site-packages/playwright/_impl/_connection.py", line 559, in wrap_api_call
+2025-12-01T11:11:27.752940565Z [err]      raise rewrite_error(error, f"{parsed_st['apiName']}: {error}") from None
+2025-12-01T11:11:27.752945647Z [err]  Exception: Connection.init: Connection closed while reading from the driver
+2025-12-01T11:11:27.752954364Z [err]  
+2025-12-01T11:11:27.752959557Z [err]    #  /usr/local/lib/python3.12/site-packages/playwright/driver/node[3614]: std::unique_ptr<long unsigned int> node::WorkerThreadsTaskRunner::DelayedTaskScheduler::Start() at ../src/node_platform.cc:104
+2025-12-01T11:11:27.756153224Z [err]    #  Assertion failed: (0) == (uv_thread_create(t.get(), start_thread, this))
+2025-12-01T11:11:27.756158136Z [err]  
+2025-12-01T11:11:27.756162122Z [err]  ----- Native stack trace -----
+2025-12-01T11:11:27.756165817Z [err]  
+2025-12-01T11:11:27.756170680Z [err]   1: 0xf8b177 node::Assert(node::AssertionInfo const&) [/usr/local/lib/python3.12/site-packages/playwright/driver/node]
+2025-12-01T11:11:27.756174686Z [err]   2: 0x101807a node::WorkerThreadsTaskRunner::WorkerThreadsTaskRunner(int, node::PlatformDebugLogLevel) [/usr/local/lib/python3.12/site-packages/playwright/driver/node]
+2025-12-01T11:11:27.756179949Z [err]   3: 0x1018180 node::NodePlatform::NodePlatform(int, v8::TracingController*, v8::PageAllocator*) [/usr/local/lib/python3.12/site-packages/playwright/driver/node]
+2025-12-01T11:11:27.756183550Z [err]   4: 0xf36f9e  [/usr/local/lib/python3.12/site-packages/playwright/driver/node]
+2025-12-01T11:11:27.756188150Z [err]   5: 0xf3857c node::Start(int, char**) [/usr/local/lib/python3.12/site-packages/playwright/driver/node]
+2025-12-01T11:11:27.756192788Z [err]   6: 0x7fd974c3524a  [/lib/x86_64-linux-gnu/libc.so.6]
+2025-12-01T11:11:27.756197182Z [err]   7: 0x7fd974c35305 __libc_start_main [/lib/x86_64-linux-gnu/libc.so.6]
+2025-12-01T11:11:27.756201454Z [err]   8: 0xe7dc7e _start [/usr/local/lib/python3.12/site-packages/playwright/driver/node]
+2025-12-01T11:11:27.756206102Z [err]  ERROR:core.advanced_scraper:❌ Attempt 1 failed for http://www.euroklimat.it: Connection closed while reading from the driver
+2025-12-01T11:11:30.820273036Z [err]  ERROR:core.advanced_scraper:🚫 All attempts failed for http://www.euroklimat.it
+2025-12-01T11:11:30.820282200Z [err]  INFO:core.hybrid_scraper_v2:🚨 TRYING BASIC HTTP for http://www.euroklimat.it - FORCED!
+2025-12-01T11:11:30.820290922Z [err]  INFO:core.hybrid_scraper_v2:🚀 Basic HTTP starting for: http://www.euroklimat.it
+2025-12-01T11:11:30.820299221Z [err]  INFO:core.hybrid_scraper_v2:🎭 Using rotated UA: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:1...
+2025-12-01T11:11:30.820305252Z [err]  INFO:core.hybrid_scraper_v2:🔧 Basic HTTP: Creating session with EXPERT timeouts (5s total)
+2025-12-01T11:11:30.820311605Z [err]  INFO:core.hybrid_scraper_v2:🌐 Basic HTTP: Attempt 1/2 - Making request to http://www.euroklimat.it
+2025-12-01T11:11:30.820317457Z [err]  INFO:core.hybrid_scraper_v2:📊 Basic HTTP: Got response status 200
+2025-12-01T11:11:30.820324263Z [err]  WARNING:core.hybrid_scraper_v2:⚠️ Attempt 1 failed: ClientPayloadError: 400, message:
+2025-12-01T11:11:30.820333353Z [err]    Can not decode content-encoding: br
+2025-12-01T11:11:30.820340101Z [err]  INFO:core.hybrid_scraper_v2:🌐 Basic HTTP: Attempt 2/2 - Making request to http://www.euroklimat.it
+2025-12-01T11:11:30.919937872Z [err]  INFO:core.hybrid_scraper_v2:📊 Basic HTTP: Got response status 200
+2025-12-01T11:11:30.930385914Z [err]  WARNING:core.hybrid_scraper_v2:⚠️ Attempt 2 failed: ClientPayloadError: 400, message:
+2025-12-01T11:11:30.930390903Z [err]    Can not decode content-encoding: br
+2025-12-01T11:11:30.930396205Z [err]  ERROR:core.hybrid_scraper_v2:💥 Basic HTTP EXCEPTION: ClientPayloadError: 400, message:
+2025-12-01T11:11:30.930402554Z [err]    Can not decode content-encoding: br
+2025-12-01T11:11:30.930409576Z [err]  ERROR:core.hybrid_scraper_v2:🔍 Exception details: ClientPayloadError('400, message:\n  Can not decode content-encoding: br')
+2025-12-01T11:11:30.930415125Z [err]  ERROR:core.hybrid_scraper_v2:📝 Exception args: ('400, message:\n  Can not decode content-encoding: br',)
+2025-12-01T11:11:30.930420181Z [err]  INFO:core.hybrid_scraper_v2:🚨 All HTTP methods failed with exceptions - trying PROXY FALLBACK
+2025-12-01T11:11:30.930425624Z [err]  INFO:core.hybrid_scraper_v2:🚫 Site not in proxy whitelist - skipping ScraperAPI
+2025-12-01T11:11:30.930433462Z [err]  INFO:core.hybrid_scraper_v2:🔍 Basic HTTP result: success=False, error=ClientPayloadError: 400, message:
+2025-12-01T11:11:30.930438387Z [err]    Can not decode content-encoding: br
+2025-12-01T11:11:30.930443268Z [err]  ERROR:core.hybrid_scraper_v2:❌ Basic HTTP FAILED: ClientPayloadError: 400, message:
+2025-12-01T11:11:30.930449558Z [err]    Can not decode content-encoding: br
+2025-12-01T11:11:30.930455404Z [err]  ERROR:core.hybrid_scraper_v2:❌ ALL METHODS FAILED for http://www.euroklimat.it after 23.52s
+2025-12-01T11:11:30.930462088Z [err]  WARNING:root:⚠️ Scraping failed for http://www.euroklimat.it: All scraping methods failed. Last error: ClientPayloadError: 400, message:
+2025-12-01T11:11:30.930467983Z [err]    Can not decode content-encoding: br
+2025-12-01T11:11:30.933108918Z [err]  INFO:root:📊 Streaming analysis 29/47: https://www.columbiasrl.it
+2025-12-01T11:11:30.933116560Z [err]  INFO:core.hybrid_scraper_v2:🎯 Starting ULTRA-INTELLIGENT scrape for: https://www.columbiasrl.it
+2025-12-01T11:11:34.969836858Z [inf]  INFO:     100.64.0.5:19296 - "GET /health HTTP/1.1" 200 OK
+2025-12-01T11:11:54.958263591Z [err]  
+2025-12-01T11:11:54.958269846Z [err]    #  /usr/local/lib/python3.12/site-packages/playwright/driver/node[3618]: std::unique_ptr<long unsigned int> node::WorkerThreadsTaskRunner::DelayedTaskScheduler::Start() at ../src/node_platform.cc:104
+2025-12-01T11:11:54.958275201Z [err]    #  Assertion failed: (0) == (uv_thread_create(t.get(), start_thread, this))
+2025-12-01T11:11:54.958280952Z [err]  
+2025-12-01T11:11:54.958286106Z [err]  ----- Native stack trace -----
+2025-12-01T11:11:54.958292300Z [err]  
+2025-12-01T11:11:54.958297894Z [err]   1: 0xf8b177 node::Assert(node::AssertionInfo const&) [/usr/local/lib/python3.12/site-packages/playwright/driver/node]
+2025-12-01T11:11:54.958303892Z [err]   2: 0x101807a node::WorkerThreadsTaskRunner::WorkerThreadsTaskRunner(int, node::PlatformDebugLogLevel) [/usr/local/lib/python3.12/site-packages/playwright/driver/node]
+2025-12-01T11:11:54.958309474Z [err]   3: 0x1018180 node::NodePlatform::NodePlatform(int, v8::TracingController*, v8::PageAllocator*) [/usr/local/lib/python3.12/site-packages/playwright/driver/node]
+2025-12-01T11:11:54.958314406Z [err]   4: 0xf36f9e  [/usr/local/lib/python3.12/site-packages/playwright/driver/node]
+2025-12-01T11:11:54.958326781Z [err]   5: 0xf3857c node::Start(int, char**) [/usr/local/lib/python3.12/site-packages/playwright/driver/node]
+2025-12-01T11:11:54.958332697Z [err]   6: 0x7fc7ae4a524a  [/lib/x86_64-linux-gnu/libc.so.6]
+2025-12-01T11:11:54.958337362Z [err]   7: 0x7fc7ae4a5305 __libc_start_main [/lib/x86_64-linux-gnu/libc.so.6]
+2025-12-01T11:11:54.958341934Z [err]   8: 0xe7dc7e _start [/usr/local/lib/python3.12/site-packages/playwright/driver/node]
+2025-12-01T11:11:54.958347427Z [err]  ERROR:core.advanced_scraper:❌ Attempt 1 failed for https://www.columbiasrl.it: Connection closed while reading from the driver
+2025-12-01T11:11:58.919419584Z [err]  ERROR:core.advanced_scraper:🚫 All attempts failed for https://www.columbiasrl.it
+2025-12-01T11:11:58.919425708Z [err]  INFO:core.hybrid_scraper_v2:🚨 TRYING BASIC HTTP for https://www.columbiasrl.it - FORCED!
+2025-12-01T11:11:58.919431085Z [err]  INFO:core.hybrid_scraper_v2:🚀 Basic HTTP starting for: https://www.columbiasrl.it
+2025-12-01T11:11:58.919435834Z [err]  INFO:core.hybrid_scraper_v2:🎭 Using rotated UA: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWeb...
+2025-12-01T11:11:58.919440788Z [err]  INFO:core.hybrid_scraper_v2:🔧 Basic HTTP: Creating session with EXPERT timeouts (5s total)
+2025-12-01T11:11:58.919445602Z [err]  INFO:core.hybrid_scraper_v2:🌐 Basic HTTP: Attempt 1/2 - Making request to https://www.columbiasrl.it
+2025-12-01T11:11:58.919451710Z [err]  WARNING:core.hybrid_scraper_v2:🌐 Connection Error on attempt 1: Cannot connect to host www.columbiasrl.it:443 ssl:True [SSLCertVerificationError: (1, '[SSL: CERTIFICATE_VERIFY_FAILED] certificate verify failed: certificate has expired (_ssl.c:1010)')]
+2025-12-01T11:11:58.919457098Z [err]  INFO:core.hybrid_scraper_v2:🌐 Basic HTTP: Attempt 2/2 - Making request to https://www.columbiasrl.it
+2025-12-01T11:11:58.919462713Z [err]  ERROR:asyncio:Task exception was never retrieved
+2025-12-01T11:11:58.919472500Z [err]  future: <Task finished name='Task-761' coro=<Connection.run.<locals>.init() done, defined at /usr/local/lib/python3.12/site-packages/playwright/_impl/_connection.py:309> exception=Exception('Connection.init: Connection closed while reading from the driver')>
+2025-12-01T11:11:58.919477650Z [err]  Traceback (most recent call last):
+2025-12-01T11:11:58.919483248Z [err]    File "/usr/local/lib/python3.12/site-packages/playwright/_impl/_connection.py", line 310, in init
+2025-12-01T11:11:58.919488106Z [err]      self.playwright_future.set_result(await self._root_object.initialize())
+2025-12-01T11:11:58.919494550Z [err]                                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+2025-12-01T11:11:58.919523215Z [err]    File "/usr/local/lib/python3.12/site-packages/playwright/_impl/_connection.py", line 251, in initialize
+2025-12-01T11:11:58.919530361Z [err]      await self._channel.send(
+2025-12-01T11:11:58.919536155Z [err]    File "/usr/local/lib/python3.12/site-packages/playwright/_impl/_connection.py", line 69, in send
+2025-12-01T11:11:58.919543033Z [err]      return await self._connection.wrap_api_call(
+2025-12-01T11:11:58.919549466Z [err]             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+2025-12-01T11:11:58.919560689Z [err]    File "/usr/local/lib/python3.12/site-packages/playwright/_impl/_connection.py", line 559, in wrap_api_call
+2025-12-01T11:11:58.919566142Z [err]      raise rewrite_error(error, f"{parsed_st['apiName']}: {error}") from None
+2025-12-01T11:11:58.919572272Z [err]  Exception: Connection.init: Connection closed while reading from the driver
+2025-12-01T11:11:58.919578107Z [err]  ERROR:asyncio:Task exception was never retrieved
+2025-12-01T11:11:58.919583079Z [err]  future: <Task finished name='Task-776' coro=<Connection.run.<locals>.init() done, defined at /usr/local/lib/python3.12/site-packages/playwright/_impl/_connection.py:309> exception=Exception('Connection.init: Connection closed while reading from the driver')>
+2025-12-01T11:11:58.919590882Z [err]  Traceback (most recent call last):
+2025-12-01T11:11:58.919595228Z [err]    File "/usr/local/lib/python3.12/site-packages/playwright/_impl/_connection.py", line 310, in init
+2025-12-01T11:11:58.919599693Z [err]      self.playwright_future.set_result(await self._root_object.initialize())
+2025-12-01T11:11:58.919604657Z [err]                                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+2025-12-01T11:11:58.919609705Z [err]    File "/usr/local/lib/python3.12/site-packages/playwright/_impl/_connection.py", line 251, in initialize
+2025-12-01T11:11:58.919615059Z [err]      await self._channel.send(
+2025-12-01T11:11:58.919620023Z [err]    File "/usr/local/lib/python3.12/site-packages/playwright/_impl/_connection.py", line 69, in send
+2025-12-01T11:11:58.919625856Z [err]      return await self._connection.wrap_api_call(
+2025-12-01T11:11:58.919634291Z [err]             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+2025-12-01T11:11:58.919639730Z [err]    File "/usr/local/lib/python3.12/site-packages/playwright/_impl/_connection.py", line 559, in wrap_api_call
+2025-12-01T11:11:58.919662688Z [err]      raise rewrite_error(error, f"{parsed_st['apiName']}: {error}") from None
+2025-12-01T11:11:58.919668559Z [err]  Exception: Connection.init: Connection closed while reading from the driver
+2025-12-01T11:11:59.909466538Z [err]  INFO:core.hybrid_scraper_v2:📊 Basic HTTP: Got response status 200
+2025-12-01T11:11:59.909474092Z [err]  INFO:core.hybrid_scraper_v2:✅ Basic HTTP SUCCESS (200): 43349 characters received
+2025-12-01T11:11:59.909479315Z [err]  INFO:core.hybrid_scraper_v2:🔍 Basic HTTP result: success=True, error=
+2025-12-01T11:11:59.909485238Z [err]  INFO:core.hybrid_scraper_v2:✅ Basic HTTP SUCCESS: 20 keywords
+2025-12-01T11:12:00.942758436Z [err]  INFO:core.matching:🔍 Keyword splitting: 2 phrases → 3 words
+2025-12-01T11:12:00.942768079Z [err]  INFO:core.matching:📊 Matching analysis: 2 original keywords → 3 words
+2025-12-01T11:12:00.942774925Z [err]  INFO:core.semantic_filter:Starting semantic analysis with 3 keywords
+2025-12-01T11:12:00.964711972Z [err]  INFO:root:✅ https://www.columbiasrl.it: 14% match
+2025-12-01T11:12:00.964720310Z [err]  INFO:root:📊 Streaming analysis 30/47: http://www.axialfansint.com
+2025-12-01T11:12:00.964725830Z [err]  INFO:core.hybrid_scraper_v2:🎯 Starting ULTRA-INTELLIGENT scrape for: http://www.axialfansint.com
+2025-12-01T11:12:04.981163221Z [inf]  INFO:     100.64.0.5:27382 - "GET /health HTTP/1.1" 200 OK
+2025-12-01T11:12:24.547624510Z [err]   6: 0x7f088ab1024a  [/lib/x86_64-linux-gnu/libc.so.6]
+2025-12-01T11:12:24.547644836Z [err]   7: 0x7f088ab10305 __libc_start_main [/lib/x86_64-linux-gnu/libc.so.6]
+2025-12-01T11:12:24.547650372Z [err]  
+2025-12-01T11:12:24.547660236Z [err]   8: 0xe7dc7e _start [/usr/local/lib/python3.12/site-packages/playwright/driver/node]
+2025-12-01T11:12:24.547663075Z [err]    #  /usr/local/lib/python3.12/site-packages/playwright/driver/node[3622]: std::unique_ptr<long unsigned int> node::WorkerThreadsTaskRunner::DelayedTaskScheduler::Start() at ../src/node_platform.cc:104
+2025-12-01T11:12:24.547673536Z [err]  ERROR:core.advanced_scraper:❌ Attempt 1 failed for http://www.axialfansint.com: Connection closed while reading from the driver
+2025-12-01T11:12:24.547676196Z [err]    #  Assertion failed: (0) == (uv_thread_create(t.get(), start_thread, this))
+2025-12-01T11:12:24.547684445Z [err]  
+2025-12-01T11:12:24.547692786Z [err]  ----- Native stack trace -----
+2025-12-01T11:12:24.547699380Z [err]  
+2025-12-01T11:12:24.547707255Z [err]   1: 0xf8b177 node::Assert(node::AssertionInfo const&) [/usr/local/lib/python3.12/site-packages/playwright/driver/node]
+2025-12-01T11:12:24.547714295Z [err]   2: 0x101807a node::WorkerThreadsTaskRunner::WorkerThreadsTaskRunner(int, node::PlatformDebugLogLevel) [/usr/local/lib/python3.12/site-packages/playwright/driver/node]
+2025-12-01T11:12:24.547720731Z [err]   3: 0x1018180 node::NodePlatform::NodePlatform(int, v8::TracingController*, v8::PageAllocator*) [/usr/local/lib/python3.12/site-packages/playwright/driver/node]
+2025-12-01T11:12:24.547727942Z [err]   4: 0xf36f9e  [/usr/local/lib/python3.12/site-packages/playwright/driver/node]
+2025-12-01T11:12:24.547736559Z [err]   5: 0xf3857c node::Start(int, char**) [/usr/local/lib/python3.12/site-packages/playwright/driver/node]
+2025-12-01T11:12:31.124007353Z [err]  INFO:core.hybrid_scraper_v2:✅ Basic HTTP SUCCESS (200): 40471 characters received
+2025-12-01T11:12:31.124022280Z [err]  INFO:core.hybrid_scraper_v2:🔍 Basic HTTP result: success=True, error=
+2025-12-01T11:12:31.124030992Z [err]  ERROR:asyncio:Task exception was never retrieved
+2025-12-01T11:12:31.124037842Z [err]  future: <Task finished name='Task-792' coro=<Connection.run.<locals>.init() done, defined at /usr/local/lib/python3.12/site-packages/playwright/_impl/_connection.py:309> exception=Exception('Connection.init: Connection closed while reading from the driver')>
+2025-12-01T11:12:31.124062116Z [err]  Traceback (most recent call last):
+2025-12-01T11:12:31.124073459Z [err]  ERROR:core.advanced_scraper:🚫 All attempts failed for http://www.axialfansint.com
+2025-12-01T11:12:31.124073917Z [err]    File "/usr/local/lib/python3.12/site-packages/playwright/_impl/_connection.py", line 310, in init
+2025-12-01T11:12:31.124083013Z [err]      self.playwright_future.set_result(await self._root_object.initialize())
+2025-12-01T11:12:31.124083864Z [err]  INFO:core.hybrid_scraper_v2:🚨 TRYING BASIC HTTP for http://www.axialfansint.com - FORCED!
+2025-12-01T11:12:31.124092117Z [err]                                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+2025-12-01T11:12:31.124094632Z [err]  INFO:core.hybrid_scraper_v2:🚀 Basic HTTP starting for: http://www.axialfansint.com
+2025-12-01T11:12:31.124099037Z [err]    File "/usr/local/lib/python3.12/site-packages/playwright/_impl/_connection.py", line 251, in initialize
+2025-12-01T11:12:31.124102148Z [err]  INFO:core.hybrid_scraper_v2:🎭 Using rotated UA: Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) Ap...
+2025-12-01T11:12:31.124108108Z [err]  INFO:core.hybrid_scraper_v2:🔧 Basic HTTP: Creating session with EXPERT timeouts (5s total)
+2025-12-01T11:12:31.124116007Z [err]  INFO:core.hybrid_scraper_v2:🌐 Basic HTTP: Attempt 1/2 - Making request to http://www.axialfansint.com
+2025-12-01T11:12:31.124123559Z [err]  INFO:core.hybrid_scraper_v2:📊 Basic HTTP: Got response status 200
+2025-12-01T11:12:31.127165310Z [err]      await self._channel.send(
+2025-12-01T11:12:31.127170778Z [err]    File "/usr/local/lib/python3.12/site-packages/playwright/_impl/_connection.py", line 69, in send
+2025-12-01T11:12:31.127176040Z [err]      return await self._connection.wrap_api_call(
+2025-12-01T11:12:31.127183709Z [err]             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+2025-12-01T11:12:31.127188981Z [err]    File "/usr/local/lib/python3.12/site-packages/playwright/_impl/_connection.py", line 559, in wrap_api_call
+2025-12-01T11:12:31.127195014Z [err]      raise rewrite_error(error, f"{parsed_st['apiName']}: {error}") from None
+2025-12-01T11:12:31.127200714Z [err]  Exception: Connection.init: Connection closed while reading from the driver
+2025-12-01T11:12:31.127206530Z [err]  INFO:core.hybrid_scraper_v2:✅ Basic HTTP SUCCESS: 20 keywords
+2025-12-01T11:12:31.287115857Z [err]  INFO:core.matching:🔍 Keyword splitting: 2 phrases → 3 words
+2025-12-01T11:12:31.287123365Z [err]  INFO:core.matching:📊 Matching analysis: 2 original keywords → 3 words
+2025-12-01T11:12:31.287129653Z [err]  INFO:core.semantic_filter:Starting semantic analysis with 3 keywords
+2025-12-01T11:12:31.290426448Z [err]  INFO:root:✅ http://www.axialfansint.com: 26% match
+2025-12-01T11:12:31.294669132Z [err]  INFO:root:📊 Streaming analysis 31/47: https://www.evapco.eu
+2025-12-01T11:12:31.294679183Z [err]  INFO:core.hybrid_scraper_v2:🎯 Starting ULTRA-INTELLIGENT scrape for: https://www.evapco.eu
+2025-12-01T11:12:35.228346633Z [inf]  INFO:     100.64.0.5:22702 - "GET /health HTTP/1.1" 200 OK
+2025-12-01T11:12:55.230098422Z [err]  
+2025-12-01T11:12:55.230109187Z [err]    #  /usr/local/lib/python3.12/site-packages/playwright/driver/node[3626]: std::unique_ptr<long unsigned int> node::WorkerThreadsTaskRunner::DelayedTaskScheduler::Start() at ../src/node_platform.cc:104
+2025-12-01T11:12:55.230115153Z [err]    #  Assertion failed: (0) == (uv_thread_create(t.get(), start_thread, this))
+2025-12-01T11:12:55.230121076Z [err]  
+2025-12-01T11:12:55.230128338Z [err]  ----- Native stack trace -----
+2025-12-01T11:12:55.230133496Z [err]  
+2025-12-01T11:12:55.230139340Z [err]   1: 0xf8b177 node::Assert(node::AssertionInfo const&) [/usr/local/lib/python3.12/site-packages/playwright/driver/node]
+2025-12-01T11:12:55.230144733Z [err]   2: 0x101807a node::WorkerThreadsTaskRunner::WorkerThreadsTaskRunner(int, node::PlatformDebugLogLevel) [/usr/local/lib/python3.12/site-packages/playwright/driver/node]
+2025-12-01T11:12:55.230149980Z [err]   3: 0x1018180 node::NodePlatform::NodePlatform(int, v8::TracingController*, v8::PageAllocator*) [/usr/local/lib/python3.12/site-packages/playwright/driver/node]
+2025-12-01T11:12:55.230156266Z [err]   4: 0xf36f9e  [/usr/local/lib/python3.12/site-packages/playwright/driver/node]
+2025-12-01T11:12:55.230160921Z [err]   5: 0xf3857c node::Start(int, char**) [/usr/local/lib/python3.12/site-packages/playwright/driver/node]
+2025-12-01T11:12:55.230165905Z [err]   6: 0x7fc0001b524a  [/lib/x86_64-linux-gnu/libc.so.6]
+2025-12-01T11:12:55.230173522Z [err]   7: 0x7fc0001b5305 __libc_start_main [/lib/x86_64-linux-gnu/libc.so.6]
+2025-12-01T11:12:55.230178074Z [err]   8: 0xe7dc7e _start [/usr/local/lib/python3.12/site-packages/playwright/driver/node]
+2025-12-01T11:12:55.230182912Z [err]  ERROR:core.advanced_scraper:❌ Attempt 1 failed for https://www.evapco.eu: Connection closed while reading from the driver
+2025-12-01T11:12:55.230187805Z [err]  ERROR:core.advanced_scraper:🚫 All attempts failed for https://www.evapco.eu
+2025-12-01T11:12:55.232502917Z [err]  INFO:core.hybrid_scraper_v2:🚨 TRYING BASIC HTTP for https://www.evapco.eu - FORCED!
+2025-12-01T11:12:55.232509009Z [err]  INFO:core.hybrid_scraper_v2:🚀 Basic HTTP starting for: https://www.evapco.eu
+2025-12-01T11:12:55.232515480Z [err]  INFO:core.hybrid_scraper_v2:🎭 Using rotated UA: Mozilla/5.0 (Android 14; Mobile; rv:121.0) Gecko/1...
+2025-12-01T11:12:55.232520250Z [err]  INFO:core.hybrid_scraper_v2:🔧 Basic HTTP: Creating session with EXPERT timeouts (5s total)
+2025-12-01T11:12:55.232526108Z [err]  INFO:core.hybrid_scraper_v2:🌐 Basic HTTP: Attempt 1/2 - Making request to https://www.evapco.eu
+2025-12-01T11:12:55.232534812Z [err]  INFO:core.hybrid_scraper_v2:📊 Basic HTTP: Got response status 200
+2025-12-01T11:12:55.232540676Z [err]  INFO:core.hybrid_scraper_v2:✅ Basic HTTP SUCCESS (200): 177738 characters received
+2025-12-01T11:12:55.232545388Z [err]  INFO:core.hybrid_scraper_v2:🔍 Basic HTTP result: success=True, error=
+2025-12-01T11:12:55.232551227Z [err]  ERROR:asyncio:Task exception was never retrieved
+2025-12-01T11:12:55.232555791Z [err]  future: <Task finished name='Task-811' coro=<Connection.run.<locals>.init() done, defined at /usr/local/lib/python3.12/site-packages/playwright/_impl/_connection.py:309> exception=Exception('Connection.init: Connection closed while reading from the driver')>
+2025-12-01T11:12:55.232560365Z [err]  Traceback (most recent call last):
+2025-12-01T11:12:55.232565282Z [err]    File "/usr/local/lib/python3.12/site-packages/playwright/_impl/_connection.py", line 310, in init
+2025-12-01T11:12:55.232570396Z [err]      self.playwright_future.set_result(await self._root_object.initialize())
+2025-12-01T11:12:55.232576729Z [err]                                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+2025-12-01T11:12:55.232582401Z [err]    File "/usr/local/lib/python3.12/site-packages/playwright/_impl/_connection.py", line 251, in initialize
+2025-12-01T11:12:55.234780032Z [err]      await self._channel.send(
+2025-12-01T11:12:55.234790951Z [err]    File "/usr/local/lib/python3.12/site-packages/playwright/_impl/_connection.py", line 69, in send
+2025-12-01T11:12:55.234798919Z [err]      return await self._connection.wrap_api_call(
+2025-12-01T11:12:55.234806113Z [err]             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+2025-12-01T11:12:55.234814714Z [err]    File "/usr/local/lib/python3.12/site-packages/playwright/_impl/_connection.py", line 559, in wrap_api_call
+2025-12-01T11:12:55.234821122Z [err]      raise rewrite_error(error, f"{parsed_st['apiName']}: {error}") from None
+2025-12-01T11:12:55.234831393Z [err]  Exception: Connection.init: Connection closed while reading from the driver
+2025-12-01T11:12:55.234837778Z [err]  INFO:core.hybrid_scraper_v2:✅ Basic HTTP SUCCESS: 20 keywords
+2025-12-01T11:12:55.234843822Z [err]  INFO:core.matching:🔍 Keyword splitting: 2 phrases → 3 words
+2025-12-01T11:12:55.234852814Z [err]  INFO:core.matching:📊 Matching analysis: 2 original keywords → 3 words
+2025-12-01T11:12:55.234859589Z [err]  INFO:core.semantic_filter:Starting semantic analysis with 3 keywords
+2025-12-01T11:12:55.234864675Z [err]  INFO:root:✅ https://www.evapco.eu: 21% match
+2025-12-01T11:12:55.234870013Z [err]  INFO:root:📊 Streaming analysis 32/47: http://www.recuperator.eu
+2025-12-01T11:12:55.234877759Z [err]  INFO:core.hybrid_scraper_v2:🎯 Starting ULTRA-INTELLIGENT scrape for: http://www.recuperator.eu
+2025-12-01T11:13:05.130509826Z [inf]  INFO:     100.64.0.5:51934 - "GET /health HTTP/1.1" 200 OK
+2025-12-01T11:13:08.149874919Z [err]  
+2025-12-01T11:13:08.149884003Z [err]    #  /usr/local/lib/python3.12/site-packages/playwright/driver/node[3630]: std::unique_ptr<long unsigned int> node::WorkerThreadsTaskRunner::DelayedTaskScheduler::Start() at ../src/node_platform.cc:104
+2025-12-01T11:13:08.149896801Z [err]   3: 0x1018180 node::NodePlatform::NodePlatform(int, v8::TracingController*, v8::PageAllocator*) [/usr/local/lib/python3.12/site-packages/playwright/driver/node]
+2025-12-01T11:13:08.149896929Z [err]    #  Assertion failed: (0) == (uv_thread_create(t.get(), start_thread, this))
+2025-12-01T11:13:08.149907538Z [err]  
+2025-12-01T11:13:08.149912334Z [err]   4: 0xf36f9e  [/usr/local/lib/python3.12/site-packages/playwright/driver/node]
+2025-12-01T11:13:08.149920440Z [err]  ----- Native stack trace -----
+2025-12-01T11:13:08.149926666Z [err]   5: 0xf3857c node::Start(int, char**) [/usr/local/lib/python3.12/site-packages/playwright/driver/node]
+2025-12-01T11:13:08.149932889Z [err]  
+2025-12-01T11:13:08.149943729Z [err]   6: 0x7fd0fab1c24a  [/lib/x86_64-linux-gnu/libc.so.6]
+2025-12-01T11:13:08.149945242Z [err]   1: 0xf8b177 node::Assert(node::AssertionInfo const&) [/usr/local/lib/python3.12/site-packages/playwright/driver/node]
+2025-12-01T11:13:08.149957545Z [err]   2: 0x101807a node::WorkerThreadsTaskRunner::WorkerThreadsTaskRunner(int, node::PlatformDebugLogLevel) [/usr/local/lib/python3.12/site-packages/playwright/driver/node]
+2025-12-01T11:13:08.149959699Z [err]   7: 0x7fd0fab1c305 __libc_start_main [/lib/x86_64-linux-gnu/libc.so.6]
+2025-12-01T11:13:08.149970361Z [err]   8: 0xe7dc7e _start [/usr/local/lib/python3.12/site-packages/playwright/driver/node]
+2025-12-01T11:13:08.149979369Z [err]  ERROR:core.advanced_scraper:❌ Attempt 1 failed for http://www.recuperator.eu: Connection closed while reading from the driver
+2025-12-01T11:13:15.210543282Z [err]  ERROR:core.advanced_scraper:🚫 All attempts failed for http://www.recuperator.eu
+2025-12-01T11:13:15.210549817Z [err]  INFO:core.hybrid_scraper_v2:🚨 TRYING BASIC HTTP for http://www.recuperator.eu - FORCED!
+2025-12-01T11:13:15.210557243Z [err]  INFO:core.hybrid_scraper_v2:🚀 Basic HTTP starting for: http://www.recuperator.eu
+2025-12-01T11:13:15.210565172Z [err]  INFO:core.hybrid_scraper_v2:🎭 Using rotated UA: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWeb...
+2025-12-01T11:13:15.210574268Z [err]  INFO:core.hybrid_scraper_v2:🔧 Basic HTTP: Creating session with EXPERT timeouts (5s total)
+2025-12-01T11:13:15.210585408Z [err]  INFO:core.hybrid_scraper_v2:🌐 Basic HTTP: Attempt 1/2 - Making request to http://www.recuperator.eu
+2025-12-01T11:13:15.384355956Z [err]  INFO:core.hybrid_scraper_v2:📊 Basic HTTP: Got response status 200
+2025-12-01T11:13:15.384362245Z [err]  INFO:core.hybrid_scraper_v2:✅ Basic HTTP SUCCESS (200): 119433 characters received
+2025-12-01T11:13:15.384368878Z [err]  INFO:core.hybrid_scraper_v2:🔍 Basic HTTP result: success=True, error=
+2025-12-01T11:13:15.387301957Z [err]  ERROR:asyncio:Task exception was never retrieved
+2025-12-01T11:13:15.387311386Z [err]      self.playwright_future.set_result(await self._root_object.initialize())
+2025-12-01T11:13:15.387312427Z [err]  future: <Task finished name='Task-826' coro=<Connection.run.<locals>.init() done, defined at /usr/local/lib/python3.12/site-packages/playwright/_impl/_connection.py:309> exception=Exception('Connection.init: Connection closed while reading from the driver')>
+2025-12-01T11:13:15.387321742Z [err]                                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+2025-12-01T11:13:15.387325789Z [err]  Traceback (most recent call last):
+2025-12-01T11:13:15.387328244Z [err]    File "/usr/local/lib/python3.12/site-packages/playwright/_impl/_connection.py", line 251, in initialize
+2025-12-01T11:13:15.387334032Z [err]      await self._channel.send(
+2025-12-01T11:13:15.387335331Z [err]    File "/usr/local/lib/python3.12/site-packages/playwright/_impl/_connection.py", line 310, in init
+2025-12-01T11:13:15.387338822Z [err]    File "/usr/local/lib/python3.12/site-packages/playwright/_impl/_connection.py", line 69, in send
+2025-12-01T11:13:15.387343880Z [err]      return await self._connection.wrap_api_call(
+2025-12-01T11:13:15.387348670Z [err]             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+2025-12-01T11:13:15.387354090Z [err]    File "/usr/local/lib/python3.12/site-packages/playwright/_impl/_connection.py", line 559, in wrap_api_call
+2025-12-01T11:13:15.387358694Z [err]      raise rewrite_error(error, f"{parsed_st['apiName']}: {error}") from None
+2025-12-01T11:13:15.387363665Z [err]  Exception: Connection.init: Connection closed while reading from the driver
+2025-12-01T11:13:15.415172749Z [err]  INFO:core.hybrid_scraper_v2:✅ Basic HTTP SUCCESS: 20 keywords
+2025-12-01T11:13:16.215731055Z [err]  INFO:root:✅ http://www.recuperator.eu: 25% match
+2025-12-01T11:13:16.215739299Z [err]  INFO:root:📊 Streaming analysis 33/47: https://www.oesse.com
+2025-12-01T11:13:16.215746899Z [err]  INFO:core.hybrid_scraper_v2:🎯 Starting ULTRA-INTELLIGENT scrape for: https://www.oesse.com
+2025-12-01T11:13:16.215815177Z [err]  INFO:core.matching:📊 Matching analysis: 2 original keywords → 3 words
+2025-12-01T11:13:16.215823138Z [err]  INFO:core.semantic_filter:Starting semantic analysis with 3 keywords
+2025-12-01T11:13:16.215831921Z [err]  INFO:core.matching:🔍 Keyword splitting: 2 phrases → 3 words
