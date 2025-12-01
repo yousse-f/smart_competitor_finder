@@ -229,54 +229,54 @@ async def stream_analysis_progress(urls: List[str], keywords: List[str], analysi
                         yield f"data: {json.dumps({'event': 'site_failed', 'url': url, 'reason': 'scraping_failed', 'message': error_msg})}\n\n"
                         continue
                 
-                # Extract full text
-                try:
-                    ssl_context = ssl.create_default_context()
-                    ssl_context.check_hostname = False
-                    ssl_context.verify_mode = ssl.CERT_NONE
+                    # Extract full text
+                    try:
+                        ssl_context = ssl.create_default_context()
+                        ssl_context.check_hostname = False
+                        ssl_context.verify_mode = ssl.CERT_NONE
+                        
+                        timeout = aiohttp.ClientTimeout(total=10)
+                        async with aiohttp.ClientSession(timeout=timeout) as session:
+                            async with session.get(url, ssl=ssl_context) as response:
+                                if response.status == 200:
+                                    html_content = await response.text()
+                                    soup = BeautifulSoup(html_content, 'html.parser')
+                                    for element in soup(["script", "style", "meta", "link"]):
+                                        element.decompose()
+                                    full_text = soup.get_text()
+                                    full_text = ' '.join(full_text.split())
+                                else:
+                                    full_text = ""
+                    except Exception:
+                        full_text = ""
                     
-                    timeout = aiohttp.ClientTimeout(total=10)
-                    async with aiohttp.ClientSession(timeout=timeout) as session:
-                        async with session.get(url, ssl=ssl_context) as response:
-                            if response.status == 200:
-                                html_content = await response.text()
-                                soup = BeautifulSoup(html_content, 'html.parser')
-                                for element in soup(["script", "style", "meta", "link"]):
-                                    element.decompose()
-                                full_text = soup.get_text()
-                                full_text = ' '.join(full_text.split())
-                            else:
-                                full_text = ""
-                except Exception:
-                    full_text = ""
-                
-                # 2. Calculate match score
-                match_results = await keyword_matcher.calculate_match_score(
-                    target_keywords=keywords,
-                    site_content=full_text,
-                    business_context=None,
-                    site_title=scrape_result.get('title', ''),
-                    meta_description=scrape_result.get('description', ''),
-                    client_sector_data=None
-                )
-                
-                score = int(match_results['match_score'])
-                found_keywords = match_results['found_keywords']
-                
-                match = CompetitorMatch(
-                    url=url,
-                    score=score,
-                    keywords_found=found_keywords,
-                    title=scrape_result.get('title', ''),
-                    description=scrape_result.get('description', '')
-                )
-                matches.append(match)
-                
-                # Send result event
-                yield f"data: {json.dumps({'event': 'result', 'url': url, 'score': score, 'keywords_found': found_keywords, 'title': match.title})}\n\n"
-                
-                logging.info(f"✅ {url}: {score}% match")
-                
+                    # 2. Calculate match score
+                    match_results = await keyword_matcher.calculate_match_score(
+                        target_keywords=keywords,
+                        site_content=full_text,
+                        business_context=None,
+                        site_title=scrape_result.get('title', ''),
+                        meta_description=scrape_result.get('description', ''),
+                        client_sector_data=None
+                    )
+                    
+                    score = int(match_results['match_score'])
+                    found_keywords = match_results['found_keywords']
+                    
+                    match = CompetitorMatch(
+                        url=url,
+                        score=score,
+                        keywords_found=found_keywords,
+                        title=scrape_result.get('title', ''),
+                        description=scrape_result.get('description', '')
+                    )
+                    matches.append(match)
+                    
+                    # Send result event
+                    yield f"data: {json.dumps({'event': 'result', 'url': url, 'score': score, 'keywords_found': found_keywords, 'title': match.title})}\n\n"
+                    
+                    logging.info(f"✅ {url}: {score}% match")
+                    
                     # 💾 Save progress to file
                     update_analysis_progress(
                         analysis_id=analysis_id,
