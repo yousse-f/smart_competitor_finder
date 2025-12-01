@@ -306,12 +306,13 @@ async def stream_analysis_progress(urls: List[str], keywords: List[str], analysi
                     # Send error event but continue
                     yield f"data: {json.dumps({'event': 'site_failed', 'url': url, 'reason': 'processing_error', 'message': error_msg})}\n\n"
                     
+                    # 🆕 AGGIUNGERE SITI FALLITI AL REPORT con score=0 e messaggio chiaro
                     matches.append(CompetitorMatch(
                         url=url,
                         score=0,
                         keywords_found=[],
-                        title=f"Error: {url}",
-                        description=f"Analysis failed: {error_msg}"
+                        title=f"⚠️ Errore Analisi",
+                        description=f"Impossibile analizzare questo sito: {error_msg[:100]}"
                     ))
             
             # 📦 FASE 2: Batch complete event

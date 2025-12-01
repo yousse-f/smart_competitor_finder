@@ -279,6 +279,11 @@ class HybridScraperV2:
             )
             logger.info(f"🔧 Basic HTTP: Creating session with EXPERT timeouts (5s total)")
             
+            # 🆕 BROTLI FIX: Disable Brotli compression to avoid decode errors
+            # Sites like fiat.it use Brotli (br) but aiohttp can't decode it
+            headers_no_br = headers.copy()
+            headers_no_br['Accept-Encoding'] = 'gzip, deflate'  # Remove 'br' support
+            
             # First try with SSL verification, then fallback to SSL bypass
             connectors = [
                 aiohttp.TCPConnector(ssl=None),  # Normal SSL verification
@@ -290,7 +295,8 @@ class HybridScraperV2:
                     logger.info(f"🌐 Basic HTTP: Attempt {i+1}/2 - Making request to {url}")
                     async with aiohttp.ClientSession(timeout=timeout, connector=connector) as session:
                         # FOLLOW REDIRECTS - CRUCIAL for sites like mondo-convenienza.it!
-                        async with session.get(url, headers=headers, allow_redirects=True, max_redirects=5) as response:
+                        # Use headers_no_br to avoid Brotli decode errors
+                        async with session.get(url, headers=headers_no_br, allow_redirects=True, max_redirects=5) as response:
                             duration = time.time() - start_time
                             logger.info(f"📊 Basic HTTP: Got response status {response.status}")
                             
@@ -307,8 +313,33 @@ class HybridScraperV2:
                                     content_length=content_length
                                 )
                             else:
-                                error_msg = f"HTTP {response.status}"
-                                logger.error(f"❌ Basic HTTP: Bad status code {response.status}")
+                                # 🆕 MESSAGGI ERRORE CHIARI: Titoli descrittivi invece di solo codici
+                                error_titles = {
+                                    400: "Richiesta Non Valida",
+                                    401: "Autenticazione Richiesta",
+                                    403: "Accesso Negato - Sito Protetto da WAF/Firewall",
+                                    404: "Pagina Non Trovata",
+                                    429: "Troppe Richieste - Rate Limit",
+                                    500: "Errore Server Interno",
+                                    502: "Gateway Non Raggiungibile",
+                                    503: "Servizio Temporaneamente Non Disponibile",
+                                    504: "Timeout Gateway"
+                                }
+                                error_title = error_titles.get(response.status, "Errore HTTP")
+                                error_msg = f"{error_title} (HTTP {response.status})"
+                                logger.error(f"❌ Basic HTTP: {error_msg}")
+                                
+                                # 🆕 PLAYWRIGHT FALLBACK per 403: Re-abilita browser per WAF protection
+                                if response.status == 403 and i == len(connectors) - 1:
+                                    logger.warning(f"⚡ Status 403 detected - trying Playwright fallback for WAF bypass")
+                                    try:
+                                        playwright_result = await self._scrape_with_browser_pool(url)
+                                        if playwright_result.success:
+                                            logger.info(f"✅ Playwright rescued 403 site: {len(playwright_result.content)} chars")
+                                            return playwright_result
+                                    except Exception as pw_error:
+                                        logger.warning(f"⚠️ Playwright fallback also failed: {pw_error}")
+                                
                                 if i == len(connectors) - 1:  # Last attempt
                                     return ScrapingResult(
                                         success=False,
