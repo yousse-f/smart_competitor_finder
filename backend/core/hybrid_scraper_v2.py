@@ -329,16 +329,12 @@ class HybridScraperV2:
                                 error_msg = f"{error_title} (HTTP {response.status})"
                                 logger.error(f"❌ Basic HTTP: {error_msg}")
                                 
-                                # 🆕 PLAYWRIGHT FALLBACK per 403: Re-abilita browser per WAF protection
+                                # 🆕 PLAYWRIGHT FALLBACK per 403: DISABILITATO (Railway 512MB limit)
+                                # Browser Pool non inizializzato in produzione → skip fallback
                                 if response.status == 403 and i == len(connectors) - 1:
-                                    logger.warning(f"⚡ Status 403 detected - trying Playwright fallback for WAF bypass")
-                                    try:
-                                        playwright_result = await self._scrape_with_browser_pool(url)
-                                        if playwright_result.success:
-                                            logger.info(f"✅ Playwright rescued 403 site: {len(playwright_result.content)} chars")
-                                            return playwright_result
-                                    except Exception as pw_error:
-                                        logger.warning(f"⚠️ Playwright fallback also failed: {pw_error}")
+                                    logger.warning(f"⚡ Status 403 detected but Playwright disabled (Railway RAM limit)")
+                                    # Skip Playwright fallback - would fail anyway with "not initialized"
+                                    # Accept 403 as final failure to avoid false retry attempts
                                 
                                 if i == len(connectors) - 1:  # Last attempt
                                     return ScrapingResult(
