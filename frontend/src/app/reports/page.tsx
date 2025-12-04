@@ -588,8 +588,8 @@ export default function ReportsPage() {
         doc.setFont('helvetica', 'normal');
         doc.setFontSize(9);
         
-        // Righe della tabella con classificazione KPI
-        report.matches.slice(0, 20).forEach((comp: any, index: number) => {
+        // Righe della tabella con classificazione KPI - MOSTRA TUTTI I SITI
+        report.matches.forEach((comp: any, index: number) => {
           const competitor = normalizeCompetitorData(comp);
           const status = getCompetitorStatus(competitor.score);
           

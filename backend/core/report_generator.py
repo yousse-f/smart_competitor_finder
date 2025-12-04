@@ -152,16 +152,16 @@ class ReportGenerator:
                     cell.alignment = self.styles['header']['alignment']
                 cell.border = self.styles['border']
         
-        # Top 10 competitors ordinati per score con classe KPI
-        ws['A16'] = "TOP 10 COMPETITOR PER CATEGORIA"
+        # Top 50 competitors ordinati per score con classe KPI
+        ws['A16'] = "TOP 50 COMPETITOR PER CATEGORIA"
         ws['A16'].font = Font(bold=True, size=14, color='366092')
         
-        # Sort by score and take top 10
+        # Sort by score and take top 50
         top_competitors = sorted(
             analysis_results,
             key=lambda x: x.get('score', 0),
             reverse=True
-        )[:10]
+        )[:50]
         
         headers = ["Rank", "Website", "Score", "Categoria KPI", "Azione Consigliata"]
         for col_idx, header in enumerate(headers, 1):
@@ -322,8 +322,8 @@ class ReportGenerator:
             
             row_idx += 1
             
-            # Competitor list
-            for comp in sorted(competitors, key=lambda x: x.get('score', 0), reverse=True)[:10]:  # Top 10
+            # Competitor list - top 30 per categoria
+            for comp in sorted(competitors, key=lambda x: x.get('score', 0), reverse=True)[:30]:
                 cell_data = [
                     comp.get('url', 'N/A'),
                     f"{comp.get('score', 0):.1f}%",
