@@ -47,6 +47,10 @@ class AIConfig:
     SEMANTIC_THRESHOLD: float = float(os.getenv("SEMANTIC_THRESHOLD", "0.7"))
     KEYWORD_WEIGHT: float = float(os.getenv("KEYWORD_WEIGHT", "0.4"))
     SEMANTIC_WEIGHT: float = float(os.getenv("SEMANTIC_WEIGHT", "0.6"))
+    
+    # === Generic Keyword Filter ===
+    ENABLE_GENERIC_KEYWORD_FILTER: bool = os.getenv("ENABLE_GENERIC_KEYWORD_FILTER", "true").lower() == "true"
+    GENERIC_KEYWORD_WEIGHT: float = float(os.getenv("GENERIC_KEYWORD_WEIGHT", "0.3"))
 
 @dataclass
 class ServerConfig:

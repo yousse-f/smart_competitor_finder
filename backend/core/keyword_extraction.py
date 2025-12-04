@@ -33,6 +33,87 @@ except (LookupError, OSError):
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
 
+
+# ============================================================================
+# GENERIC KEYWORDS - Keywords troppo generiche per matching di qualità
+# ============================================================================
+# Queste keywords sono comuni a migliaia di aziende e non dovrebbero
+# avere peso pieno nel calcolo dello score di matching.
+# Verranno pesate con fattore 0.3x invece di 1.0x
+
+GENERIC_KEYWORDS = {
+    # Settore HVAC/Ventilazione/Climatizzazione
+    'hvac', 'ventilazione', 'condizionamento', 'riscaldamento', 
+    'climatizzazione', 'aria', 'impianti', 'impianto',
+    'raffrescamento', 'caldo', 'freddo', 'temperatura',
+    
+    # Termini industriali generici
+    'industria', 'industriale', 'industriali', 'produzione',
+    'prodotti', 'prodotto', 'fabbricazione', 'manifattura',
+    'manufacturing', 'factory', 'plant', 'production',
+    
+    # Termini geografici
+    'italia', 'italiano', 'italiana', 'italiane', 'italiani',
+    'europa', 'europeo', 'europea', 'european', 'italy',
+    'milano', 'roma', 'torino', 'bologna',  # Città principali
+    
+    # Termini tecnologici generici
+    'tecnologia', 'tecnologie', 'tecnologico', 'tecnologica',
+    'technology', 'innovation', 'innovazione', 'innovativo',
+    'sistema', 'sistemi', 'system', 'systems',
+    'soluzione', 'soluzioni', 'solution', 'solutions',
+    
+    # Termini business/servizi generici
+    'servizio', 'servizi', 'service', 'services',
+    'fornitore', 'fornitori', 'supplier', 'suppliers',
+    'distributore', 'distribuzione', 'distribution',
+    'commercio', 'commerciale', 'commercial', 'business',
+    
+    # Termini aziendali generici
+    'azienda', 'aziende', 'impresa', 'imprese', 'società',
+    'gruppo', 'spa', 'srl', 'company', 'group', 'corporation',
+    'enterprise', 'organization', 'firm',
+    
+    # Termini di qualità/marketing generici
+    'qualità', 'quality', 'efficienza', 'efficiency',
+    'professionale', 'professional', 'esperienza', 'experience',
+    'affidabilità', 'reliability', 'certificato', 'certified',
+    'certificazione', 'certification', 'excellence', 'eccellenza',
+    'leader', 'leading', 'migliore', 'best',
+    
+    # Termini processo generici
+    'progettazione', 'design', 'installazione', 'installation',
+    'manutenzione', 'maintenance', 'assistenza', 'support',
+    'consulenza', 'consulting', 'vendita', 'sales',
+}
+
+
+def is_generic_keyword(keyword: str) -> bool:
+    """
+    Verifica se una keyword è troppo generica per avere peso pieno nel matching.
+    
+    Keywords generiche (es: "HVAC", "industria", "tecnologia") sono comuni a 
+    migliaia di aziende e causano falsi positivi. Queste ricevono peso ridotto (0.3x).
+    
+    Args:
+        keyword: La keyword da verificare (case-insensitive)
+        
+    Returns:
+        bool: True se la keyword è generica, False se è specifica
+        
+    Examples:
+        >>> is_generic_keyword("HVAC")
+        True
+        >>> is_generic_keyword("hvac")
+        True
+        >>> is_generic_keyword("ventilatori")
+        False
+        >>> is_generic_keyword("centrifughi")
+        False
+    """
+    return keyword.lower().strip() in GENERIC_KEYWORDS
+
+
 class KeywordExtractor:
     def __init__(self):
         self.stop_words = set(stopwords.words('italian') + stopwords.words('english'))

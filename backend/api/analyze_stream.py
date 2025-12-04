@@ -9,6 +9,7 @@ import asyncio
 from datetime import datetime
 
 from core.keyword_extraction import extract_keywords_bulk
+from core.matching import format_match_criteria
 from .upload_analyze import classify_competitor_status, CompetitorMatch, analyze_competitors_bulk
 from .analysis_manager import (
     create_analysis_id,
@@ -268,6 +269,13 @@ async def stream_analysis_progress(urls: List[str], keywords: List[str], analysi
                     score = int(match_results['match_score'])
                     found_keywords = match_results['found_keywords']
                     
+                    # 🆕 Format match criteria for Excel report transparency
+                    match_criteria = format_match_criteria(
+                        match_result=match_results,
+                        keyword_counts=match_results.get('keyword_counts', {}),
+                        semantic_score=match_results.get('score_details', {}).get('semantic_score')
+                    )
+                    
                     match = CompetitorMatch(
                         url=url,
                         score=score,
@@ -292,7 +300,8 @@ async def stream_analysis_progress(urls: List[str], keywords: List[str], analysi
                             'keywords_found': found_keywords,
                             'title': match.title,
                             'description': match.description,
-                            'status': match.status
+                            'status': match.status,
+                            'match_criteria': match_criteria  # 🆕 NEW: Criteria for transparency
                         }
                     )
                     

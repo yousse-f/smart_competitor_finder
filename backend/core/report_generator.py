@@ -163,7 +163,7 @@ class ReportGenerator:
             reverse=True
         )[:50]
         
-        headers = ["Rank", "Website", "Score", "Categoria KPI", "Azione Consigliata"]
+        headers = ["Rank", "Website", "Score", "Criteri Match", "Categoria KPI", "Azione Consigliata"]
         for col_idx, header in enumerate(headers, 1):
             cell = ws.cell(row=18, column=col_idx, value=header)
             cell.font = self.styles['header']['font']
@@ -177,6 +177,7 @@ class ReportGenerator:
                 row_idx - 18,
                 competitor.get('url', 'N/A'),
                 f"{competitor.get('score', 0):.1f}%",
+                competitor.get('match_criteria', 'N/A'),
                 f"{status.get('emoji', '⚪')} {status.get('label', 'Non classificato')}",
                 status.get('action', 'N/A')
             ]
@@ -187,6 +188,10 @@ class ReportGenerator:
                 cell.alignment = self.styles['data']['alignment']
                 cell.border = self.styles['border']
                 
+                # Enable wrap text for "Criteri Match" column (column 4)
+                if col_idx == 4:
+                    cell.alignment = Alignment(horizontal='left', vertical='top', wrap_text=True)
+                
                 # Colora riga in base a categoria
                 if status.get('color') == 'green':
                     cell.fill = PatternFill(start_color='E6F9E6', end_color='E6F9E6', fill_type='solid')
@@ -195,8 +200,13 @@ class ReportGenerator:
                 elif status.get('color') == 'red':
                     cell.fill = PatternFill(start_color='FFE6E6', end_color='FFE6E6', fill_type='solid')
         
-        # Auto-adjust column widths
-        self._auto_adjust_columns(ws)
+        # Set specific column widths
+        ws.column_dimensions['A'].width = 8   # Rank
+        ws.column_dimensions['B'].width = 35  # Website
+        ws.column_dimensions['C'].width = 10  # Score
+        ws.column_dimensions['D'].width = 60  # Criteri Match (wider for detailed criteria)
+        ws.column_dimensions['E'].width = 20  # Categoria KPI
+        ws.column_dimensions['F'].width = 25  # Azione Consigliata
     
     def _create_detailed_results_sheet(self, analysis_results: List[Dict]):
         """Create detailed results sheet with all competitor data and KPI classification"""
@@ -204,7 +214,7 @@ class ReportGenerator:
         
         # Headers con classificazione KPI (senza Score %)
         headers = [
-            "URL", "Categoria KPI", "Azione", 
+            "URL", "Criteri Match", "Categoria KPI", "Azione", 
             "Keywords Found", "Keyword Count", "Title"
         ]
         
@@ -220,6 +230,7 @@ class ReportGenerator:
             status = result.get('competitor_status', {})
             row_data = [
                 result.get('url', 'N/A'),
+                result.get('match_criteria', 'N/A'),
                 f"{status.get('emoji', '⚪')} {status.get('label', 'Non classificato')}",
                 status.get('action', 'N/A'),
                 ', '.join(result.get('keywords_found', [])),
@@ -231,6 +242,10 @@ class ReportGenerator:
                 cell = ws.cell(row=row_idx, column=col_idx, value=value)
                 cell.border = self.styles['border']
                 
+                # Enable wrap text for "Criteri Match" column (column 2)
+                if col_idx == 2:
+                    cell.alignment = Alignment(horizontal='left', vertical='top', wrap_text=True)
+                
                 # Applica colore di sfondo in base a categoria KPI
                 if status.get('color') == 'green':
                     cell.fill = PatternFill(start_color='E6F9E6', end_color='E6F9E6', fill_type='solid')
@@ -239,15 +254,21 @@ class ReportGenerator:
                 elif status.get('color') == 'red':
                     cell.fill = PatternFill(start_color='FFE6E6', end_color='FFE6E6', fill_type='solid')
                 
-                # Formatting specifico per colonne (senza Score %)
-                if col_idx == 5:  # Count column (ora colonna 5 invece di 6)
+                # Formatting specifico per colonne
+                if col_idx == 6:  # Count column (now column 6 with Criteri Match)
                     cell.alignment = Alignment(horizontal='center')
                 else:
                     cell.font = self.styles['data']['font']
                     cell.alignment = self.styles['data']['alignment']
         
-        # Auto-adjust column widths
-        self._auto_adjust_columns(ws)
+        # Set specific column widths for Detailed Results sheet
+        ws.column_dimensions['A'].width = 35  # URL
+        ws.column_dimensions['B'].width = 60  # Criteri Match
+        ws.column_dimensions['C'].width = 20  # Categoria KPI
+        ws.column_dimensions['D'].width = 25  # Azione
+        ws.column_dimensions['E'].width = 40  # Keywords Found
+        ws.column_dimensions['F'].width = 12  # Keyword Count
+        ws.column_dimensions['G'].width = 40  # Title
     
     def _create_sector_analysis_sheet(self, analysis_results: List[Dict]):
         """Create KPI category distribution analysis sheet"""

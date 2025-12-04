@@ -13,10 +13,15 @@ def classify_competitor_status(score: float) -> dict:
     """
     Classifica competitor in base allo score con sistema KPI a 3 colori.
     
+    Soglie aggiornate (Task 3):
+    - DIRECT: >= 65% (era 60%)
+    - POTENTIAL: >= 50% (era 40%)
+    - NON_COMPETITOR: < 50%
+    
     Returns:
         dict con category, label, color, priority
     """
-    if score >= 60:
+    if score >= 65:  # 🔄 Aumentato da 60 a 65
         return {
             "category": "DIRECT",
             "label": "Competitor Diretto",
@@ -26,7 +31,7 @@ def classify_competitor_status(score: float) -> dict:
             "priority": 1,
             "action": "Monitora attentamente"
         }
-    elif score >= 40:
+    elif score >= 50:  # 🔄 Aumentato da 40 a 50
         return {
             "category": "POTENTIAL",
             "label": "Da Valutare",

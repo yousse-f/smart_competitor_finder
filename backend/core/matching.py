@@ -6,6 +6,7 @@ import logging
 
 from core.semantic_filter import semantic_filter
 from core.sector_classifier import sector_classifier
+from core.keyword_extraction import GENERIC_KEYWORDS, is_generic_keyword
 
 logger = logging.getLogger(__name__)
 
@@ -22,35 +23,8 @@ class KeywordMatcher:
             'questa', 'questo', 'questi', 'queste', 'all', 'alla', 'alle', 'allo', 'agli'
         }
         
-        # ⭐ NEW: Keyword Quality Weighting
-        # Generic keywords (too common across sectors) - LOW weight
-        self.generic_keywords = {
-            'soluzioni', 'solutions', 'innovazione', 'innovation', 'sviluppo', 'development',
-            'tecnologia', 'technology', 'servizi', 'services', 'qualità', 'quality',
-            'efficienza', 'efficiency', 'esperienza', 'experience', 'professionale', 'professional',
-            'azienda', 'company', 'impresa', 'business', 'prodotto', 'product', 'cliente', 'customer',
-            'team', 'gruppo', 'group', 'Italia', 'italy', 'mondo', 'world', 'mercato', 'market'
-        }
-        
-        # Sector-specific keywords (high value) - HIGH weight
-        self.high_value_keywords = {
-            # IT/Digital
-            'software', 'cloud', 'cybersecurity', 'api', 'database', 'frontend', 'backend',
-            'informatica', 'digitale', 'app', 'mobile', 'web', 'sviluppatori', 'programmazione',
-            'devops', 'agile', 'scrum', 'microservizi', 'kubernetes', 'docker', 'react', 'angular',
-            # Manufacturing
-            'meccanica', 'metalworking', 'carpenteria', 'cnc', 'tornio', 'fresatura',
-            'lamiera', 'saldatura', 'assemblaggio', 'officina', 'prototipazione', 'stampi',
-            # Construction
-            'edilizia', 'costruzioni', 'cantiere', 'ristrutturazione', 'cemento', 'mattoni',
-            # Consulting specific
-            'consulenza', 'advisory', 'strategia', 'strategy', 'management', 'governance'
-        }
-        
-        # Weight multipliers
-        self.generic_weight = 0.3  # Generic keywords count 30%
-        self.normal_weight = 1.0   # Normal keywords count 100%
-        self.high_value_weight = 1.5  # High-value keywords count 150%
+        # Note: Generic keywords are now defined in keyword_extraction.py as GENERIC_KEYWORDS
+        # and accessed via is_generic_keyword() function for consistency
         
         # Semantic analysis configuration
         self.semantic_enabled = os.getenv("SEMANTIC_ANALYSIS_ENABLED", "true").lower() == "true"
@@ -82,9 +56,9 @@ class KeywordMatcher:
                 clean_word = re.sub(r'[^a-zA-ZÀ-ÿ]', '', word)
                 
                 # Filter: min 2 chars, not in stopwords/ignore list
+                # Note: We don't filter generic keywords here, they're just weighted differently in scoring
                 if (len(clean_word) >= 2 and 
-                    clean_word not in self.ignore_words and
-                    clean_word not in self.generic_keywords):  # Don't filter generic, just flag them
+                    clean_word not in self.ignore_words):
                     individual_words.append(clean_word)
         
         # Remove duplicates while preserving order
@@ -192,7 +166,11 @@ class KeywordMatcher:
                     'semantic_weight': self.semantic_weight,
                     'semantic_enabled': self.semantic_enabled,
                     'original_combined_score': final_score['combined_score'],
-                    'relevance_adjusted_score': adjusted_score
+                    'relevance_adjusted_score': adjusted_score,
+                    # ⭐ NEW: Generic keyword filter details
+                    'generic_matches': keyword_score_data.get('generic_matches', []),
+                    'specific_matches': keyword_score_data.get('specific_matches', []),
+                    'quality_flag': keyword_score_data.get('quality_flag', 'UNKNOWN')
                 },
                 'semantic_analysis': semantic_results if self.semantic_enabled else None,
                 'sector_analysis': sector_results,
@@ -252,7 +230,12 @@ class KeywordMatcher:
         }
     
     def _calculate_keyword_score(self, target_keywords: List[str], matches: Dict) -> Dict:
-        """Calculate the keyword-based match score with quality weighting."""
+        """
+        Calculate the keyword-based match score with quality weighting.
+        
+        Uses GENERIC_KEYWORDS from keyword_extraction.py to apply reduced weight (0.3x)
+        to generic keywords and penalize matches with ONLY generic keywords (50% reduction).
+        """
         if not target_keywords:
             return {'score': 0, 'method': 'no_keywords'}
         
@@ -263,61 +246,72 @@ class KeywordMatcher:
         if len(found_keywords) == 0:
             return {'score': 0, 'method': 'no_matches'}
         
-        # ⭐ NEW: Calculate weighted matches
-        weighted_matches = 0.0
-        weighted_total_keywords = 0.0
-        generic_count = 0
-        high_value_count = 0
-        normal_count = 0
+        # ⭐ NEW: Separate generic vs specific matches
+        generic_matches = []
+        specific_matches = []
         
-        # Calculate total weighted keywords (denominator)
-        for keyword in target_keywords:
-            keyword_lower = keyword.lower().strip()
-            if keyword_lower in self.generic_keywords:
-                weighted_total_keywords += self.generic_weight
-            elif keyword_lower in self.high_value_keywords:
-                weighted_total_keywords += self.high_value_weight
-            else:
-                weighted_total_keywords += self.normal_weight
-        
-        # Calculate weighted found keywords (numerator)
         for keyword in found_keywords:
-            keyword_lower = keyword.lower().strip()
-            count = keyword_counts.get(keyword, 1)
-            
-            if keyword_lower in self.generic_keywords:
-                # Generic keywords count less
-                weighted_matches += self.generic_weight
-                generic_count += 1
-            elif keyword_lower in self.high_value_keywords:
-                # High-value keywords count more + frequency bonus
-                weighted_matches += self.high_value_weight * min(1.5, 1 + (count - 1) * 0.1)
-                high_value_count += 1
+            if is_generic_keyword(keyword):
+                generic_matches.append(keyword)
             else:
-                # Normal keywords with frequency bonus
-                weighted_matches += self.normal_weight * min(1.5, 1 + (count - 1) * 0.1)
-                normal_count += 1
+                specific_matches.append(keyword)
         
         # Calculate weighted score
-        if weighted_total_keywords > 0:
-            weighted_score = (weighted_matches / weighted_total_keywords) * 100
+        GENERIC_WEIGHT = float(os.getenv('GENERIC_KEYWORD_WEIGHT', '0.3'))
+        SPECIFIC_WEIGHT = 1.0
+        
+        weighted_matches = 0.0
+        max_possible_weight = len(target_keywords) * SPECIFIC_WEIGHT  # Assuming all keywords are specific
+        
+        for keyword in found_keywords:
+            count = keyword_counts.get(keyword, 1)
+            # Frequency bonus (max 1.5x): 1x at 1 occurrence, 1.5x at 5+ occurrences
+            frequency_multiplier = min(1.5, 1 + (count - 1) * 0.1)
+            
+            if is_generic_keyword(keyword):
+                weighted_matches += GENERIC_WEIGHT * frequency_multiplier
+            else:
+                weighted_matches += SPECIFIC_WEIGHT * frequency_multiplier
+        
+        # Calculate base score
+        if max_possible_weight > 0:
+            keyword_score = (weighted_matches / max_possible_weight) * 100
         else:
-            weighted_score = 0
+            keyword_score = 0
+        
+        # ⚠️ PENALTY: If ONLY generic keywords matched (no specific ones), reduce score by 50%
+        quality_flag = ''
+        if len(specific_matches) == 0 and len(generic_matches) > 0:
+            keyword_score *= 0.5  # 50% penalty
+            quality_flag = 'LOW_QUALITY_ONLY_GENERIC'
+        elif len(specific_matches) >= 5:
+            quality_flag = 'HIGH_QUALITY'
+        elif len(specific_matches) >= 2:
+            quality_flag = 'MEDIUM_QUALITY'
+        elif len(specific_matches) >= 1:
+            quality_flag = 'LOW_QUALITY'
+        else:
+            quality_flag = 'NO_SPECIFIC_KEYWORDS'
         
         # Cap at 100
-        final_score = min(100, weighted_score)
+        final_score = min(100, keyword_score)
+        
+        logger.info(f"🎯 Match quality: {len(specific_matches)} specific + {len(generic_matches)} generic = {quality_flag}")
         
         return {
             'score': round(final_score, 1),
-            'method': 'quality_weighted',
+            'method': 'quality_weighted_generic_filter',
             'weighted_matches': round(weighted_matches, 2),
-            'weighted_total': round(weighted_total_keywords, 2),
+            'max_possible_weight': round(max_possible_weight, 2),
             'unique_matches': len(found_keywords),
             'total_target': total_target_keywords,
+            'generic_matches': generic_matches,
+            'specific_matches': specific_matches,
+            'quality_flag': quality_flag,
             'breakdown': {
-                'generic_keywords': generic_count,
-                'high_value_keywords': high_value_count,
-                'normal_keywords': normal_count
+                'generic_keywords': len(generic_matches),
+                'specific_keywords': len(specific_matches),
+                'penalty_applied': len(specific_matches) == 0 and len(generic_matches) > 0
             }
         }
     
@@ -364,6 +358,104 @@ class KeywordMatcher:
             adjusted_score = original_score * relevance_score
         
         return round(min(100, max(0, adjusted_score)), 1)
+
+
+def format_match_criteria(
+    match_result: Dict,
+    keyword_counts: Dict[str, int] = None,
+    semantic_score: float = None
+) -> str:
+    """
+    Formatta i criteri di matching in stringa leggibile per il report Excel.
+    
+    Mostra al cliente PERCHÉ un sito è stato classificato come competitor,
+    includendo keywords matchate (con frequenza), score semantico, e quality flag.
+    
+    Args:
+        match_result: Risultato completo di calculate_match_score() con score_details
+        keyword_counts: Dict con conteggio occorrenze keywords (opzionale)
+        semantic_score: Score semantico 0-100 (opzionale)
+        
+    Returns:
+        Stringa formattata es: "Keywords: Ventilatori(3x), Centrifughi(2x), hvac | Semantic: 75% | ⭐⭐ BUONO"
+        
+    Examples:
+        >>> format_match_criteria(
+        ...     {'score_details': {'generic_matches': ['hvac'], 'specific_matches': ['ventilatori'], 'quality_flag': 'HIGH_QUALITY'}},
+        ...     {'ventilatori': 3, 'hvac': 1},
+        ...     85.0
+        ... )
+        'Keywords: Ventilatori(3x), hvac | Semantic: 85% | ⭐⭐⭐ OTTIMO'
+    """
+    from collections import Counter
+    
+    score_details = match_result.get('score_details', {})
+    
+    # Estrai keywords matchate
+    generic_matches = score_details.get('generic_matches', [])
+    specific_matches = score_details.get('specific_matches', [])
+    
+    # Se non ci sono score_details, prova a usare i campi legacy
+    if not generic_matches and not specific_matches:
+        found_keywords = match_result.get('found_keywords', [])
+        # Separa in base a GENERIC_KEYWORDS
+        for kw in found_keywords:
+            if is_generic_keyword(kw):
+                generic_matches.append(kw)
+            else:
+                specific_matches.append(kw)
+    
+    # Prepara lista keywords con frequenza
+    keyword_with_freq = []
+    
+    # Prima le specifiche (in Title Case per evidenziarle)
+    for kw in specific_matches[:5]:  # Max 5 per non sovraccaricare
+        freq = keyword_counts.get(kw, 1) if keyword_counts else 1
+        kw_formatted = kw.title()  # Title Case per keywords specifiche
+        if freq > 1:
+            keyword_with_freq.append(f"{kw_formatted}({freq}x)")
+        else:
+            keyword_with_freq.append(kw_formatted)
+    
+    # Poi le generiche (in lowercase per distinguerle)
+    for kw in generic_matches[:3]:  # Max 3 generiche
+        freq = keyword_counts.get(kw, 1) if keyword_counts else 1
+        kw_lower = kw.lower()  # lowercase per keywords generiche
+        if freq > 1:
+            keyword_with_freq.append(f"{kw_lower}({freq}x)")
+        else:
+            keyword_with_freq.append(kw_lower)
+    
+    # Limita totale a 6-7 keywords
+    if len(keyword_with_freq) > 7:
+        remaining = len(specific_matches) + len(generic_matches) - 7
+        keyword_with_freq = keyword_with_freq[:7]
+        keywords_str = ", ".join(keyword_with_freq) + f" +{remaining}"
+    else:
+        keywords_str = ", ".join(keyword_with_freq) if keyword_with_freq else "Nessuna"
+    
+    # Costruisci parti della stringa
+    parts = [f"Keywords: {keywords_str}"]
+    
+    # Aggiungi semantic score se disponibile
+    if semantic_score is not None and semantic_score > 0:
+        parts.append(f"Semantic: {semantic_score:.0f}%")
+    
+    # Aggiungi quality flag con emoji
+    quality_flag = score_details.get('quality_flag', 'UNKNOWN')
+    quality_mapping = {
+        'HIGH_QUALITY': '⭐⭐⭐ OTTIMO',
+        'MEDIUM_QUALITY': '⭐⭐ BUONO',
+        'LOW_QUALITY': '⭐ ACCETTABILE',
+        'LOW_QUALITY_ONLY_GENERIC': '⚠️ SCARSO (solo generiche)',
+        'NO_SPECIFIC_KEYWORDS': '⚠️ SCARSO',
+        'UNKNOWN': '❓'
+    }
+    quality_str = quality_mapping.get(quality_flag, quality_flag)
+    parts.append(quality_str)
+    
+    return " | ".join(parts)
+
 
 # Global matcher instance
 keyword_matcher = KeywordMatcher()
