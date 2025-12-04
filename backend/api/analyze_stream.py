@@ -15,7 +15,8 @@ from .analysis_manager import (
     create_analysis_file,
     update_analysis_progress,
     complete_analysis,
-    fail_analysis
+    fail_analysis,
+    add_failed_site  # 🆕 Add failed site to JSON
 )
 from utils.excel_utils import ExcelProcessor
 import math
@@ -204,12 +205,14 @@ async def stream_analysis_progress(urls: List[str], keywords: List[str], analysi
                             scrape_result = await hybrid_scraper_v2.scrape_intelligent(url, max_keywords=20, use_advanced=True)
                     except asyncio.TimeoutError:
                         logging.error(f"⏱️ TIMEOUT (90s) for {url}")
-                        failed_sites.append({
+                        failed_site_data = {
                             'url': url,
                             'error': 'Timeout dopo 90 secondi',
                             'suggestion': 'Sito troppo lento o bloccato - riprova manualmente',
                             'timestamp': datetime.now().strftime('%Y-%m-%d %H:%M:%S')
-                        })
+                        }
+                        failed_sites.append(failed_site_data)
+                        add_failed_site(analysis_id, failed_site_data)  # 🆕 Save to JSON
                         yield f"data: {json.dumps({'event': 'site_failed', 'url': url, 'reason': 'timeout_90s'})}\n\n"
                         continue
                 
@@ -218,12 +221,14 @@ async def stream_analysis_progress(urls: List[str], keywords: List[str], analysi
                         logging.warning(f"⚠️ Scraping failed for {url}: {error_msg}")
                         
                         # 🆕 FASE 1: Track failed site
-                        failed_sites.append({
+                        failed_site_data = {
                             'url': url,
                             'error': error_msg[:100],  # Primi 100 caratteri
                             'suggestion': _get_error_suggestion(error_msg),
                             'timestamp': datetime.now().strftime('%Y-%m-%d %H:%M:%S')
-                        })
+                        }
+                        failed_sites.append(failed_site_data)
+                        add_failed_site(analysis_id, failed_site_data)  # 🆕 Save to JSON
                         
                         # Send error event
                         yield f"data: {json.dumps({'event': 'site_failed', 'url': url, 'reason': 'scraping_failed', 'message': error_msg})}\n\n"
@@ -296,12 +301,14 @@ async def stream_analysis_progress(urls: List[str], keywords: List[str], analysi
                     logging.error(f"❌ Error processing {url}: {error_msg}")
                     
                     # 🆕 FASE 1: Track failed site with categorization
-                    failed_sites.append({
+                    failed_site_data = {
                         'url': url,
                         'error': error_msg[:100],
                         'suggestion': _get_error_suggestion(error_msg),
                         'timestamp': datetime.now().strftime('%Y-%m-%d %H:%M:%S')
-                    })
+                    }
+                    failed_sites.append(failed_site_data)
+                    add_failed_site(analysis_id, failed_site_data)  # 🆕 Save to JSON
                     
                     # Send error event but continue
                     yield f"data: {json.dumps({'event': 'site_failed', 'url': url, 'reason': 'processing_error', 'message': error_msg})}\n\n"

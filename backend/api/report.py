@@ -171,9 +171,15 @@ async def _generate_report_background(report_id: str, request: ReportRequest):
         report_status_cache[report_id].message = "Analyzing competitors and generating report..."
         
         # Get or generate analysis results
+        failed_sites = []  # Initialize failed_sites list
         if request.analysis_id and request.analysis_id in analysis_cache:
             # Use cached analysis results
-            analysis_results = analysis_cache[request.analysis_id]
+            cached_data = analysis_cache[request.analysis_id]
+            if isinstance(cached_data, dict) and 'results' in cached_data:
+                analysis_results = cached_data['results']
+                failed_sites = cached_data.get('failed_sites', [])
+            else:
+                analysis_results = cached_data
             print(f"Using cached analysis results for {request.analysis_id}")
         else:
             # Perform fresh analysis
@@ -196,7 +202,8 @@ async def _generate_report_background(report_id: str, request: ReportRequest):
             client_url=request.client_url,
             client_keywords=request.keywords,
             analysis_results=analysis_results,
-            output_path=report_path
+            output_path=report_path,
+            failed_sites=failed_sites  # 🆕 Pass failed sites to report
         )
         
         # Update status

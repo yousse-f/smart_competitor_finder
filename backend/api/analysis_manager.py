@@ -64,7 +64,8 @@ def create_analysis_file(
                 "updated_at": datetime.now().isoformat(),
                 "completed_at": None
             },
-            "results": []
+            "results": [],
+            "failed_sites": []  # 🆕 Track failed URLs with errors
         }
         
         # Salva il file
@@ -132,6 +133,50 @@ def update_analysis_progress(
         
     except Exception as e:
         logger.error(f"❌ Errore aggiornamento analisi {analysis_id}: {e}")
+        return False
+
+
+def add_failed_site(
+    analysis_id: str,
+    failed_site_data: Dict[str, Any]
+) -> bool:
+    """
+    Aggiunge un sito fallito alla lista failed_sites dell'analisi
+    
+    Args:
+        analysis_id: ID dell'analisi
+        failed_site_data: Dict con url, error, suggestion, timestamp
+        
+    Returns:
+        True se aggiornamento riuscito
+    """
+    try:
+        file_path = IN_PROGRESS_DIR / f"{analysis_id}.json"
+        
+        if not file_path.exists():
+            logger.warning(f"⚠️ File analisi non trovato: {analysis_id}")
+            return False
+        
+        # Leggi file esistente
+        with open(file_path, 'r', encoding='utf-8') as f:
+            analysis_data = json.load(f)
+        
+        # Assicurati che failed_sites esista
+        if "failed_sites" not in analysis_data:
+            analysis_data["failed_sites"] = []
+        
+        # Aggiungi failed site
+        analysis_data["failed_sites"].append(failed_site_data)
+        analysis_data["metadata"]["updated_at"] = datetime.now().isoformat()
+        
+        # Salva file aggiornato
+        with open(file_path, 'w', encoding='utf-8') as f:
+            json.dump(analysis_data, f, indent=2, ensure_ascii=False)
+        
+        return True
+        
+    except Exception as e:
+        logger.error(f"❌ Errore aggiunta sito fallito {analysis_id}: {e}")
         return False
 
 
