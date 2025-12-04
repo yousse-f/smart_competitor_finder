@@ -13,6 +13,67 @@ from core.hybrid_scraper_v2 import hybrid_scraper_v2
 
 router = APIRouter()
 
+# 🎯 Helper function per messaggi user-friendly
+def _get_user_friendly_error(error: str, url: str) -> dict:
+    """Converte errori tecnici in messaggi comprensibili con azioni pratiche"""
+    error_lower = error.lower()
+    
+    # WAF / Firewall (403)
+    if '403' in error or 'waf' in error_lower or 'firewall' in error_lower:
+        return {
+            'message': f'🛡️ Il sito "{url}" ha una protezione anti-bot attiva che sta bloccando l\'accesso.',
+            'suggestion': '💡 **Cosa puoi fare:**\n- Riprova tra 1-2 minuti (il sito ti "ricorderà")\n- Visita il sito manualmente nel browser prima di analizzarlo\n- Se il problema persiste, il sito potrebbe richiedere credenziali di accesso',
+            'can_retry': True
+        }
+    
+    # Timeout
+    elif 'timeout' in error_lower or 'timed out' in error_lower:
+        return {
+            'message': f'⏱️ Il sito "{url}" impiega troppo tempo a rispondere.',
+            'suggestion': '💡 **Cosa puoi fare:**\n- Verifica che il sito sia online (aprilo nel browser)\n- Riprova tra qualche minuto\n- Il sito potrebbe essere temporaneamente sovraccarico',
+            'can_retry': True
+        }
+    
+    # Connection refused / unreachable
+    elif 'connection' in error_lower or 'unreachable' in error_lower or 'refused' in error_lower:
+        return {
+            'message': f'🔌 Impossibile connettersi a "{url}".',
+            'suggestion': '💡 **Cosa puoi fare:**\n- Controlla che l\'URL sia corretto (es: https://www.esempio.com)\n- Verifica che il sito sia online\n- Potrebbe essere temporaneamente offline per manutenzione',
+            'can_retry': True
+        }
+    
+    # SSL/Certificate errors
+    elif 'ssl' in error_lower or 'certificate' in error_lower:
+        return {
+            'message': f'🔒 Il certificato SSL di "{url}" ha dei problemi.',
+            'suggestion': '💡 **Cosa puoi fare:**\n- Prova a cambiare "https://" in "http://"\n- Verifica che l\'URL sia corretto\n- Il sito potrebbe avere un certificato scaduto',
+            'can_retry': True
+        }
+    
+    # 404 Not Found
+    elif '404' in error:
+        return {
+            'message': f'❌ La pagina "{url}" non esiste.',
+            'suggestion': '💡 **Cosa puoi fare:**\n- Controlla che l\'URL sia corretto\n- Prova a rimuovere la parte finale dell\'URL (es: /it o /home)\n- Usa solo il dominio principale (es: https://www.esempio.com)',
+            'can_retry': False
+        }
+    
+    # Server errors (500, 502, 503)
+    elif '500' in error or '502' in error or '503' in error:
+        return {
+            'message': f'⚠️ Il server di "{url}" ha un problema tecnico.',
+            'suggestion': '💡 **Cosa puoi fare:**\n- Riprova tra 5-10 minuti\n- Il sito è temporaneamente fuori servizio\n- Contatta l\'amministratore del sito se il problema persiste',
+            'can_retry': True
+        }
+    
+    # Generic error
+    else:
+        return {
+            'message': f'❌ Non è stato possibile analizzare "{url}".',
+            'suggestion': '💡 **Cosa puoi fare:**\n- Verifica che l\'URL sia completo e corretto\n- Assicurati che il sito sia accessibile dal browser\n- Riprova tra qualche minuto\n- Se il problema persiste, contatta il supporto',
+            'can_retry': True
+        }
+
 # Request/Response models
 class AnalyzeSiteRequest(BaseModel):
     url: HttpUrl
@@ -58,6 +119,21 @@ async def analyze_site(request: AnalyzeSiteRequest):
         if request.use_advanced_scraping:
             # 🚀 Use hybrid V2 ultra-stable scraper
             result = await hybrid_scraper_v2.scrape_intelligent(url_str, max_keywords, use_advanced=True)
+            
+            # 🎯 Check if scraping failed and provide user-friendly message
+            if result.get('status') == 'failed':
+                error_msg = result.get('error', 'Unknown error')
+                user_message = _get_user_friendly_error(error_msg, url_str)
+                
+                raise HTTPException(
+                    status_code=422,  # Unprocessable Entity
+                    detail={
+                        'message': user_message['message'],
+                        'suggestion': user_message['suggestion'],
+                        'technical_error': error_msg,
+                        'retry_recommended': user_message['can_retry']
+                    }
+                )
             
             # Format response from hybrid scraper result
             return AnalyzeSiteResponse(

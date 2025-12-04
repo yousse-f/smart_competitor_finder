@@ -319,14 +319,23 @@ class HybridScraperV2:
             headers_no_br['Accept-Encoding'] = 'gzip, deflate'  # Remove 'br' support
             
             # First try with SSL verification, then fallback to SSL bypass
+            # 3 attempts total to handle WAF challenges (Cloudflare, etc.)
             connectors = [
                 aiohttp.TCPConnector(ssl=None),  # Normal SSL verification
-                aiohttp.TCPConnector(ssl=False)   # SSL bypass for problematic sites
+                aiohttp.TCPConnector(ssl=False),  # SSL bypass for problematic sites
+                aiohttp.TCPConnector(ssl=False)   # 3rd attempt for WAF challenge completion
             ]
             
             for i, connector in enumerate(connectors):
                 try:
-                    logger.info(f"🌐 Basic HTTP: Attempt {i+1}/2 - Making request to {url}")
+                    # 🎭 Human-like delay between attempts (WAF bypass)
+                    if i > 0:
+                        import random
+                        delay = random.uniform(1.0, 2.5)
+                        logger.info(f"⏳ Waiting {delay:.1f}s before retry (WAF challenge)...")
+                        await asyncio.sleep(delay)
+                    
+                    logger.info(f"🌐 Basic HTTP: Attempt {i+1}/3 - Making request to {url}")
                     async with aiohttp.ClientSession(timeout=timeout, connector=connector) as session:
                         # FOLLOW REDIRECTS - CRUCIAL for sites like mondo-convenienza.it!
                         # Use headers_no_br to avoid Brotli decode errors
@@ -366,11 +375,11 @@ class HybridScraperV2:
                                 # 🆕 PLAYWRIGHT FALLBACK per 403: DISABILITATO (Railway 512MB limit)
                                 # Browser Pool non inizializzato in produzione → skip fallback
                                 if response.status == 403 and i == len(connectors) - 1:
-                                    logger.warning(f"⚡ Status 403 detected but Playwright disabled (Railway RAM limit)")
+                                    logger.warning(f"⚡ Status 403 after 3 attempts - Site has aggressive WAF protection")
                                     # Skip Playwright fallback - would fail anyway with "not initialized"
                                     # Accept 403 as final failure to avoid false retry attempts
                                 
-                                if i == len(connectors) - 1:  # Last attempt
+                                if i == len(connectors) - 1:  # Last attempt (3/3)
                                     return ScrapingResult(
                                         success=False,
                                         error=error_msg,
