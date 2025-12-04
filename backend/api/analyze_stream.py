@@ -197,20 +197,20 @@ async def stream_analysis_progress(urls: List[str], keywords: List[str], analysi
                 try:
                     logging.info(f"📊 Streaming analysis {global_index}/{total_urls}: {url}")
                     
-                    # ⏱️ FASE 1: Max 60s timeout per site
+                    # ⏱️ Max 90s timeout per site (come analisi client - serve per doppio fallback)
                     try:
-                        async with asyncio.timeout(60):
-                            # 1. Scrape competitor site
+                        async with asyncio.timeout(90):
+                            # 1. Scrape competitor site con DOPPIO FALLBACK (Basic HTTP → Browser Pool)
                             scrape_result = await hybrid_scraper_v2.scrape_intelligent(url, max_keywords=20, use_advanced=True)
                     except asyncio.TimeoutError:
-                        logging.error(f"⏱️ TIMEOUT (60s) for {url}")
+                        logging.error(f"⏱️ TIMEOUT (90s) for {url}")
                         failed_sites.append({
                             'url': url,
-                            'error': 'Timeout dopo 60 secondi',
+                            'error': 'Timeout dopo 90 secondi',
                             'suggestion': 'Sito troppo lento o bloccato - riprova manualmente',
                             'timestamp': datetime.now().strftime('%Y-%m-%d %H:%M:%S')
                         })
-                        yield f"data: {json.dumps({'event': 'site_failed', 'url': url, 'reason': 'timeout_60s'})}\n\n"
+                        yield f"data: {json.dumps({'event': 'site_failed', 'url': url, 'reason': 'timeout_90s'})}\n\n"
                         continue
                 
                     if not scrape_result.get('status') == 'success':

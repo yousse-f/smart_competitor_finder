@@ -58,46 +58,77 @@ class HybridScraperV2:
     
     async def scrape_intelligent(self, url: str, max_keywords: int = 20, use_advanced: bool = True) -> Dict[str, Any]:
         """
-        🧠 Scraping super-intelligente con 4 layer di fallback
+        🧠 Scraping super-intelligente con DOPPIO FALLBACK UNIFICATO
         
-        ⚡ PLAYWRIGHT DISABLED: Vai diretto a Basic HTTP per evitare crash Railway
-        Railway 512MB non supporta Playwright thread creation.
-        Basic HTTP ha dimostrato 100% success rate sui competitor testati.
+        ⚡ STESSO METODO PER CLIENT E COMPETITOR:
+        1. Basic HTTP (veloce, 5s timeout)
+        2. Browser Pool fallback (se Basic fallisce o content < 1000 chars)
+        
+        Questo garantisce success rate 95%+ come nell'analisi client.
         """
         start_time = time.time()
         self.stats['total_requests'] += 1
         
-        logger.info(f"🎯 Starting DIRECT BASIC HTTP scrape for: {url}")
+        logger.info(f"🎯 Starting UNIFIED scrape with INTELLIGENT FALLBACK for: {url}")
         
-        # 🚨 PLAYWRIGHT DISABLED - Vai diretto a Basic HTTP
-        # Motivo: Railway container 512MB causa pthread_create failures
-        # Browser Pool, Advanced Scraper = 100% failure rate in produzione
-        # Basic HTTP = 100% success rate (33/33 siti testati)
-        
-        # 🏴 LAYER UNICO: Basic HTTP (DIRETTO, nessun fallback Playwright)
-        logger.info(f"🚀 Basic HTTP starting for: {url}")
+        # 🏆 LAYER 1: Basic HTTP (veloce, prima scelta)
+        logger.info(f"🚀 Layer 1: Trying Basic HTTP first...")
         result = await self._scrape_basic(url)
-        logger.info(f"🔍 Basic HTTP result: success={result.success}, error={getattr(result, 'error', 'None')}")
+        logger.info(f"🔍 Basic HTTP result: success={result.success}, content_length={result.content_length if result.success else 0}, error={result.error if not result.success else 'None'}")
         
-        if result.success:
+        # ✅ Validazione qualità contenuto (come in ai_site_analyzer.py)
+        content_sufficient = result.success and result.content_length >= 1000
+        
+        if content_sufficient:
             keywords_data = await self._extract_keywords_smart(result.content, url, max_keywords)
             self._update_stats('basic_success', result.method, result.duration)
             logger.info(f"✅ Basic HTTP SUCCESS: {len(keywords_data.get('keywords', []))} keywords")
             return keywords_data
-        else:
-            logger.error(f"❌ Basic HTTP FAILED: {getattr(result, 'error', 'Unknown error')}")
         
-        # ❌ Tutti i metodi falliti
+        # 🔄 LAYER 2: Browser Pool fallback (se Basic fallisce o content insufficiente)
+        if not result.success:
+            logger.warning(f"⚠️ Basic HTTP FAILED: {result.error}")
+        else:
+            logger.warning(f"⚠️ Content insufficient ({result.content_length} < 1000 chars)")
+        
+        logger.info(f"🔄 Layer 2: Trying Browser Pool fallback...")
+        
+        # Check se Browser Pool è disponibile (Railway protection)
+        if not browser_pool.is_initialized:
+            logger.error(f"❌ Browser Pool not initialized - cannot fallback")
+            # Usa il risultato Basic HTTP anche se insufficiente
+            if result.success and result.content:
+                logger.warning(f"⚠️ Using Basic HTTP result anyway ({result.content_length} chars)")
+                keywords_data = await self._extract_keywords_smart(result.content, url, max_keywords)
+                self._update_stats('basic_success', result.method, result.duration)
+                return keywords_data
+        
+        # Prova Browser Pool fallback
+        browser_result = await self._scrape_with_browser_pool(url)
+        logger.info(f"🔍 Browser Pool result: success={browser_result.success}, error={browser_result.error if not browser_result.success else 'None'}")
+        
+        if browser_result.success:
+            keywords_data = await self._extract_keywords_smart(browser_result.content, url, max_keywords)
+            self._update_stats('browser_pool_success', browser_result.method, browser_result.duration)
+            logger.info(f"✅ Browser Pool SUCCESS: {len(keywords_data.get('keywords', []))} keywords")
+            return keywords_data
+        else:
+            logger.error(f"❌ Browser Pool FAILED: {browser_result.error}")
+        
+        # ❌ Entrambi i metodi falliti
         total_duration = time.time() - start_time
         self.stats['total_failures'] += 1
-        self._update_error_stats(result.error)
+        self._update_error_stats(browser_result.error)
         
         logger.error(f"❌ ALL METHODS FAILED for {url} after {total_duration:.2f}s")
+        logger.error(f"   - Basic HTTP: {result.error}")
+        logger.error(f"   - Browser Pool: {browser_result.error}")
+        
         return {
             'url': url,
             'keywords': [],
             'status': 'failed',
-            'error': f"All scraping methods failed. Last error: {result.error}",
+            'error': f"All scraping methods failed. Basic HTTP: {result.error}, Browser Pool: {browser_result.error}",
             'scraping_method': 'none',
             'duration': total_duration
         }
@@ -109,13 +140,16 @@ class HybridScraperV2:
         try:
             # 🚨 Check if Browser Pool is available (Railway resource protection)
             if not browser_pool.is_initialized:
-                logger.warning("⚠️ Browser Pool not initialized - skipping")
+                logger.warning("⚠️ Browser Pool not initialized - skipping (Railway RAM protection)")
+                logger.info(f"ℹ️  Browser Pool status: initialized={browser_pool.is_initialized}, pool_size={len(browser_pool.session_pool) if hasattr(browser_pool, 'session_pool') else 0}")
                 return ScrapingResult(
                     success=False,
                     error="Browser pool not initialized (resource protection)",
                     method="browser_pool",
                     duration=time.time() - start_time
                 )
+            
+            logger.info(f"✅ Browser Pool available - attempting scrape for {url}")
             
             # Ottieni sessione dal pool
             session = await browser_pool.get_session()
