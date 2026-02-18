@@ -467,7 +467,19 @@
       "started_at": "2026-02-18T12:49:25.217764",
       "completed_at": "2026-02-18T12:50:08.021146",
       "file_path": "completed/20260218_124925.json"
+    },
+    {
+      "id": "20260218_144302",
+      "status": "completed",
+      "client_url": "bulk_analysis",
+      "client_name": "Analisi bulk_analysis - 18/02/2026",
+      "total_sites": 6,
+      "processed_sites": 6,
+      "progress": 100,
+      "started_at": "2026-02-18T14:43:02.438741",
+      "completed_at": "2026-02-18T14:43:48.380395",
+      "file_path": "completed/20260218_144302.json"
     }
   ],
-  "last_updated": "2026-02-18T12:50:08.022293"
+  "last_updated": "2026-02-18T14:43:48.382139"
 }

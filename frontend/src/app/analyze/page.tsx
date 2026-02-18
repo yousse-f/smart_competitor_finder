@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useForm } from 'react-hook-form';
 import { useRouter } from 'next/navigation';
@@ -118,6 +118,8 @@ export default function AnalyzePage() {
     totalBatches: number;
     totalSites: number;
   } | null>(null);
+  const [showNearlyDonePopup, setShowNearlyDonePopup] = useState(false);
+  const showNearlyDonePopupRef = useRef(false);
   
   const [extractedKeywords, setExtractedKeywords] = useState<KeywordData[]>([]);
   const [analysisResult, setAnalysisResult] = useState<any>(null);
@@ -434,6 +436,7 @@ export default function AnalyzePage() {
     setIsAnalyzing(true);
     setAnalysisProgress(0);
     setCurrentAnalyzingUrl('');
+    setShowNearlyDonePopup(false);
     
     try {
       const file = data.competitorFile[0];
@@ -482,66 +485,72 @@ export default function AnalyzePage() {
           if (line.startsWith('data: ')) {
             const data = JSON.parse(line.slice(6));
             
-            // 🎯 Gestisci eventi real-time
+            // 🎯 Gestisci eventi real-time con progress stages
             switch (data.event) {
               case 'started':
                 console.log('🚀 Analysis started, total sites:', data.total, 'ID:', data.analysis_id);
                 setTotalCompetitorsToAnalyze(data.total);
-                
-                // 💾 Salva analysis_id in localStorage
+                setAnalysisProgress(5);
                 if (data.analysis_id) {
                   localStorage.setItem('current_analysis_id', data.analysis_id);
                   localStorage.setItem('analysis_started_at', new Date().toISOString());
                   console.log('💾 Analysis ID saved to localStorage:', data.analysis_id);
                 }
                 break;
-              
-              // 📦 FASE 2: Batch info event
-              case 'batch_info':
-                console.log(`📦 BATCH MODE: ${data.total_sites} sites in ${data.num_batches} batches`);
-                setBatchInfo({
-                  currentBatch: 1,
-                  totalBatches: data.num_batches,
-                  totalSites: data.total_sites
-                });
+
+              case 'wave1_started':
+                setAnalysisProgress(10);
                 break;
-              
-              // 📦 FASE 2: Batch start event
-              case 'batch_start':
-                console.log(`🔄 BATCH ${data.batch_num}/${data.total_batches} started (${data.batch_size} sites)`);
-                setBatchInfo(prev => ({
-                  currentBatch: data.batch_num,
-                  totalBatches: data.total_batches,
-                  totalSites: prev?.totalSites || 0
-                }));
+
+              case 'wave1_progress': {
+                // 10% → 30% durante scraping
+                const wave1Pct = data.total > 0 ? data.current / data.total : 0;
+                setAnalysisProgress(Math.round(10 + wave1Pct * 20));
+                setCurrentAnalyzingUrl(data.url || '');
                 break;
-              
-              // 📦 FASE 2: Batch complete event
-              case 'batch_complete':
-                console.log(`✅ BATCH ${data.batch_num} completed (${data.sites_processed} sites processed)`);
+              }
+
+              case 'wave1_complete':
+                setAnalysisProgress(30);
                 break;
-              
-              case 'start':
-                // Backward compatibility con vecchio evento
-                console.log('🚀 Analysis started, total sites:', data.total);
-                setTotalCompetitorsToAnalyze(data.total);
+
+              case 'wave2_started':
+                setAnalysisProgress(35);
                 break;
-                
-              case 'progress':
-                console.log(`📊 Analyzing (${data.current}/${data.total}): ${data.url}`);
-                setCurrentAnalyzingUrl(data.url);
-                setAnalysisProgress(data.percentage);
+
+              case 'progress': {
+                // 35% → 85% durante AI + matching
+                const wave2Pct = data.total > 0 ? data.current / data.total : 0;
+                const newProgress = Math.round(35 + wave2Pct * 50);
+                setAnalysisProgress(newProgress);
+                setCurrentAnalyzingUrl(data.url || '');
+                if (newProgress >= 65 && !showNearlyDonePopupRef.current) {
+                  setShowNearlyDonePopup(true);
+                  showNearlyDonePopupRef.current = true;
+                }
                 break;
-                
+              }
+
               case 'result':
                 console.log(`✅ Result: ${data.url} → ${data.score}%`);
                 break;
-                
+
+              // 📦 Batch events
+              case 'batch_info':
+                setBatchInfo({ currentBatch: 1, totalBatches: data.num_batches, totalSites: data.total_sites });
+                break;
+              case 'batch_start':
+                setBatchInfo(prev => ({ currentBatch: data.batch_num, totalBatches: data.total_batches, totalSites: prev?.totalSites || 0 }));
+                break;
+              case 'batch_complete':
+                break;
+              case 'start':
+                setTotalCompetitorsToAnalyze(data.total);
+                break;
+
               case 'site_failed':
-                // 🚨 FASE 1: Failed site event
                 console.warn(`⚠️ Site failed: ${data.url} (${data.reason})`);
                 break;
-                
               case 'error':
                 console.warn(`⚠️ Error analyzing ${data.url}: ${data.message}`);
                 break;
@@ -550,6 +559,8 @@ export default function AnalyzePage() {
                 console.log('🎉 Analysis complete!');
                 setAnalysisProgress(100);
                 setCurrentAnalyzingUrl('Completato!');
+                setShowNearlyDonePopup(false);
+                showNearlyDonePopupRef.current = false;
                 
                 // 💾 Pulisci localStorage (analisi completata)
                 localStorage.removeItem('current_analysis_id');
@@ -1045,6 +1056,28 @@ export default function AnalyzePage() {
                         </div>
                       </div>
                     </div>
+
+                    {/* ⚙️ Popup "Ci siamo quasi!" — visibile dal 65% */}
+                    {showNearlyDonePopup && (
+                      <div className="mt-4 p-5 bg-gradient-to-br from-indigo-500/15 to-purple-500/15 rounded-xl border-2 border-indigo-500/40 shadow-lg">
+                        <div className="flex items-start gap-3">
+                          <span className="text-2xl">⚙️</span>
+                          <div className="flex-1">
+                            <p className="text-base font-bold text-slate-100 mb-1">
+                              Ci siamo quasi!
+                            </p>
+                            <p className="text-sm text-slate-300 leading-relaxed">
+                              Stiamo analizzando e confrontando ogni competitor con il profilo del tuo cliente.
+                              La fase di matching richiede qualche secondo in più — il risultato sarà molto più preciso 🎯
+                            </p>
+                            {/* Mini progress bar animata */}
+                            <div className="mt-3 w-full bg-slate-700/50 rounded-full h-1.5 overflow-hidden">
+                              <div className="h-full rounded-full bg-gradient-to-r from-indigo-400 via-purple-400 to-pink-400 animate-pulse" style={{ width: '100%' }} />
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    )}
                   </div>
                 )}
 
