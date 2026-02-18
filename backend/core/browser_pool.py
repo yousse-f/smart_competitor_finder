@@ -6,6 +6,7 @@ Sistema di pool browser per stabilità e performance
 import asyncio
 import time
 import random
+import os
 from typing import List, Optional, Dict
 from dataclasses import dataclass
 from playwright.async_api import async_playwright, Browser, BrowserContext, Page
@@ -36,7 +37,7 @@ class BrowserPool:
     - Performance optimization
     """
     
-    def __init__(self, pool_size: int = 1, max_requests_per_session: int = 10):
+    def __init__(self, pool_size: int = 3, max_requests_per_session: int = 10):
         self.pool_size = pool_size
         self.max_requests_per_session = max_requests_per_session
         self.sessions: List[BrowserSession] = []
@@ -212,8 +213,9 @@ class BrowserPool:
                 try:
                     await page.goto(url, wait_until="networkidle", timeout=adaptive_timeout)
                     
-                    # 🎭 HUMAN-LIKE DELAY - Critical anti-detection
-                    human_delay = random.uniform(3.0, 7.0)
+                    # 🎭 HUMAN-LIKE DELAY - Adattivo bulk/single mode
+                    is_bulk = os.getenv("BULK_MODE", "false").lower() == "true"
+                    human_delay = random.uniform(0.5, 1.5) if is_bulk else random.uniform(3.0, 7.0)
                     logger.info(f"🕐 Human-like delay: {human_delay:.1f}s")
                     await asyncio.sleep(human_delay)
                     

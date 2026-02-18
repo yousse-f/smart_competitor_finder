@@ -1,6 +1,7 @@
 import asyncio
 from typing import List, Dict, Any
 import logging
+import os
 from urllib.parse import urlparse
 
 from playwright.async_api import async_playwright
@@ -12,10 +13,14 @@ logger = logging.getLogger(__name__)
 class BulkScraper:
     """Handles bulk scraping of competitor websites with keyword matching."""
     
-    def __init__(self, max_concurrent: int = 5, timeout: int = 30):
+    def __init__(self, max_concurrent: int = None, timeout: int = 30):
+        # Use ENV var or default to 10 for optimal performance
+        if max_concurrent is None:
+            max_concurrent = int(os.getenv('MAX_CONCURRENT_SCRAPES', '10'))
         self.max_concurrent = max_concurrent
         self.timeout = timeout * 1000  # Convert to milliseconds for Playwright
         self.semaphore = asyncio.Semaphore(max_concurrent)
+        logger.info(f"🚀 BulkScraper initialized: max_concurrent={max_concurrent}")
     
     async def analyze_sites_bulk(self, sites_data: List[Dict], target_keywords: List[str], client_url: str = None) -> List[Dict[str, Any]]:
         """
@@ -33,21 +38,9 @@ class BulkScraper:
         
         # Analyze client sector if URL provided
         client_sector_data = None
+        # sector_classifier rimosso in v2.0 — client_sector_data non più utilizzato
         if client_url:
-            try:
-                logger.info(f"Analyzing client sector from: {client_url}")
-                client_content = await self._scrape_site_content(client_url)
-                full_client_text = self._combine_content_text(client_content)
-                
-                from core.sector_classifier import sector_classifier
-                client_sector_data = await sector_classifier.analyze_sector(
-                    full_client_text, 
-                    client_content.get('title', ''), 
-                    client_content.get('meta_description', '')
-                )
-                logger.info(f"Client sector identified as: {client_sector_data.get('primary_sector', 'unknown')}")
-            except Exception as e:
-                logger.warning(f"Failed to analyze client sector: {str(e)}")
+            logger.info(f"client_url {client_url} ricevuto ma sector analysis rimossa in v2.0")
         
         # Create tasks for concurrent processing
         tasks = [
@@ -118,6 +111,7 @@ class BulkScraper:
                 'unique_matches': match_results['unique_matches'],
                 'title': content_data.get('title', ''),
                 'meta_description': content_data.get('meta_description', ''),
+                '_full_content': full_text,  # 🆕 Salva contenuto per batch AI
                 'status': 'success',
                 'analysis_details': match_results.get('score_details', {}),
                 'relevance_label': match_results.get('relevance_label', 'relevant'),
@@ -229,5 +223,5 @@ class BulkScraper:
             'error_message': error_message
         }
 
-# Global scraper instance
-bulk_scraper = BulkScraper(max_concurrent=3, timeout=30)
+# Global scraper instance (max_concurrent from ENV or default 10)
+bulk_scraper = BulkScraper(max_concurrent=None, timeout=30)

@@ -3,10 +3,14 @@ from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import JSONResponse
 import uvicorn
 import os
+import logging
 from dotenv import load_dotenv
 
 # Load environment variables
 load_dotenv()
+
+# Setup logger
+logger = logging.getLogger(__name__)
 
 from api.analyze_site import router as analyze_site_router
 from api.upload_file import router as upload_file_router
@@ -37,6 +41,19 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
+# Browser Pool initialization on startup
+from core.browser_pool import browser_pool
+
+@app.on_event("startup")
+async def startup_event():
+    logger.info("🚀 Initializing Browser Pool on startup...")
+    try:
+        await browser_pool.initialize()
+        logger.info(f"✅ Browser Pool ready: {len(browser_pool.sessions)} sessions")
+    except Exception as e:
+        logger.warning(f"⚠️ Browser Pool init failed (non-critical): {e}")
+        logger.warning("⚠️ Scraping will use Basic HTTP only (no Playwright fallback)")
+
 # Include API routers
 app.include_router(analyze_site_router, prefix="/api", tags=["analysis"])
 app.include_router(upload_file_router, prefix="/api", tags=["file-processing"])
@@ -54,6 +71,25 @@ async def root():
 @app.get("/health")
 async def health_check():
     return {"status": "healthy"}
+
+@app.get("/api/cache-stats")
+async def cache_stats():
+    """Get scraping cache statistics (performance monitoring)."""
+    from core.scraping_cache import scraping_cache
+    
+    if scraping_cache:
+        stats = scraping_cache.get_stats()
+        return {
+            "cache_enabled": True,
+            "stats": stats,
+            "status": "operational"
+        }
+    else:
+        return {
+            "cache_enabled": False,
+            "message": "Scraping cache is disabled (set SCRAPING_CACHE_ENABLED=true to enable)",
+            "status": "disabled"
+        }
 
 if __name__ == "__main__":
     # Get port from environment variable (Railway uses $PORT)

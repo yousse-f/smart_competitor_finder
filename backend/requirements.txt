@@ -1,6 +1,7 @@
 # ============================================
 # Smart Competitor Finder - Backend Dependencies
-# Versione Flessibile (Fissa solo le librerie ML critiche + pydantic-settings)
+# v2.0 (18/02/2026) — Rimosso sentence-transformers/torch/scikit-learn
+# Classificazione competitor ora via OpenAI gpt-4o-mini
 # ============================================
 
 # --- Core Framework ---
@@ -8,32 +9,33 @@ fastapi
 uvicorn[standard]
 python-dotenv
 pydantic
-pydantic-settings==2.1.0  # <--- Fissato per risolvere l'errore ModuleNotFoundError
+pydantic-settings==2.1.0
 pydantic==2.5.0
+python-multipart
 
 # --- Web Scraping & Automation ---
 playwright
-playwright-stealth 
+playwright-stealth
 beautifulsoup4
+lxml
 requests
 aiofiles
 httpx
-# Brotli support (MUST be installed BEFORE aiohttp)
 brotli>=1.1.0
 brotlicffi>=1.1.0
 aiohttp>=3.9.0
-fake-useragent # FIX: Missing dependency causing Railway crash
+fake-useragent
+trafilatura
 
-# --- Data Processing (Fissate per compatibilità Docker) ---
+# --- Data Processing ---
 numpy==1.26.4
 pandas==2.1.4
-openpyxl  # For .xlsx files
-xlrd      # For legacy .xls files
+openpyxl
+xlrd
 nltk
 
-# --- ML Libraries (Fissate per compatibilità Docker) ---
-scikit-learn==1.3.2
-sentence-transformers
+# --- AI/ML APIs ---
+openai
 
 # --- Database (Future Caching) ---
 sqlalchemy
@@ -41,10 +43,6 @@ alembic
 
 # --- Utilities & Logging ---
 structlog
-python-multipart
-
-# --- AI/ML APIs ---
-openai
 
 # --- Development & Testing ---
 pytest

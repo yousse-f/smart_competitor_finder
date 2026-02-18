@@ -4,9 +4,9 @@ from typing import List, Dict, Set, Optional
 from collections import Counter
 import logging
 
-from core.semantic_filter import semantic_filter
-from core.sector_classifier import sector_classifier
-from core.keyword_extraction import GENERIC_KEYWORDS, is_generic_keyword
+# semantic_filter e sector_classifier rimossi in v2.0 (18/02/2026)
+# Classificazione competitor ora delegata a classify_competitor_with_ai() in ai_site_analyzer.py
+from core.keyword_extraction import GENERIC_KEYWORDS, is_generic_keyword, TECHNICAL_HVAC_KEYWORDS, is_technical_hvac_keyword
 
 logger = logging.getLogger(__name__)
 
@@ -114,40 +114,24 @@ class KeywordMatcher:
             keyword_matches = self._find_keyword_matches(target_keywords, content_words, content_lower)
             keyword_score_data = self._calculate_keyword_score(target_keywords, keyword_matches)
             
-            # Semantic analysis (if enabled)
-            semantic_results = {}
-            if self.semantic_enabled:
-                try:
-                    semantic_results = await semantic_filter.analyze_semantic_similarity(
-                        target_keywords, site_content, business_context
-                    )
-                except Exception as e:
-                    logger.warning(f"Semantic analysis failed, using keyword-only scoring: {str(e)}")
-                    semantic_results = {'semantic_score': 0}
+            # Semantic analysis disabilitata in v2.0 (semantic_filter rimosso)
+            semantic_results = {'semantic_score': 0}
             
-            # Sector analysis and relevance scoring
+            # Sector analysis rimossa in v2.0 — sector_classifier eliminato
+            # La rilevanza è calcolata da classify_competitor_with_ai() in analyze_stream.py
             sector_results = {}
-            relevance_results = {'relevance_score': 1.0, 'relevance_label': 'relevant', 'reason': 'No sector analysis'}
-            
-            try:
-                # Analyze competitor sector
-                competitor_sector_data = await sector_classifier.analyze_sector(
-                    site_content, site_title, meta_description
-                )
-                sector_results = competitor_sector_data
-                
-                # Calculate relevance if client sector data is available
-                if client_sector_data:
-                    relevance_results = sector_classifier.calculate_relevance_score(
-                        client_sector_data, competitor_sector_data
-                    )
-                    
-            except Exception as e:
-                logger.warning(f"Sector analysis failed: {str(e)}")
-                relevance_results = {'relevance_score': 0.8, 'relevance_label': 'partially_relevant', 'reason': 'Sector analysis error'}
+            relevance_results = {'relevance_score': 1.0, 'relevance_label': 'relevant', 'reason': 'Sector analysis delegata a OpenAI'}
             
             # Calculate combined score
             final_score = self._calculate_combined_score(keyword_score_data, semantic_results)
+            
+            # 🚨 SECTOR MISMATCH PENALTY: Se settori completamente diversi, penalizza score
+            sector_penalty_applied = False
+            if relevance_results.get('relevance_label') == 'irrelevant':
+                # Settori completamente diversi (es: Auto vs IT)
+                logger.warning(f"⚠️ SECTOR MISMATCH: Applying 70% penalty (irrelevant sectors)")
+                final_score['combined_score'] *= 0.3  # Penalty 70%
+                sector_penalty_applied = True
             
             # Apply relevance adjustment to final score
             adjusted_score = self._apply_relevance_adjustment(final_score['combined_score'], relevance_results)
@@ -167,9 +151,11 @@ class KeywordMatcher:
                     'semantic_enabled': self.semantic_enabled,
                     'original_combined_score': final_score['combined_score'],
                     'relevance_adjusted_score': adjusted_score,
+                    'sector_penalty_applied': sector_penalty_applied,  # 🆕 Flag penalty settore
                     # ⭐ NEW: Generic keyword filter details
                     'generic_matches': keyword_score_data.get('generic_matches', []),
                     'specific_matches': keyword_score_data.get('specific_matches', []),
+                    'technical_hvac_matches': keyword_score_data.get('technical_hvac_matches', []),
                     'quality_flag': keyword_score_data.get('quality_flag', 'UNKNOWN')
                 },
                 'semantic_analysis': semantic_results if self.semantic_enabled else None,
@@ -233,8 +219,8 @@ class KeywordMatcher:
         """
         Calculate the keyword-based match score with quality weighting.
         
-        Uses GENERIC_KEYWORDS from keyword_extraction.py to apply reduced weight (0.3x)
-        to generic keywords and penalize matches with ONLY generic keywords (50% reduction).
+        Uses TECHNICAL_HVAC_KEYWORDS (1.5x weight), normal keywords (1.0x), 
+        and GENERIC_KEYWORDS (0.3x weight) for accurate HVAC competitor detection.
         """
         if not target_keywords:
             return {'score': 0, 'method': 'no_keywords'}
@@ -246,29 +232,35 @@ class KeywordMatcher:
         if len(found_keywords) == 0:
             return {'score': 0, 'method': 'no_matches'}
         
-        # ⭐ NEW: Separate generic vs specific matches
+        # ⭐ NEW: Separate technical HVAC, generic, and normal matches
+        technical_hvac_matches = []
         generic_matches = []
         specific_matches = []
         
         for keyword in found_keywords:
-            if is_generic_keyword(keyword):
+            if is_technical_hvac_keyword(keyword):
+                technical_hvac_matches.append(keyword)
+            elif is_generic_keyword(keyword):
                 generic_matches.append(keyword)
             else:
                 specific_matches.append(keyword)
         
-        # Calculate weighted score
-        GENERIC_WEIGHT = float(os.getenv('GENERIC_KEYWORD_WEIGHT', '0.3'))
+        # Calculate weighted score with HVAC boost
+        TECHNICAL_HVAC_WEIGHT = 1.5  # 🚀 Boost per keyword tecniche HVAC
         SPECIFIC_WEIGHT = 1.0
+        GENERIC_WEIGHT = float(os.getenv('GENERIC_KEYWORD_WEIGHT', '0.3'))
         
         weighted_matches = 0.0
-        max_possible_weight = len(target_keywords) * SPECIFIC_WEIGHT  # Assuming all keywords are specific
+        max_possible_weight = len(target_keywords) * SPECIFIC_WEIGHT  # Assuming all keywords are normal
         
         for keyword in found_keywords:
             count = keyword_counts.get(keyword, 1)
             # Frequency bonus (max 1.5x): 1x at 1 occurrence, 1.5x at 5+ occurrences
             frequency_multiplier = min(1.5, 1 + (count - 1) * 0.1)
             
-            if is_generic_keyword(keyword):
+            if is_technical_hvac_keyword(keyword):
+                weighted_matches += TECHNICAL_HVAC_WEIGHT * frequency_multiplier
+            elif is_generic_keyword(keyword):
                 weighted_matches += GENERIC_WEIGHT * frequency_multiplier
             else:
                 weighted_matches += SPECIFIC_WEIGHT * frequency_multiplier
@@ -279,16 +271,22 @@ class KeywordMatcher:
         else:
             keyword_score = 0
         
-        # ⚠️ PENALTY: If ONLY generic keywords matched (no specific ones), reduce score by 50%
+        # ⚠️ PENALTY: If ONLY generic keywords matched (no specific/technical ones), reduce score by 50%
         quality_flag = ''
-        if len(specific_matches) == 0 and len(generic_matches) > 0:
+        total_quality_matches = len(technical_hvac_matches) + len(specific_matches)
+        
+        if total_quality_matches == 0 and len(generic_matches) > 0:
             keyword_score *= 0.5  # 50% penalty
             quality_flag = 'LOW_QUALITY_ONLY_GENERIC'
-        elif len(specific_matches) >= 5:
+        elif len(technical_hvac_matches) >= 3:
+            quality_flag = 'EXCELLENT_QUALITY_HVAC'  # 🏆 Molte keyword tecniche
+        elif len(technical_hvac_matches) >= 1:
+            quality_flag = 'HIGH_QUALITY_HVAC'  # ✅ Almeno 1 keyword tecnica
+        elif total_quality_matches >= 5:
             quality_flag = 'HIGH_QUALITY'
-        elif len(specific_matches) >= 2:
+        elif total_quality_matches >= 2:
             quality_flag = 'MEDIUM_QUALITY'
-        elif len(specific_matches) >= 1:
+        elif total_quality_matches >= 1:
             quality_flag = 'LOW_QUALITY'
         else:
             quality_flag = 'NO_SPECIFIC_KEYWORDS'
@@ -296,22 +294,24 @@ class KeywordMatcher:
         # Cap at 100
         final_score = min(100, keyword_score)
         
-        logger.info(f"🎯 Match quality: {len(specific_matches)} specific + {len(generic_matches)} generic = {quality_flag}")
+        logger.info(f"🎯 Match quality: {len(technical_hvac_matches)} HVAC + {len(specific_matches)} specific + {len(generic_matches)} generic = {quality_flag}")
         
         return {
             'score': round(final_score, 1),
-            'method': 'quality_weighted_generic_filter',
+            'method': 'hvac_technical_weighted',
             'weighted_matches': round(weighted_matches, 2),
             'max_possible_weight': round(max_possible_weight, 2),
             'unique_matches': len(found_keywords),
             'total_target': total_target_keywords,
+            'technical_hvac_matches': technical_hvac_matches,
             'generic_matches': generic_matches,
             'specific_matches': specific_matches,
             'quality_flag': quality_flag,
             'breakdown': {
+                'technical_hvac_keywords': len(technical_hvac_matches),
                 'generic_keywords': len(generic_matches),
                 'specific_keywords': len(specific_matches),
-                'penalty_applied': len(specific_matches) == 0 and len(generic_matches) > 0
+                'penalty_applied': total_quality_matches == 0 and len(generic_matches) > 0
             }
         }
     
@@ -358,6 +358,49 @@ class KeywordMatcher:
             adjusted_score = original_score * relevance_score
         
         return round(min(100, max(0, adjusted_score)), 1)
+    
+    def _map_ai_sector_to_code(self, ai_sector_name: str) -> str:
+        """
+        Map AI industry sector name to internal sector code.
+        
+        AI sectors examples:
+        - "Tecnologia dell'Informazione e Software" → digital_tech
+        - "Consulenza e Servizi Professionali" → consulting
+        - "Design e Comunicazione" → services
+        - "Produzione Industriale" → manufacturing
+        """
+        sector_lower = ai_sector_name.lower()
+        
+        # Technology/IT/Software
+        if any(word in sector_lower for word in ['tecnologia', 'software', 'informazione', 'it', 'digital']):
+            return 'digital_tech'
+        
+        # AI/ML
+        if any(word in sector_lower for word in ['intelligenza artificiale', 'machine learning', 'ai']):
+            return 'ai_ml'
+        
+        # Consulting
+        if any(word in sector_lower for word in ['consulenza', 'consulting', 'advisory']):
+            return 'consulting'
+        
+        # Design/Communication
+        if any(word in sector_lower for word in ['design', 'comunicazione', 'communication', 'marketing']):
+            return 'services'
+        
+        # Manufacturing
+        if any(word in sector_lower for word in ['produzione', 'manufacturing', 'industriale']):
+            return 'manufacturing'
+        
+        # Construction
+        if any(word in sector_lower for word in ['edilizia', 'costruzioni', 'construction']):
+            return 'construction'
+        
+        # Retail/Commerce
+        if any(word in sector_lower for word in ['commercio', 'retail', 'e-commerce']):
+            return 'services'
+        
+        # Default fallback
+        return 'services'
 
 
 def format_match_criteria(

@@ -13,15 +13,17 @@ def classify_competitor_status(score: float) -> dict:
     """
     Classifica competitor in base allo score con sistema KPI a 3 colori.
     
-    Soglie aggiornate (Task 3):
-    - DIRECT: >= 65% (era 60%)
-    - POTENTIAL: >= 50% (era 40%)
-    - NON_COMPETITOR: < 50%
+    Soglie ottimizzate per ridurre falsi positivi:
+    - DIRECT: >= 40% (competitor diretto stesso mercato)
+    - POTENTIAL: >= 25% (da valutare - possibile overlap) 
+    - NON_COMPETITOR: < 25% (settore completamente diverso)
+    
+    Note: Soglie più alte per evitare falsi positivi (es: noleggio auto vs IT)
     
     Returns:
         dict con category, label, color, priority
     """
-    if score >= 65:  # 🔄 Aumentato da 60 a 65
+    if score >= 40:  # 🔄 Manteniamo 40%
         return {
             "category": "DIRECT",
             "label": "Competitor Diretto",
@@ -31,7 +33,7 @@ def classify_competitor_status(score: float) -> dict:
             "priority": 1,
             "action": "Monitora attentamente"
         }
-    elif score >= 50:  # 🔄 Aumentato da 40 a 50
+    elif score >= 25:  # 🔄 Aumentato da 20 a 25 (evita falsi positivi)
         return {
             "category": "POTENTIAL",
             "label": "Da Valutare",
@@ -53,14 +55,38 @@ def classify_competitor_status(score: float) -> dict:
         }
 
 class CompetitorMatch:
-    def __init__(self, url: str, score: int, keywords_found: List[str], title: str = "", description: str = ""):
+    def __init__(
+        self, 
+        url: str, 
+        score: int, 
+        keywords_found: List[str], 
+        title: str = "", 
+        description: str = "",
+        # 🆕 Nuovi campi AI
+        classification: str = "not_competitor",
+        reason: str = "",
+        ai_confidence: float = 0.0,
+        competitor_description: str = "",
+        competitor_sector: str = "",
+        recommended_action: str = "",
+        overlap_percentage: int = 0
+    ):
         self.url = url
         self.score = score
         self.keywords_found = keywords_found
         self.title = title
         self.description = description
-        # Aggiungi classificazione KPI automatica
+        # Aggiungi classificazione KPI automatica (mantiene compatibilità)
         self.status = classify_competitor_status(score)
+        
+        # 🆕 Nuovi campi AI per analisi avanzata
+        self.classification = classification  # direct_competitor | potential_competitor | not_competitor
+        self.reason = reason  # Spiegazione del perché
+        self.ai_confidence = ai_confidence  # Confidence score AI (0.0-1.0)
+        self.competitor_description = competitor_description  # Descrizione business competitor
+        self.competitor_sector = competitor_sector  # Settore industriale competitor
+        self.recommended_action = recommended_action  # Azione consigliata
+        self.overlap_percentage = overlap_percentage  # Percentuale sovrapposizione mercato
 
 @router.post("/upload-and-analyze")
 async def upload_and_analyze(
@@ -213,67 +239,103 @@ async def upload_and_analyze(
 
 async def analyze_competitors_bulk(urls: List[str], keywords: List[str]) -> List[CompetitorMatch]:
     """
-    🎯 REAL ANALYSIS with keyword quality weighting system.
-    Uses the actual matching engine with semantic analysis and sector relevance.
+    🎯 REFACTORED: Single source of truth - no double scraping.
+    
+    Pipeline:
+    1. hybrid_scraper_v2.scrape_intelligent() → UNICA fonte di contenuto
+    2. Usa full_text dal risultato scraping
+    3. Ogni sito produce SEMPRE un risultato (success/partial/error)
+    4. Nessun skip definitivo (no continue)
     """
     from core.hybrid_scraper_v2 import hybrid_scraper_v2
     from core.matching import keyword_matcher
-    from bs4 import BeautifulSoup
-    import aiohttp
-    import ssl
     
     matches = []
     
-    # Process all URLs (no artificial limit)
-    logging.info(f"🚀 Starting REAL analysis for {len(urls)} competitors with {len(keywords)} target keywords")
+    logging.info(f"🚀 Starting REFACTORED batch analysis for {len(urls)} competitors")
+    logging.info(f"   Target keywords: {len(keywords)}")
+    logging.info(f"   Pipeline: Single scraping source → deterministic results")
     
     for i, url in enumerate(urls):
+        logging.info(f"📊 [{i+1}/{len(urls)}] Processing: {url}")
+        
+        # ═══════════════════════════════════════════════════════════
+        # STEP 1: Scraping (UNICA SOURCE OF TRUTH)
+        # ═══════════════════════════════════════════════════════════
         try:
-            logging.info(f"📊 Processing {i+1}/{len(urls)}: {url}")
+            scrape_result = await hybrid_scraper_v2.scrape_intelligent(
+                url, 
+                max_keywords=50,  # 🔄 Aumentato per catturare più termini tecnici 
+                use_advanced=True
+            )
             
-            # 1. Scrape competitor site content
-            scrape_result = await hybrid_scraper_v2.scrape_intelligent(url, max_keywords=20, use_advanced=True)
+            scraping_status = scrape_result.get('status', 'unknown')
+            full_text = scrape_result.get('full_text', '')
+            content_length = scrape_result.get('content_length', 0)
             
-            if not scrape_result.get('status') == 'success':
-                logging.warning(f"⚠️ Scraping failed for {url}, skipping...")
-                continue
+            logging.info(f"   Scraping: {scraping_status} | Content: {content_length} chars | Method: {scrape_result.get('scraping_method', 'unknown')}")
             
-            # Extract text content from scraping result
-            # The scraper returns keywords as dicts, but we need the full text for matching
-            try:
-                ssl_context = ssl.create_default_context()
-                ssl_context.check_hostname = False
-                ssl_context.verify_mode = ssl.CERT_NONE
-                
-                timeout = aiohttp.ClientTimeout(total=10)
-                async with aiohttp.ClientSession(timeout=timeout) as session:
-                    async with session.get(url, ssl=ssl_context) as response:
-                        if response.status == 200:
-                            html_content = await response.text()
-                            soup = BeautifulSoup(html_content, 'html.parser')
-                            for element in soup(["script", "style", "meta", "link"]):
-                                element.decompose()
-                            full_text = soup.get_text()
-                            full_text = ' '.join(full_text.split())  # Clean whitespace
-                        else:
-                            full_text = ""
-            except Exception as text_error:
-                logging.warning(f"Could not extract full text from {url}: {text_error}")
-                full_text = ""
+        except Exception as scraping_error:
+            logging.error(f"   ❌ Scraping exception: {scraping_error}")
+            scrape_result = {
+                'status': 'error',
+                'error': str(scraping_error),
+                'full_text': '',
+                'title': '',
+                'description': '',
+                'content_length': 0
+            }
+            scraping_status = 'error'
+            full_text = ''
+            content_length = 0
+        
+        # ═══════════════════════════════════════════════════════════
+        # STEP 2: Validazione Contenuto (Guardrails)
+        # ═══════════════════════════════════════════════════════════
+        MIN_CONTENT_THRESHOLD = 500  # 500 caratteri minimi
+        
+        if scraping_status != 'success':
+            # Scraping fallito completamente
+            logging.warning(f"   ⚠️ Scraping failed: {scrape_result.get('error', 'Unknown error')}")
+            matches.append(CompetitorMatch(
+                url=url,
+                score=0,
+                keywords_found=[],
+                title=f"❌ Scraping Failed",
+                description=f"Error: {scrape_result.get('error', 'Unknown error')}"
+            ))
+            continue  # Prossimo sito
             
-            # 2. Calculate match score using REAL matching engine with quality weighting
+        elif content_length < MIN_CONTENT_THRESHOLD:
+            # Contenuto insufficiente → status partial
+            logging.warning(f"   ⚠️ Insufficient content: {content_length} < {MIN_CONTENT_THRESHOLD} chars")
+            matches.append(CompetitorMatch(
+                url=url,
+                score=0,
+                keywords_found=[],
+                title=scrape_result.get('title', '❌ Insufficient Content'),
+                description=f"Partial scraping: only {content_length} chars extracted"
+            ))
+            continue  # Prossimo sito
+        
+        # ═══════════════════════════════════════════════════════════
+        # STEP 3: Matching (usa full_text dallo scraper)
+        # ═══════════════════════════════════════════════════════════
+        try:
             match_results = await keyword_matcher.calculate_match_score(
                 target_keywords=keywords,
-                site_content=full_text,
+                site_content=full_text,  # ✅ SOURCE OF TRUTH
                 business_context=None,
                 site_title=scrape_result.get('title', ''),
                 meta_description=scrape_result.get('description', ''),
                 client_sector_data=None
             )
             
-            # 3. Create match object with real data
             score = int(match_results['match_score'])
             found_keywords = match_results['found_keywords']
+            
+            logging.info(f"   ✅ Matching: {score}% | Keywords: {len(found_keywords)}")
+            logging.info(f"      Quality: {match_results.get('score_details', {}).get('quality_flag', 'N/A')}")
             
             matches.append(CompetitorMatch(
                 url=url,
@@ -283,23 +345,22 @@ async def analyze_competitors_bulk(urls: List[str], keywords: List[str]) -> List
                 description=scrape_result.get('description', '')
             ))
             
-            logging.info(f"✅ {url}: {score}% match ({len(found_keywords)} keywords found)")
-            logging.info(f"   Quality breakdown: {match_results.get('score_details', {})}")
-            
-        except Exception as e:
-            logging.error(f"❌ Error processing {url}: {str(e)}")
-            # Add error entry
+        except Exception as matching_error:
+            logging.error(f"   ❌ Matching exception: {matching_error}")
             matches.append(CompetitorMatch(
                 url=url,
                 score=0,
                 keywords_found=[],
-                title=f"Error analyzing {url}",
-                description=f"Analysis failed: {str(e)}"
+                title=scrape_result.get('title', '❌ Matching Failed'),
+                description=f"Scraping OK, Matching error: {str(matching_error)}"
             ))
     
     # Sort by score (highest first)
     matches.sort(key=lambda x: x.score, reverse=True)
     
-    logging.info(f"🎉 Analysis complete: {len(matches)}/{len(urls)} competitors successfully analyzed")
+    logging.info(f"🎉 Batch analysis complete:")
+    logging.info(f"   Total sites: {len(urls)}")
+    logging.info(f"   Results: {len(matches)}")
+    logging.info(f"   Success rate: {len([m for m in matches if m.score > 0])}/{len(urls)} ({len([m for m in matches if m.score > 0])/len(urls)*100:.1f}%)")
     
     return matches

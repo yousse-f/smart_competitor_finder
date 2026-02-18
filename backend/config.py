@@ -26,11 +26,6 @@ class ScrapingConfig:
     
     # === Scraping Mode ===
     SCRAPING_MODE: str = os.getenv("SCRAPING_MODE", "development")  # development, production
-    
-    # === External Services ===
-    SCRAPINGBEE_API_KEY: Optional[str] = os.getenv("SCRAPINGBEE_API_KEY")
-    SCRAPERAPI_API_KEY: Optional[str] = os.getenv("SCRAPERAPI_API_KEY")
-    SCRAPERAPI_ENABLED: bool = os.getenv("SCRAPERAPI_ENABLED", "false").lower() == "true"
 
 @dataclass
 class AIConfig:

@@ -9,11 +9,11 @@
 
 ## 🚀 Quick Links
 
-- **[🏃 Quick Start Deployment](DEPLOYMENT_QUICK_START.md)** - Da zero a produzione in 5 minuti
-- **[🐳 Docker Deployment Guide](DOCKER_DEPLOYMENT.md)** - Guida completa deployment
-- **[🤖 Automation & Monitoring](AUTOMATION_MONITORING.md)** - Setup backup e monitoraggio
-- **[📖 User Manual](Manuale_Smart_Competitor_Finder.md)** - Manuale utente completo
-- **[🗺️ Roadmap](roadmap.md)** - Piano di sviluppo del progetto
+- **[🏃 Quick Start](docs/DEPLOYMENT_QUICK_START.md)** - Da zero a produzione in 5 minuti (se presente)
+- **[📖 User Manual](docs/Manuale_Smart_Competitor_Finder.md)** - Manuale utente completo
+- **[🗺️ Roadmap](docs/roadmap.md)** - Piano di sviluppo del progetto
+- **[🛡️ Anti-Bot Strategy](docs/ANTI_BOT_STRATEGY.md)** - Strategie avanzate di scraping
+- **[🔧 Scraping Roadmap](docs/SCRAPING_ROADMAP.md)** - Roadmap tecnica scraping
 
 ---
 
@@ -34,7 +34,7 @@
 ### 🛡️ Anti-Bot Advanced
 - **Browser fingerprinting evasion** con playwright-stealth
 - **User-Agent rotation** per ogni richiesta
-- **Proxy support** (ScraperAPI integration ready)
+- **100% Self-hosted** scraping (no external paid services)
 - **Domain intelligence** per handling di casi edge
 
 ### 🎨 Modern UX
@@ -88,7 +88,9 @@ nano backend/.env  # Inserisci OPENAI_API_KEY
 ./deploy.sh production
 ```
 
-**Documentazione completa:** [DEPLOYMENT_QUICK_START.md](DEPLOYMENT_QUICK_START.md)
+**Accesso applicazione:**
+- Frontend: `http://localhost:3000`
+- Backend API: `http://localhost:8000/docs`
 
 ### Option 2: Development Locale
 
@@ -120,17 +122,19 @@ npm run dev  # Apre su http://localhost:3000
 **Backend (`.env`):**
 
 ```bash
-# OpenAI (OBBLIGATORIO)
+# OpenAI (REQUIRED - Only external service)
 OPENAI_API_KEY=sk-...
-
-# ScraperAPI (Opzionale per anti-bot avanzato)
-SCRAPERAPI_KEY=...
 
 # Security
 SECRET_KEY=your-secret-key-here
 
 # CORS
 ALLOWED_ORIGINS=http://localhost:3000,https://tuodominio.com
+
+# Scraping Configuration (Optional - defaults are optimized)
+BROWSER_POOL_TIMEOUT=15
+MAX_CONCURRENT_SCRAPES=2
+SCRAPING_MODE=development
 ```
 
 **Documentazione completa:** [backend/.env.example](backend/.env.example)

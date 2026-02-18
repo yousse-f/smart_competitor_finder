@@ -218,6 +218,7 @@ def complete_analysis(analysis_id: str) -> bool:
         _update_metadata_index(analysis_data["metadata"])
         
         logger.info(f"✅ Analisi completata: {analysis_id}")
+        logger.info(f"✅ File generato: {dest_path}")
         return True
         
     except Exception as e:

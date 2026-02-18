@@ -6,9 +6,6 @@ import os
 from datetime import datetime
 
 from core.keyword_extraction import extract_keywords
-from core.hybrid_scraper import HybridScraper
-from core.hybrid_scraper_v2 import hybrid_scraper_v2
-from core.hybrid_scraper import HybridScraper
 from core.hybrid_scraper_v2 import hybrid_scraper_v2
 
 router = APIRouter()
@@ -77,7 +74,7 @@ def _get_user_friendly_error(error: str, url: str) -> dict:
 # Request/Response models
 class AnalyzeSiteRequest(BaseModel):
     url: HttpUrl
-    max_keywords: Optional[int] = 15
+    max_keywords: Optional[int] = 50  # 🔄 Aumentato per settore HVAC tecnico
     use_advanced_scraping: Optional[bool] = True
 
 class KeywordData(BaseModel):
@@ -100,17 +97,17 @@ class AnalyzeSiteResponse(BaseModel):
 @router.post("/analyze-site", response_model=AnalyzeSiteResponse)
 async def analyze_site(request: AnalyzeSiteRequest):
     """
-    🚀 Analyze a website URL to extract relevant keywords using advanced anti-bot scraping.
+    🚀 Analyze a website URL to extract relevant keywords using advanced self-hosted scraping.
     
     Features:
-    - Hybrid scraping: ScrapingBee → Advanced Internal → Basic fallback
-    - Anti-bot detection bypass
+    - 100% self-hosted: Browser Pool → Advanced Scraper → Basic HTTP
+    - Anti-bot detection bypass with Playwright stealth
     - Real-time performance stats
     - Intelligent keyword extraction and categorization
     """
     try:
         url_str = str(request.url)
-        max_keywords = request.max_keywords or 15
+        max_keywords = request.max_keywords or 50  # 🔄 Aumentato per HVAC
         
         logging.info(f"🎯 Starting analysis for URL: {url_str} (max_keywords: {max_keywords})")
         logging.info(f"🔧 Advanced scraping: {request.use_advanced_scraping}")
@@ -175,11 +172,15 @@ async def analyze_site(request: AnalyzeSiteRequest):
                 scraping_method="basic"
             )
         
+    except HTTPException:
+        # Re-raise HTTPException (already formatted)
+        raise
     except Exception as e:
-        logging.error(f"❌ Error analyzing site {request.url}: {str(e)}")
+        error_msg = str(e) if str(e) else "Errore sconosciuto durante l'analisi"
+        logging.error(f"❌ Error analyzing site {request.url}: {error_msg}", exc_info=True)
         raise HTTPException(
             status_code=500,
-            detail=f"Failed to analyze site: {str(e)}"
+            detail=f"Errore durante l'analisi del sito: {error_msg}"
         )
 
 def categorize_keyword(keyword: str) -> str:

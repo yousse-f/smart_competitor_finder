@@ -126,7 +126,18 @@ export const analyzeUrl = async (url: string): Promise<AnalysisResponse> => {
     });
     return response.data;
   } catch (error: any) {
-    throw new Error(error.response?.data?.detail || 'Errore durante l\'analisi del sito');
+    // Handle error response - backend can return string or object
+    const detail = error.response?.data?.detail;
+    
+    if (typeof detail === 'object' && detail.message) {
+      // User-friendly error with suggestion
+      const message = `${detail.message}\n${detail.suggestion || ''}`;
+      throw new Error(message);
+    } else if (typeof detail === 'string') {
+      throw new Error(detail);
+    } else {
+      throw new Error('Errore durante l\'analisi del sito');
+    }
   }
 };
 

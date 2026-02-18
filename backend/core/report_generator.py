@@ -209,12 +209,14 @@ class ReportGenerator:
         ws.column_dimensions['F'].width = 25  # Azione Consigliata
     
     def _create_detailed_results_sheet(self, analysis_results: List[Dict]):
-        """Create detailed results sheet with all competitor data and KPI classification"""
+        """Create detailed results sheet with all competitor data, KPI classification AND AI analysis"""
         ws = self.workbook.create_sheet("Detailed Results")
         
-        # Headers con classificazione KPI (senza Score %)
+        # 🆕 Headers con nuove colonne AI
         headers = [
-            "URL", "Criteri Match", "Categoria KPI", "Azione", 
+            "URL", "Criteri Match", "Categoria KPI", "Azione KPI",
+            "🤖 Classificazione AI", "🏢 Settore Competitor", "📝 Descrizione Business",
+            "💡 Perché", "🎯 Azioni Consigliate", "📊 Overlap %",
             "Keywords Found", "Keyword Count", "Title"
         ]
         
@@ -225,14 +227,38 @@ class ReportGenerator:
             cell.alignment = self.styles['header']['alignment']
             cell.border = self.styles['border']
         
-        # Data rows con classificazione KPI (senza Score %)
+        # Data rows con tutte le informazioni (KPI + AI)
         for row_idx, result in enumerate(analysis_results, 2):
             status = result.get('competitor_status', {})
+            
+            # 🆕 Mappa classification AI a emoji
+            classification = result.get('classification', 'not_competitor')
+            ai_emoji_map = {
+                'direct_competitor': '🔴',
+                'potential_competitor': '🟡',
+                'not_competitor': '🟢'
+            }
+            ai_emoji = ai_emoji_map.get(classification, '⚪')
+            ai_label_map = {
+                'direct_competitor': 'Diretto',
+                'potential_competitor': 'Potenziale',
+                'not_competitor': 'Non Competitor'
+            }
+            ai_label = ai_label_map.get(classification, 'N/A')
+            
             row_data = [
                 result.get('url', 'N/A'),
                 result.get('match_criteria', 'N/A'),
                 f"{status.get('emoji', '⚪')} {status.get('label', 'Non classificato')}",
                 status.get('action', 'N/A'),
+                # 🆕 Nuove colonne AI
+                f"{ai_emoji} {ai_label}",
+                result.get('competitor_sector', 'N/A'),
+                result.get('competitor_description', 'N/A'),
+                result.get('reason', 'N/A'),
+                result.get('recommended_action', 'N/A'),
+                result.get('overlap_percentage', 0),
+                # Colonne esistenti
                 ', '.join(result.get('keywords_found', [])),
                 len(result.get('keywords_found', [])),
                 result.get('title', 'N/A')
@@ -242,33 +268,57 @@ class ReportGenerator:
                 cell = ws.cell(row=row_idx, column=col_idx, value=value)
                 cell.border = self.styles['border']
                 
-                # Enable wrap text for "Criteri Match" column (column 2)
-                if col_idx == 2:
+                # Enable wrap text for long text columns
+                if col_idx in [2, 7, 8, 9]:  # Criteri Match, Descrizione, Perché, Azioni
                     cell.alignment = Alignment(horizontal='left', vertical='top', wrap_text=True)
                 
-                # Applica colore di sfondo in base a categoria KPI
-                if status.get('color') == 'green':
-                    cell.fill = PatternFill(start_color='E6F9E6', end_color='E6F9E6', fill_type='solid')
-                elif status.get('color') == 'yellow':
-                    cell.fill = PatternFill(start_color='FFF9E6', end_color='FFF9E6', fill_type='solid')
-                elif status.get('color') == 'red':
-                    cell.fill = PatternFill(start_color='FFE6E6', end_color='FFE6E6', fill_type='solid')
+                # 🆕 Colore sfondo basato su classificazione AI (colonna 5)
+                if col_idx == 5:
+                    if classification == 'direct_competitor':
+                        cell.fill = PatternFill(start_color='FFE6E6', end_color='FFE6E6', fill_type='solid')
+                        cell.font = Font(bold=True, color='CC0000')
+                    elif classification == 'potential_competitor':
+                        cell.fill = PatternFill(start_color='FFF9E6', end_color='FFF9E6', fill_type='solid')
+                        cell.font = Font(bold=True, color='CC8800')
+                    else:  # not_competitor
+                        cell.fill = PatternFill(start_color='E6F9E6', end_color='E6F9E6', fill_type='solid')
+                        cell.font = Font(color='006600')
+                
+                # Applica colore di sfondo KPI (colonna 3)
+                elif col_idx == 3:
+                    if status.get('color') == 'green':
+                        cell.fill = PatternFill(start_color='E6F9E6', end_color='E6F9E6', fill_type='solid')
+                    elif status.get('color') == 'yellow':
+                        cell.fill = PatternFill(start_color='FFF9E6', end_color='FFF9E6', fill_type='solid')
+                    elif status.get('color') == 'red':
+                        cell.fill = PatternFill(start_color='FFE6E6', end_color='FFE6E6', fill_type='solid')
                 
                 # Formatting specifico per colonne
-                if col_idx == 6:  # Count column (now column 6 with Criteri Match)
+                if col_idx in [10, 12]:  # Overlap % e Keyword Count
                     cell.alignment = Alignment(horizontal='center')
+                    if col_idx == 10:  # Overlap %
+                        cell.number_format = '0"%"'
                 else:
                     cell.font = self.styles['data']['font']
                     cell.alignment = self.styles['data']['alignment']
         
-        # Set specific column widths for Detailed Results sheet
+        # 🆕 Set column widths aggiornate
         ws.column_dimensions['A'].width = 35  # URL
-        ws.column_dimensions['B'].width = 60  # Criteri Match
+        ws.column_dimensions['B'].width = 50  # Criteri Match
         ws.column_dimensions['C'].width = 20  # Categoria KPI
-        ws.column_dimensions['D'].width = 25  # Azione
-        ws.column_dimensions['E'].width = 40  # Keywords Found
-        ws.column_dimensions['F'].width = 12  # Keyword Count
-        ws.column_dimensions['G'].width = 40  # Title
+        ws.column_dimensions['D'].width = 25  # Azione KPI
+        ws.column_dimensions['E'].width = 22  # Classificazione AI
+        ws.column_dimensions['F'].width = 25  # Settore Competitor
+        ws.column_dimensions['G'].width = 50  # Descrizione Business
+        ws.column_dimensions['H'].width = 60  # Perché
+        ws.column_dimensions['I'].width = 45  # Azioni Consigliate
+        ws.column_dimensions['J'].width = 12  # Overlap %
+        ws.column_dimensions['K'].width = 40  # Keywords Found
+        ws.column_dimensions['L'].width = 12  # Keyword Count
+        ws.column_dimensions['M'].width = 40  # Title
+        
+        # 🆕 Freeze panes per navigazione migliore
+        ws.freeze_panes = 'B2'  # Congela header e colonna URL
     
     def _create_sector_analysis_sheet(self, analysis_results: List[Dict]):
         """Create KPI category distribution analysis sheet"""

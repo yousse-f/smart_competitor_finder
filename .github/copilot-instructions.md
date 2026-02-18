@@ -7,7 +7,7 @@
 ### Tech Stack
 - **Frontend**: Next.js 15.5.4 App Router + React 19 + TypeScript + Tailwind
 - **Backend**: FastAPI (Python 3.11+) async/await + Pydantic models
-- **Scraping**: 4-layer fallback (Browser Pool → ScrapingBee → Advanced → Basic HTTP)
+- **Scraping**: 3-layer fallback (Browser Pool → Advanced → Basic HTTP)
 - **AI/ML**: OpenAI GPT-3.5-turbo (business summaries) + sentence-transformers (semantic similarity)
 - **Reports**: Pandas + OpenPyXL Excel generation with styled outputs
 - **Infrastructure**: Docker Compose + Nginx reverse proxy, multi-stage builds
@@ -32,15 +32,14 @@ page = await browser.new_page()  # Don't do this!
 
 **Fallback order** (tries until success):
 1. **Browser Pool** (`browser_pool.py`): 3 pre-warmed Playwright sessions, rotated every 8 requests
-2. **ScrapingBee** (if `SCRAPINGBEE_API_KEY` set): Cloud proxy service, premium residential IPs
-3. **Advanced Scraper** (`advanced_scraper.py`): Playwright + stealth + UA rotation + domain intelligence
-4. **Basic HTTP** (`_scrape_basic()`): aiohttp with 5s timeout (2s connect, 3s read), dual SSL strategy (verify→bypass)
+2. **Advanced Scraper** (`advanced_scraper.py`): Playwright + stealth + UA rotation + domain intelligence
+3. **Basic HTTP** (`_scrape_basic()`): aiohttp with 5s timeout (2s connect, 3s read), dual SSL strategy (verify→bypass)
 
 **Timeout discipline**: All layers enforce strict timeouts—hanging on bot-protected sites wastes resources.
 
 ### 2. Anti-Bot Strategy: Timeouts Matter Most
 
-Key insight from `ANTI_BOT_STRATEGY.md`: **Short timeouts (5s) prevent hanging on WAF-protected sites**. Success rate is 60%+ across known e-commerce domains.
+Key insight from `docs/ANTI_BOT_STRATEGY.md`: **Short timeouts (5s) prevent hanging on WAF-protected sites**. Success rate is 60%+ across known e-commerce domains.
 
 ```python
 # Browser Pool adaptive timeouts (browser_pool.py)
@@ -177,8 +176,8 @@ python test_reports.py            # Excel generation only
 **Diagnosis**: Check `docker-compose logs backend | grep "scraping"`  
 **Solution**: 
 - Add domain to `domain_intelligence.py` with custom config
-- Enable ScrapingBee by setting `SCRAPINGBEE_API_KEY` env var
-- For WAF/IP blocks, see `ANTI_BOT_STRATEGY.md` proxy section ($49/mo ScrapingBee recommended)
+- Increase timeout for specific domain
+- For persistent WAF/IP blocks, see `docs/ANTI_BOT_STRATEGY.md` for self-hosted optimizations
 
 ### 2. Playwright Binary Missing
 **Symptom**: "Executable doesn't exist at /path/to/chromium"  
@@ -231,12 +230,12 @@ Edit `backend/core/report_generator.py`:
 | `backend/core/matching.py` | Scoring engine | `calculate_match_score()` - hybrid scoring |
 | `backend/api/analyze_bulk.py` | Background task manager | `run_bulk_analysis()` - async processing |
 | `frontend/src/lib/api.ts` | API client | `apiClient` - configured axios instance |
-| `backend/ANTI_BOT_STRATEGY.md` | Scraping troubleshooting | Domain configs, proxy setup |
-| `DEPLOYMENT_QUICK_START.md` | 5-minute VPS guide | Production deployment steps |
+| `docs/ANTI_BOT_STRATEGY.md` | Scraping troubleshooting | Domain configs, proxy setup |
+| `docs/roadmap.md` | Project roadmap | Phase 2-3 plans |
 
 ---
 
 ## Project Roadmap Context
 
 Current: **Phase 1** (MVP) - Single-user, in-memory state, manual file uploads  
-See `roadmap.md` for Phase 2-3 plans: Redis caching, multi-tenant auth, CRM integrations, real-time monitoring.
+See `docs/roadmap.md` for Phase 2-3 plans: Redis caching, multi-tenant auth, CRM integrations, real-time monitoring.

@@ -9,13 +9,14 @@ import logging
 import os
 from typing import Dict, Any, Optional
 from dataclasses import dataclass
+from urllib.parse import urlparse
 
 from .browser_pool import browser_pool
 from .advanced_scraper import advanced_scraper
 from .keyword_extraction import extract_keywords_from_content
 from .ua_rotator import ua_rotator
-from .proxy_system import proxy_system
 from .domain_intelligence import should_skip_scraping, get_domain_config
+from .scraping_cache import scraping_cache
 
 logger = logging.getLogger(__name__)
 
@@ -31,21 +32,18 @@ class ScrapingResult:
 
 class HybridScraperV2:
     """
-    🛡️ Sistema di scraping con resilienza estrema:
-    1. Browser Pool (Primario) - Ultra stabile
-    2. ScrapingBee (Secondario) - Cloud service 
-    3. Advanced Scraper (Terziario) - Fallback
-    4. Basic HTTP (Quaternario) - Last resort
+    🛡️ Sistema di scraping con resilienza estrema (100% self-hosted):
+    1. Browser Pool (Primario) - Playwright con browser pool persistenti
+    2. Advanced Scraper (Secondario) - Stealth mode + anti-bot evasion
+    3. Basic HTTP (Terziario) - aiohttp con SSL fallback e UA rotation
     """
     
     def __init__(self):
-        self.scrapingbee_api_key = os.getenv('SCRAPINGBEE_API_KEY')
         self.scraping_mode = os.getenv('SCRAPING_MODE', 'development')
         
         # 📊 Statistiche performance dettagliate
         self.stats = {
             'browser_pool_success': 0,
-            'scrapingbee_success': 0,
             'advanced_success': 0,
             'basic_success': 0,
             'total_requests': 0,
@@ -53,28 +51,167 @@ class HybridScraperV2:
             'average_duration': 0.0,
             'success_rate': 0.0,
             'method_distribution': {},
-            'error_types': {}
+            'error_types': {},
+            'url_redirects_found': 0  # Track successful URL redirects
         }
+    
+    async def find_working_url(self, original_url: str) -> str:
+        """
+        🔍 Trova URL funzionante se quello originale fallisce (come fa Google)
+        Esempi: saiver.com → saiver-ahu.eu, domain.com → domain.it
+        
+        Strategia:
+        1. Prova www/non-www con TLD originale (HTTPS e HTTP)
+        2. Prova TLD europei comuni (.eu, .it, .de, .fr, .es, .uk, .com)
+        3. Prova path comuni (/it/, /en/, /index.aspx, ecc.)
+        4. Prova suffissi aziendali (-group, -spa, -srl, -ahu, -hvac, ecc.)
+        """
+        import aiohttp
+        
+        try:
+            parsed = urlparse(original_url)
+            has_www = parsed.netloc.startswith('www.')
+            domain_parts = parsed.netloc.replace('www.', '').split('.')
+            
+            if len(domain_parts) < 2:
+                return original_url
+            
+            base_name = domain_parts[0]
+            original_tld = domain_parts[-1]
+            
+            # Genera varianti comuni
+            variants = []
+            
+            # IMPORTANTE: Prima prova con/senza www con TLD originale (HTTPS e HTTP)
+            if has_www:
+                # Se originale ha www, prova senza (HTTPS e HTTP)
+                variants.append(f"https://{base_name}.{original_tld}")
+                variants.append(f"http://{base_name}.{original_tld}")
+            else:
+                # Se originale NON ha www, prova CON www (priorità alta!)
+                variants.append(f"https://www.{base_name}.{original_tld}")
+                variants.append(f"http://www.{base_name}.{original_tld}")
+            
+            # 1. Varianti regionali europee comuni (con e senza www, HTTPS e HTTP)
+            eu_tlds = ['eu', 'it', 'de', 'fr', 'es', 'uk', 'com']
+            for tld in eu_tlds:
+                if tld != original_tld:
+                    # HTTPS per primo
+                    variants.append(f"https://www.{base_name}.{tld}")
+                    variants.append(f"https://{base_name}.{tld}")
+                    # HTTP come fallback
+                    variants.append(f"http://www.{base_name}.{tld}")
+                    variants.append(f"http://{base_name}.{tld}")
+            
+            # 2. Varianti con path comuni (es: /it/index.aspx, /en/index.aspx)
+            common_paths = [
+                '/it/index.aspx', '/en/index.aspx', '/index.aspx',
+                '/it/', '/en/', '/it/home', '/en/home',
+                '/home', '/index.html', '/index.php'
+            ]
+            for path in common_paths:
+                if has_www:
+                    variants.append(f"https://www.{base_name}.{original_tld}{path}")
+                    variants.append(f"http://www.{base_name}.{original_tld}{path}")
+                else:
+                    variants.append(f"https://{base_name}.{original_tld}{path}")
+                    variants.append(f"http://{base_name}.{original_tld}{path}")
+            
+            # 3. Varianti con suffissi comuni (es: saiver → saiver-ahu)
+            common_suffixes = ['-group', '-spa', '-srl', '-ahu', '-hvac', '-tech', 
+                              '-international', '-europe', '-global']
+            for suffix in common_suffixes:
+                variants.append(f"https://www.{base_name}{suffix}.{original_tld}")
+                variants.append(f"http://www.{base_name}{suffix}.{original_tld}")
+                variants.append(f"https://www.{base_name}{suffix}.eu")
+                variants.append(f"http://www.{base_name}{suffix}.eu")
+                variants.append(f"https://www.{base_name}{suffix}.com")
+                variants.append(f"http://{base_name}{suffix}.com")
+            
+            # Infine, aggiungi originale come ultimo tentativo
+            variants.append(original_url)
+            
+            # 3. Test rapido di ogni variante (HEAD request)
+            timeout = aiohttp.ClientTimeout(total=3.0)
+            async with aiohttp.ClientSession(timeout=timeout) as session:
+                for variant in variants[:60]:  # Max 60 varianti
+                    try:
+                        async with session.head(
+                            variant, 
+                            allow_redirects=True,
+                            ssl=False  # Ignora errori SSL per test veloce
+                        ) as response:
+                            # Accetta 200 OK o 503 (Service Unavailable ma sito esiste)
+                            if response.status in [200, 503]:
+                                if variant != original_url:
+                                    logger.info(f"✅ URL alternativo trovato: {original_url} → {variant}")
+                                    self.stats['url_redirects_found'] += 1
+                                return variant
+                    except:
+                        continue
+            
+            # Se nessuna variante funziona, ritorna originale
+            logger.info(f"ℹ️  Nessun URL alternativo trovato per {original_url}")
+            return original_url
+            
+        except Exception as e:
+            logger.warning(f"⚠️ Errore in find_working_url: {e}")
+            return original_url
+    
     
     async def scrape_intelligent(self, url: str, max_keywords: int = 20, use_advanced: bool = True) -> Dict[str, Any]:
         """
-        🧠 Scraping super-intelligente con DOPPIO FALLBACK UNIFICATO
+        🧠 Scraping super-intelligente con CACHE + DOPPIO FALLBACK UNIFICATO + URL REDIRECT
         
-        ⚡ STESSO METODO PER CLIENT E COMPETITOR:
+        ⚡ FLUSSO OTTIMIZZATO:
+        0. Check cache (se enabled) → return immediato se HIT
         1. Basic HTTP (veloce, 5s timeout)
-        2. Browser Pool fallback (se Basic fallisce o content < 1000 chars)
+        2. Se fallisce con errori SSL/connection, cerca URL alternativo
+        3. Browser Pool fallback (se Basic fallisce o content < 1000 chars)
+        4. Store in cache per re-analisi future
         
-        Questo garantisce success rate 95%+ come nell'analisi client.
+        Questo garantisce success rate 95%+ e performance ottimale con cache.
         """
         start_time = time.time()
         self.stats['total_requests'] += 1
+        original_url = url
         
-        logger.info(f"🎯 Starting UNIFIED scrape with INTELLIGENT FALLBACK for: {url}")
+        logger.info(f"🎯 Starting CACHED scrape with INTELLIGENT FALLBACK for: {url}")
+        
+        # ⚡ CACHE CHECK (se abilitato)
+        if scraping_cache:
+            cached_result = await scraping_cache.get(url)
+            if cached_result:
+                logger.info(f"✅ CACHE HIT: {url} (instant return)")
+                return cached_result
         
         # 🏆 LAYER 1: Basic HTTP (veloce, prima scelta)
         logger.info(f"🚀 Layer 1: Trying Basic HTTP first...")
         result = await self._scrape_basic(url)
         logger.info(f"🔍 Basic HTTP result: success={result.success}, content_length={result.content_length if result.success else 0}, error={result.error if not result.success else 'None'}")
+        
+        # 🔄 URL REDIRECT LOGIC: Se Basic HTTP fallisce con errori SSL/connection
+        if not result.success:
+            error_lower = result.error.lower()
+            should_try_redirect = any([
+                'ssl' in error_lower,
+                'connection' in error_lower,
+                'connect' in error_lower,
+                'timeout' in error_lower,
+                'cannot connect' in error_lower
+            ])
+            
+            if should_try_redirect:
+                logger.info(f"🔍 Connection/SSL error detected, searching for alternative URL...")
+                alternative_url = await self.find_working_url(original_url)
+                
+                if alternative_url != original_url:
+                    logger.info(f"🔄 Retrying with alternative URL: {alternative_url}")
+                    url = alternative_url
+                    
+                    # Retry Basic HTTP with new URL
+                    result = await self._scrape_basic(url)
+                    logger.info(f"🔍 Basic HTTP (retry) result: success={result.success}, content_length={result.content_length if result.success else 0}")
         
         # ✅ Validazione qualità contenuto (come in ai_site_analyzer.py)
         content_sufficient = result.success and result.content_length >= 1000
@@ -83,6 +220,14 @@ class HybridScraperV2:
             keywords_data = await self._extract_keywords_smart(result.content, url, max_keywords)
             self._update_stats('basic_success', result.method, result.duration)
             logger.info(f"✅ Basic HTTP SUCCESS: {len(keywords_data.get('keywords', []))} keywords")
+            # Add final URL to response if redirected
+            if url != original_url:
+                keywords_data['redirected_url'] = url
+            
+            # 💾 CACHE STORE (se abilitato)
+            if scraping_cache:
+                await scraping_cache.set(url, keywords_data)
+            
             return keywords_data
         
         # 🔄 LAYER 2: Browser Pool fallback (se Basic fallisce o content insufficiente)
@@ -101,9 +246,11 @@ class HybridScraperV2:
                 logger.warning(f"⚠️ Using Basic HTTP result anyway ({result.content_length} chars)")
                 keywords_data = await self._extract_keywords_smart(result.content, url, max_keywords)
                 self._update_stats('basic_success', result.method, result.duration)
+                if url != original_url:
+                    keywords_data['redirected_url'] = url
                 return keywords_data
         
-        # Prova Browser Pool fallback
+        # Prova Browser Pool fallback (usa URL alternativo se trovato)
         browser_result = await self._scrape_with_browser_pool(url)
         logger.info(f"🔍 Browser Pool result: success={browser_result.success}, error={browser_result.error if not browser_result.success else 'None'}")
         
@@ -111,6 +258,13 @@ class HybridScraperV2:
             keywords_data = await self._extract_keywords_smart(browser_result.content, url, max_keywords)
             self._update_stats('browser_pool_success', browser_result.method, browser_result.duration)
             logger.info(f"✅ Browser Pool SUCCESS: {len(keywords_data.get('keywords', []))} keywords")
+            if url != original_url:
+                keywords_data['redirected_url'] = url
+            
+            # 💾 CACHE STORE (se abilitato)
+            if scraping_cache:
+                await scraping_cache.set(url, keywords_data)
+            
             return keywords_data
         else:
             logger.error(f"❌ Browser Pool FAILED: {browser_result.error}")
@@ -120,12 +274,14 @@ class HybridScraperV2:
         self.stats['total_failures'] += 1
         self._update_error_stats(browser_result.error)
         
-        logger.error(f"❌ ALL METHODS FAILED for {url} after {total_duration:.2f}s")
+        logger.error(f"❌ ALL METHODS FAILED for {original_url} after {total_duration:.2f}s")
         logger.error(f"   - Basic HTTP: {result.error}")
         logger.error(f"   - Browser Pool: {browser_result.error}")
+        if url != original_url:
+            logger.error(f"   - Tried alternative URL: {url}")
         
         return {
-            'url': url,
+            'url': original_url,
             'keywords': [],
             'status': 'failed',
             'error': f"All scraping methods failed. Basic HTTP: {result.error}, Browser Pool: {browser_result.error}",
@@ -197,56 +353,6 @@ class HybridScraperV2:
                 success=False,
                 error=str(e),
                 method="browser_pool",
-                duration=time.time() - start_time
-            )
-    
-    async def _scrape_with_scrapingbee(self, url: str) -> ScrapingResult:
-        """🐝 Scraping con ScrapingBee API"""
-        import aiohttp
-        
-        start_time = time.time()
-        
-        try:
-            params = {
-                'api_key': self.scrapingbee_api_key,
-                'url': url,
-                'render_js': 'true',
-                'premium_proxy': 'true',
-                'country_code': 'IT',
-                'wait': '3000',
-                'window_width': '1366',
-                'window_height': '768',
-                'block_ads': 'true'
-            }
-            
-            async with aiohttp.ClientSession(timeout=aiohttp.ClientTimeout(total=60)) as session:
-                async with session.get('https://app.scrapingbee.com/api/v1/', params=params) as response:
-                    duration = time.time() - start_time
-                    
-                    # ✅ Accept all 2xx status codes for ScrapingBee too
-                    if 200 <= response.status < 300:
-                        content = await response.text()
-                        return ScrapingResult(
-                            success=True,
-                            content=content,
-                            method="scrapingbee",
-                            duration=duration,
-                            content_length=len(content)
-                        )
-                    else:
-                        error_text = await response.text()
-                        return ScrapingResult(
-                            success=False,
-                            error=f"ScrapingBee HTTP {response.status}: {error_text}",
-                            method="scrapingbee",
-                            duration=duration
-                        )
-        
-        except Exception as e:
-            return ScrapingResult(
-                success=False,
-                error=str(e),
-                method="scrapingbee",
                 duration=time.time() - start_time
             )
     
@@ -427,36 +533,6 @@ class HybridScraperV2:
             if hasattr(e, 'args') and e.args:
                 logger.error(f"📝 Exception args: {e.args}")
             
-            # 🌍 CRITICAL FIX: Proxy fallback when HTTP methods fail with exceptions
-            logger.info("🚨 All HTTP methods failed with exceptions - trying PROXY FALLBACK")
-            if proxy_system.should_use_proxy(url):
-                try:
-                    logger.info("🌍 Attempting ScraperAPI fallback after HTTP failure")
-                    headers = ua_rotator.get_complete_headers()
-                    timeout = aiohttp.ClientTimeout(
-                        total=120.0,     # 120s total for ScraperAPI - premium service needs time
-                        connect=30.0,    # 30s to connect
-                        sock_read=90.0   # 90s to read response
-                    )
-                    
-                    proxy_content = await proxy_system.scrape_with_proxy(url, headers, timeout)
-                    
-                    if proxy_content and len(proxy_content) > 500:
-                        logger.info(f"✅ ScraperAPI SUCCESS after HTTP failure: {len(proxy_content)} chars")
-                        return ScrapingResult(
-                            success=True,
-                            content=proxy_content,
-                            method="scraperapi_fallback",
-                            duration=time.time() - start_time,
-                            content_length=len(proxy_content)
-                        )
-                    else:
-                        logger.error("❌ ScraperAPI returned insufficient content")
-                except Exception as proxy_e:
-                    logger.error(f"💥 ScraperAPI fallback also failed: {proxy_e}")
-            else:
-                logger.info("🚫 Site not in proxy whitelist - skipping ScraperAPI")
-            
             return ScrapingResult(
                 success=False,
                 error=f"{error_type}: {error_msg}" if error_msg else f"{error_type}: Unknown error",
@@ -494,7 +570,7 @@ class HybridScraperV2:
             extractor = KeywordExtractor()
             keywords = extractor._process_text(clean_text)
             
-            # Formato risultato
+            # Formato risultato (include full_text per matching)
             return {
                 'url': url,
                 'keywords': [
@@ -511,6 +587,7 @@ class HybridScraperV2:
                 'title': title_text,
                 'description': description,
                 'content_length': len(clean_text),
+                'full_text': clean_text,  # ✅ SOURCE OF TRUTH per matching
                 'scraping_method': 'hybrid_v2'
             }
             
@@ -539,7 +616,7 @@ class HybridScraperV2:
         self.stats['method_distribution'][method] += 1
         
         # Success rate
-        total_success = sum(self.stats[key] for key in ['browser_pool_success', 'scrapingbee_success', 'advanced_success', 'basic_success'])
+        total_success = sum(self.stats[key] for key in ['browser_pool_success', 'advanced_success', 'basic_success'])
         self.stats['success_rate'] = (total_success / total_requests) * 100 if total_requests > 0 else 0
     
     def _update_error_stats(self, error: str):
@@ -579,11 +656,11 @@ class HybridScraperV2:
         if success_rate > 95:
             return "🎉 Sistema perfetto! Performance eccellenti."
         elif success_rate > 85:
-            return "✅ Sistema stabile, considera ScrapingBee per scaling."
+            return "✅ Sistema stabile con buone performance."
         elif success_rate > 70:
-            return "⚠️ Performance buone, verifica proxy pool per miglioramenti."
+            return "⚠️ Performance buone, monitora per miglioramenti."
         else:
-            return "🚨 Performance basse, necessario intervento immediato. Verifica configurazione."
+            return "🚨 Performance basse, verifica configurazione e timeout."
 
 # 🌐 Istanza globale V2
 hybrid_scraper_v2 = HybridScraperV2()

@@ -181,10 +181,21 @@ async def _generate_report_background(report_id: str, request: ReportRequest):
             else:
                 analysis_results = cached_data
             print(f"Using cached analysis results for {request.analysis_id}")
+        elif request.analysis_id:
+            # 🆕 Try to load from JSON file (persistent storage)
+            from .analysis_manager import get_analysis_status
+            analysis_data = get_analysis_status(request.analysis_id)
+            if analysis_data:
+                analysis_results = analysis_data.get('results', [])
+                failed_sites = analysis_data.get('failed_sites', [])
+                print(f"Loaded analysis from JSON: {request.analysis_id}")
+            else:
+                print(f"Analysis ID not found, performing fresh analysis")
+                analysis_results, failed_sites = await _perform_analysis(request)
         else:
             # Perform fresh analysis
             print(f"Performing fresh analysis for {len(request.competitors)} competitors")
-            analysis_results = await _perform_analysis(request)
+            analysis_results, failed_sites = await _perform_analysis(request)
         
         # Generate report
         generator = ReportGenerator()
@@ -220,8 +231,13 @@ async def _generate_report_background(report_id: str, request: ReportRequest):
         print(f"Report generation failed: {e}")
 
 
-async def _perform_analysis(request: ReportRequest) -> List[Dict]:
-    """Perform competitor analysis"""
+async def _perform_analysis(request: ReportRequest) -> tuple[List[Dict], List[Dict]]:
+    """
+    Perform competitor analysis
+    
+    Returns:
+        tuple: (processed_results, failed_sites)
+    """
     if not request.competitors:
         raise ValueError("No competitors provided for analysis")
     
@@ -238,11 +254,28 @@ async def _perform_analysis(request: ReportRequest) -> List[Dict]:
         client_url=request.client_url
     )
     
-    # Process results from bulk analysis
+    # Separate successful and failed results
     processed_results = []
+    failed_sites = []
+    
     for result in results:
-        if result.get('error'):
-            # Handle failed scrapes
+        if result.get('error') or result.get('status') == 'error':
+            # Track failed site with detailed error info
+            error_msg = result.get('error_message') or result.get('error', 'Unknown error')
+            
+            # Categorize error and provide suggestion
+            suggestion = _get_error_suggestion(error_msg)
+            
+            failed_sites.append({
+                'url': result.get('url', 'Unknown'),
+                'error': error_msg,
+                'suggestion': suggestion,
+                'timestamp': datetime.now().strftime('%Y-%m-%d %H:%M:%S'),
+                'company_name': result.get('company_name', ''),
+                'ateco_code': result.get('ateco_code', '')
+            })
+            
+            # Still add to processed results with zero scores for consistency
             processed_results.append({
                 'url': result.get('url', 'Unknown'),
                 'total_score': 0.0,
@@ -253,7 +286,7 @@ async def _perform_analysis(request: ReportRequest) -> List[Dict]:
                 'keywords_found': [],
                 'semantic_similarity': 0.0,
                 'relevance_label': 'Analysis Failed',
-                'analysis_notes': result.get('error', 'Unknown error'),
+                'analysis_notes': error_msg,
                 'content_summary': 'Analysis failed'
             })
         else:
@@ -276,7 +309,30 @@ async def _perform_analysis(request: ReportRequest) -> List[Dict]:
                 'content_summary': result.get('content_summary', '')[:200]
             })
     
-    return processed_results
+    return processed_results, failed_sites
+
+
+def _get_error_suggestion(error_message: str) -> str:
+    """Generate helpful suggestion based on error type"""
+    error_lower = error_message.lower()
+    
+    if 'cannot connect' in error_lower or 'connection' in error_lower:
+        return "🌐 Sito non raggiungibile - Verifica che l'URL sia corretto e il sito sia online"
+    elif 'timeout' in error_lower:
+        return "⏱️ Timeout - Il sito è troppo lento o temporaneamente non disponibile"
+    elif 'ssl' in error_lower or 'certificate' in error_lower:
+        return "🔒 Errore certificato SSL - Verifica configurazione HTTPS del sito"
+    elif '403' in error_lower or 'forbidden' in error_lower:
+        return "🚫 Accesso negato - Il sito blocca l'accesso automatico (WAF/Firewall)"
+    elif '404' in error_lower:
+        return "❌ Pagina non trovata - Verifica che l'URL sia corretto"
+    elif '503' in error_lower or 'service unavailable' in error_lower:
+        return "⚠️ Servizio temporaneamente non disponibile - Riprova più tardi"
+    elif 'redirect' in error_lower:
+        return "🔄 Problema redirect - L'URL potrebbe essere cambiato"
+    else:
+        return "🔧 Errore tecnico - Contatta il supporto o verifica manualmente"
+
 
 
 # Cache management endpoints

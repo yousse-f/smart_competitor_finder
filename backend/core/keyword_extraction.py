@@ -35,6 +35,45 @@ logger = logging.getLogger(__name__)
 
 
 # ============================================================================
+# TECHNICAL HVAC KEYWORDS - Keywords tecniche HVAC specifiche (peso 1.5x)
+# ============================================================================
+# Queste sono keyword altamente specifiche del settore HVAC che indicano
+# competitor diretti. Ricevono peso maggiorato (1.5x) nel matching.
+
+TECHNICAL_HVAC_KEYWORDS = {
+    # Tipologie ventilatori specifiche
+    'centrifughi', 'centrifugo', 'assiali', 'assiale', 'elicoidali', 'elicoidale',
+    'tangenziali', 'tangenziale', 'radiali', 'radiale', 'trasversali', 'trasversale',
+    
+    # Tipologie UTA/AHU specifiche
+    'uta', 'ahu', 'unità', 'trattamento', 'rooftop', 'fancoil', 'vrf', 'vrv',
+    'chiller', 'pompe', 'calore', 'recuperatori', 'recuperatore', 'entalpia',
+    
+    # Componenti tecnici HVAC
+    'ventilatori', 'ventilatore', 'estrattori', 'estrattore', 'aspiratori', 'aspiratore',
+    'elettroventilatori', 'elettroventilatore', 'coclee', 'girante', 'pale',
+    'condotti', 'condotto', 'canalizzazioni', 'canalizzazione', 'diffusori', 'diffusore',
+    'griglie', 'griglia', 'bocchette', 'bocchetta', 'serrande', 'serranda',
+    
+    # Applicazioni specifiche
+    'industriali', 'civili', 'commerciali', 'terziario', 'cleanroom', 'ospedaliero',
+    'automotive', 'farmaceutico', 'alimentare', 'galvanica', 'verniciatura',
+    'fumi', 'polveri', 'vapori', 'corrosivi', 'atex', 'antideflagrante',
+    
+    # Normative/Certificazioni HVAC
+    'eurovent', 'amca', 'ashrae', 'iso', 'certificazioni', 'f7', 'f8', 'f9', 'hepa',
+    
+    # Termini tecnici prestazioni
+    'portata', 'prevalenza', 'pressione', 'statica', 'dinamica', 'pascal',
+    'mc/h', 'm3/h', 'rpm', 'giri', 'rumorosità', 'decibel', 'db', 'rendimento',
+}
+
+def is_technical_hvac_keyword(keyword: str) -> bool:
+    """Verifica se una keyword è tecnica HVAC (peso 1.5x)"""
+    return keyword.lower().strip() in TECHNICAL_HVAC_KEYWORDS
+
+
+# ============================================================================
 # GENERIC KEYWORDS - Keywords troppo generiche per matching di qualità
 # ============================================================================
 # Queste keywords sono comuni a migliaia di aziende e non dovrebbero
