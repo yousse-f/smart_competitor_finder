@@ -6,6 +6,9 @@ const nextConfig: NextConfig = {
     NEXT_PUBLIC_API_URL: process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000',
   },
   
+  // Required for Docker standalone deployment
+  output: 'standalone',
+  
   // Optimize for production
   reactStrictMode: true,
   
