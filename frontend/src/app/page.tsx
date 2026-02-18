@@ -88,49 +88,66 @@ export default function LandingPage() {
                 Analisi AI Semantica
               </Badge>
               
-              <h1 className="text-5xl lg:text-6xl font-bold mb-6 leading-tight">
-                Trova i Veri Competitor{' '}
-                <span className="bg-gradient-to-r from-blue-400 via-cyan-300 to-blue-400 bg-clip-text text-transparent animate-gradient">
-                  in 60 Secondi
-                </span>
+              <h1 className="text-5xl lg:text-6xl font-bold mb-4 leading-tight">
+                Carica un Excel.{' '}
+                <span className="bg-gradient-to-r from-blue-400 via-cyan-300 to-blue-400 bg-clip-text text-transparent">
+                  L'AI trova i tuoi competitor.
+                </span>{' '}
+                Tu scarichi il report.
               </h1>
               
-              <p className="text-xl text-slate-400 mb-6 leading-relaxed">
-                L'AI confronta centinaia di siti e ti consegna un report professionale.
-              </p>
-              
-              <p className="text-lg text-slate-300 mb-8">
-                <span className="text-cyan-400 font-semibold">Zero lavoro manuale.</span>{' '}
-                <span className="text-cyan-400 font-semibold">Zero errori.</span>{' '}
-                <span className="text-cyan-400 font-semibold">Solo risultati.</span>
+              <p className="text-lg text-slate-400 mb-6 leading-relaxed">
+                Incolla l'URL del tuo sito → carica la lista di URL da analizzare → ricevi un report Excel con ogni sito classificato e scored dall'AI.
               </p>
 
-              <div className="flex flex-col sm:flex-row gap-4 mb-12">
+              {/* Mini flow visivo inline */}
+              <div className="flex items-center gap-2 mb-8 flex-wrap">
+                {[
+                  { icon: Globe, label: 'Il tuo sito' },
+                  null,
+                  { icon: FileSpreadsheet, label: 'Lista URL Excel' },
+                  null,
+                  { icon: Brain, label: 'AI analizza' },
+                  null,
+                  { icon: Download, label: 'Report pronto' },
+                ].map((item, i) =>
+                  item === null ? (
+                    <ArrowRight key={i} className="w-4 h-4 text-slate-600 flex-shrink-0" />
+                  ) : (
+                    <div key={i} className="flex items-center gap-1.5 bg-slate-800/80 border border-slate-700 rounded-lg px-3 py-1.5">
+                      <item.icon className="w-4 h-4 text-cyan-400" />
+                      <span className="text-xs text-slate-300 whitespace-nowrap">{item.label}</span>
+                    </div>
+                  )
+                )}
+              </div>
+
+              <div className="flex flex-col sm:flex-row gap-4 mb-10">
                 <Button 
                   variant="primary" 
                   size="lg"
                   onClick={handleCTA}
                   className="shadow-2xl shadow-blue-500/25 hover:shadow-blue-500/40 transition-all"
                 >
-                  Inizia Subito
+                  Prova Subito — È Gratis
                   <ArrowRight className="w-5 h-5 ml-2" />
                 </Button>
                 <Button 
                   variant="secondary" 
                   size="lg"
-                  onClick={() => document.getElementById('video-demo')?.scrollIntoView({ behavior: 'smooth' })}
+                  onClick={() => document.getElementById('how-it-works')?.scrollIntoView({ behavior: 'smooth' })}
                 >
                   <Eye className="w-5 h-5 mr-2" />
-                  Guarda Demo
+                  Come Funziona
                 </Button>
               </div>
 
               {/* Stats */}
               <div className="grid grid-cols-3 gap-6">
                 {[
-                  { value: '60s', label: 'Per iniziare' },
-                  { value: '100+', label: 'Siti analizzati' },
-                  { value: '0', label: 'Lavoro manuale' }
+                  { value: '5 min', label: 'Da zero a report' },
+                  { value: 'AI', label: 'Classificazione automatica' },
+                  { value: '3', label: 'Click per iniziare' }
                 ].map((stat, i) => (
                   <motion.div
                     key={i}
@@ -170,43 +187,42 @@ export default function LandingPage() {
                         </Badge>
                       </div>
 
-                      {/* Results Preview */}
-                      {[
-                        { 
-                          title: 'Estrazione Keywords', 
-                          description: 'Identifica le parole chiave del tuo business',
-                          icon: Search,
-                          color: 'from-blue-500 to-cyan-400'
-                        },
-                        { 
-                          title: 'Analisi Intelligente', 
-                          description: 'AI confronta e trova competitor rilevanti',
-                          icon: Brain,
-                          color: 'from-cyan-400 to-teal-400'
-                        },
-                        { 
-                          title: 'Report Pronto', 
-                          description: 'Scarica Excel con score e raccomandazioni',
-                          icon: FileSpreadsheet,
-                          color: 'from-teal-400 to-green-400'
-                        }
-                      ].map((item, i) => (
-                        <motion.div
-                          key={i}
-                          initial={{ opacity: 0, x: 20 }}
-                          animate={{ opacity: 1, x: 0 }}
-                          transition={{ delay: 0.5 + i * 0.1 }}
-                          className="flex items-center gap-3 p-3 bg-slate-900/50 rounded-lg border border-slate-700/50"
-                        >
-                          <div className={`w-10 h-10 rounded-lg bg-gradient-to-br ${item.color} flex items-center justify-center flex-shrink-0`}>
-                            <item.icon className="w-5 h-5 text-white" />
-                          </div>
-                          <div className="flex-1">
-                            <div className="text-sm font-medium text-slate-200">{item.title}</div>
-                            <div className="text-xs text-slate-500">{item.description}</div>
-                          </div>
-                        </motion.div>
-                      ))}
+                      {/* Risultati simulati — output reale del tool */}
+                      <div className="space-y-2">
+                        {[
+                          { url: 'competitor-a.it', score: 92, label: 'Diretto', color: 'text-red-400', bg: 'bg-red-500/10 border-red-500/20' },
+                          { url: 'competitor-b.com', score: 78, label: 'Potenziale', color: 'text-yellow-400', bg: 'bg-yellow-500/10 border-yellow-500/20' },
+                          { url: 'competitor-c.it', score: 61, label: 'Potenziale', color: 'text-yellow-400', bg: 'bg-yellow-500/10 border-yellow-500/20' },
+                          { url: 'altro-sito.com', score: 18, label: 'Non rilevante', color: 'text-slate-500', bg: 'bg-slate-700/30 border-slate-700' },
+                        ].map((item, i) => (
+                          <motion.div
+                            key={i}
+                            initial={{ opacity: 0, x: 20 }}
+                            animate={{ opacity: 1, x: 0 }}
+                            transition={{ delay: 0.5 + i * 0.12 }}
+                            className="flex items-center gap-3 p-2.5 bg-slate-900/60 rounded-lg border border-slate-700/50"
+                          >
+                            <div className="flex-1 min-w-0">
+                              <div className="text-xs font-mono text-slate-300 truncate">{item.url}</div>
+                            </div>
+                            <div className="flex items-center gap-2 flex-shrink-0">
+                              <span className={`text-xs px-2 py-0.5 rounded-full border ${item.bg} ${item.color} font-medium`}>{item.label}</span>
+                              <span className="text-sm font-bold text-slate-200 w-8 text-right">{item.score}%</span>
+                            </div>
+                          </motion.div>
+                        ))}
+                      </div>
+
+                      {/* Score medio */}
+                      <div className="pt-2 border-t border-slate-700">
+                        <div className="flex items-center justify-between text-xs text-slate-500 mb-1.5">
+                          <span>Match medio</span>
+                          <span className="text-cyan-400 font-semibold">62%</span>
+                        </div>
+                        <div className="w-full bg-slate-700/50 rounded-full h-1.5">
+                          <div className="h-1.5 rounded-full bg-gradient-to-r from-blue-400 to-cyan-400" style={{ width: '62%' }} />
+                        </div>
+                      </div>
 
                       {/* Action Button */}
                       <motion.div
@@ -221,7 +237,7 @@ export default function LandingPage() {
                           disabled
                         >
                           <Download className="w-4 h-4 mr-2" />
-                          Scarica Report Excel
+                          Scarica Report Excel (4 competitor)
                         </Button>
                       </motion.div>
                     </div>
@@ -250,14 +266,61 @@ export default function LandingPage() {
         </div>
       </section>
 
-      {/* Value Proposition Section */}
-      <section className="relative z-10 py-16 px-4 sm:px-6 lg:px-8">
-        <div className="max-w-4xl mx-auto">
-          <div className="text-center">
-            <p className="text-lg text-slate-300 leading-relaxed">
-              Il primo sistema che <span className="text-cyan-400 font-semibold">identifica i veri competitor</span> del tuo business in pochi minuti, 
-              confrontando centinaia di siti tramite <span className="text-cyan-400 font-semibold">analisi semantica AI</span>.
-            </p>
+      {/* Come funziona — visual con 3 step */}
+      <section id="how-it-works" className="relative z-10 py-20 px-4 sm:px-6 lg:px-8">
+        <div className="max-w-5xl mx-auto">
+          <div className="text-center mb-14">
+            <h2 className="text-4xl font-bold mb-3">Come Funziona</h2>
+            <p className="text-slate-400 text-lg">Tre step. Nessun setup. Risultati in pochi minuti.</p>
+          </div>
+
+          <div className="relative">
+            {/* Linea connettore desktop */}
+            <div className="hidden md:block absolute top-12 left-[16.5%] right-[16.5%] h-0.5 bg-gradient-to-r from-blue-500/40 via-cyan-400/40 to-green-400/40" />
+
+            <div className="grid md:grid-cols-3 gap-8">
+              {[
+                {
+                  step: '01',
+                  icon: Globe,
+                  color: 'from-blue-500 to-cyan-400',
+                  title: 'Incolla il tuo URL',
+                  what: 'Inserisci l\'URL del sito da analizzare',
+                  result: 'L\'AI estrae le keyword e capisce il settore automaticamente'
+                },
+                {
+                  step: '02',
+                  icon: FileSpreadsheet,
+                  color: 'from-cyan-400 to-teal-400',
+                  title: 'Carica la lista Excel',
+                  what: 'Un file Excel con gli URL dei siti da valutare',
+                  result: 'Il sistema visita ogni sito e legge il contenuto in parallelo'
+                },
+                {
+                  step: '03',
+                  icon: Download,
+                  color: 'from-teal-400 to-green-400',
+                  title: 'Scarica il report',
+                  what: 'L\'AI classifica ogni sito: Diretto / Potenziale / Non rilevante',
+                  result: 'Excel pronto con score 0-100% e motivazione per ogni competitor'
+                }
+              ].map((s, i) => (
+                <div key={i} className="flex flex-col items-center text-center">
+                  <div className={`relative w-24 h-24 rounded-2xl bg-gradient-to-br ${s.color} flex items-center justify-center shadow-xl mb-6`}>
+                    <s.icon className="w-10 h-10 text-white" />
+                    <div className="absolute -top-2 -right-2 w-7 h-7 bg-slate-900 border border-slate-700 rounded-full flex items-center justify-center">
+                      <span className="text-xs font-bold text-cyan-400">{s.step}</span>
+                    </div>
+                  </div>
+                  <h3 className="text-xl font-bold mb-2">{s.title}</h3>
+                  <p className="text-sm text-slate-400 mb-4">{s.what}</p>
+                  <div className="flex items-start gap-2 bg-slate-800/60 border border-slate-700/50 rounded-lg p-3 w-full">
+                    <CheckCircle2 className="w-4 h-4 text-cyan-400 flex-shrink-0 mt-0.5" />
+                    <p className="text-xs text-slate-300 text-left">{s.result}</p>
+                  </div>
+                </div>
+              ))}
+            </div>
           </div>
         </div>
       </section>
@@ -570,220 +633,51 @@ export default function LandingPage() {
         </div>
       </section>
 
-      {/* How It Works */}
-      <section id="how-it-works" className="relative z-10 py-20 px-4 sm:px-6 lg:px-8">
-        <div className="max-w-7xl mx-auto">
-          <div className="text-center mb-16">
-            <h2 className="text-4xl font-bold mb-4">
-              Semplice Come 1-2-3
-            </h2>
-            <p className="text-xl text-slate-400 max-w-3xl mx-auto">
-              Tre passaggi per ottenere il tuo report competitor professionale
-            </p>
-          </div>
-
-          <div className="grid md:grid-cols-3 gap-8">
-            {[
-              {
-                icon: Search,
-                step: '01',
-                title: 'Inserisci il Tuo Sito',
-                description: 'Incolla l\'URL del tuo business. L\'AI estrae automaticamente keywords e contesto di mercato in pochi secondi.',
-                color: 'from-blue-500 to-cyan-400'
-              },
-              {
-                icon: Brain,
-                step: '02',
-                title: 'Carica la Lista Competitor',
-                description: 'Upload di un file Excel con gli URL da analizzare. Il sistema confronta tutto in tempo reale e calcola i match score.',
-                color: 'from-cyan-400 to-teal-400'
-              },
-              {
-                icon: FileSpreadsheet,
-                step: '03',
-                title: 'Scarica il Report',
-                description: 'Ottieni un file Excel completo con score, classifiche e insights strategici pronti per decisioni immediate.',
-                color: 'from-teal-400 to-green-400'
-              }
-            ].map((step, i) => (
-              <div key={i}>
-                <Card className="h-full border-slate-700/50 hover:border-slate-600 transition-all hover:shadow-xl hover:shadow-blue-500/10 group">
-                  <CardContent padding="lg">
-                    <div className={`w-16 h-16 mb-6 rounded-2xl bg-gradient-to-br ${step.color} flex items-center justify-center shadow-lg group-hover:scale-110 transition-transform`}>
-                      <step.icon className="w-8 h-8 text-white" />
-                    </div>
-                    <div className="text-sm font-bold text-cyan-400 mb-2">STEP {step.step}</div>
-                    <h3 className="text-xl font-bold mb-3">{step.title}</h3>
-                    <p className="text-slate-400 leading-relaxed">{step.description}</p>
-                  </CardContent>
-                </Card>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* Case Studies / Sectors */}
+      {/* A chi serve */}
       <section className="relative z-10 py-20 px-4 sm:px-6 lg:px-8 bg-slate-900/50">
-        <div className="max-w-7xl mx-auto">
-          <div className="text-center mb-16">
-            <h2 className="text-4xl font-bold mb-4">
-              Chi Lo Usa Già
-            </h2>
-            <p className="text-xl text-slate-400 max-w-3xl mx-auto">
-              Professionisti in diversi settori si affidano a noi per battere la concorrenza
-            </p>
+        <div className="max-w-5xl mx-auto">
+          <div className="text-center mb-12">
+            <h2 className="text-4xl font-bold mb-3">A Chi Serve</h2>
+            <p className="text-slate-400 text-lg">Pensato per chi deve consegnare analisi di mercato velocemente</p>
           </div>
 
-          <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
+          <div className="grid md:grid-cols-3 gap-5">
             {[
               {
-                icon: TrendingUp,
-                sector: 'Finanza',
-                use_case: 'Banche e fintech',
-                result: '45 competitor mappati in minuti',
+                icon: Users,
+                title: 'Agenzie & Consulenti',
+                description: 'Prepari analisi competitive per i clienti. Con il tool le fai in 5 minuti invece di 2 giorni — e le consegni in formato Excel pronto.',
+                highlight: 'Report da consegnare al cliente',
                 gradient: 'from-blue-500 to-cyan-400'
               },
               {
                 icon: BarChart3,
-                sector: 'E-commerce',
-                use_case: 'Marketplace e shop online',
-                result: '120+ siti analizzati insieme',
+                title: 'Marketing & Business Dev',
+                description: 'Devi capire il mercato prima di lanciare un prodotto o entrare in un nuovo segmento. L\'AI ti mappa il panorama competitivo reale.',
+                highlight: 'Intelligence prima del lancio',
                 gradient: 'from-cyan-400 to-teal-400'
               },
               {
-                icon: Users,
-                sector: 'Consulting',
-                use_case: 'Report per clienti B2B',
-                result: 'Export pronti per presentazioni',
+                icon: Target,
+                title: 'Founder & PMI',
+                description: 'Non hai tempo né budget per un\'analisi professionale. Carichi la lista di URL e in pochi minuti sai chi ti fa concorrenza davvero.',
+                highlight: 'Analisi senza consulenti',
                 gradient: 'from-teal-400 to-green-400'
-              },
-              {
-                icon: Target,
-                sector: 'SaaS & Tech',
-                use_case: 'Intelligence software',
-                result: 'Precisione AI al 95%',
-                gradient: 'from-green-400 to-emerald-400'
               }
             ].map((item, i) => (
-              <div key={i}>
-                <Card className="h-full border-slate-700/50 hover:border-slate-600 transition-all hover:shadow-xl hover:shadow-blue-500/10 group cursor-pointer">
-                  <CardContent padding="lg">
-                    <div className={`w-12 h-12 mb-4 rounded-xl bg-gradient-to-br ${item.gradient} flex items-center justify-center shadow-lg group-hover:scale-110 transition-transform`}>
-                      <item.icon className="w-6 h-6 text-white" />
-                    </div>
-                    <h3 className="text-lg font-bold mb-2">{item.sector}</h3>
-                    <p className="text-sm text-slate-400 mb-3">{item.use_case}</p>
-                    <div className="pt-3 border-t border-slate-700">
-                      <div className="flex items-center gap-2 text-xs text-cyan-400">
-                        <Zap className="w-3 h-3" />
-                        {item.result}
-                      </div>
-                    </div>
-                  </CardContent>
-                </Card>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* Features Grid */}
-      <section className="relative z-10 py-20 px-4 sm:px-6 lg:px-8">
-        <div className="max-w-7xl mx-auto">
-          <div className="text-center mb-16">
-            <h2 className="text-4xl font-bold mb-4">
-              La Tecnologia che Fa il Lavoro al Posto Tuo
-            </h2>
-            <p className="text-xl text-slate-400 max-w-3xl mx-auto">
-              Niente fuffa: solo risultati misurabili
-            </p>
-          </div>
-
-          <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6 mb-12">
-            {[
-              {
-                icon: Search,
-                title: 'Capisce Chi Sei',
-                description: 'Analizza il tuo business e identifica il tuo posizionamento',
-                badge: 'Intelligente'
-              },
-              {
-                icon: Brain,
-                title: 'Capisce Cosa Fanno gli Altri',
-                description: 'Legge e comprende centinaia di siti in automatico',
-                badge: 'Semantico'
-              },
-              {
-                icon: Zap,
-                title: 'Confronta Tutto in Real-Time',
-                description: 'Calcola match score e rilevanza istantaneamente',
-                badge: 'Veloce'
-              },
-              {
-                icon: Target,
-                title: 'Ti Dice Chi è Competitor Vero',
-                description: 'Non "siti simili", ma veri competitor di mercato',
-                badge: 'Preciso'
-              }
-            ].map((feature, i) => (
-              <div key={i}>
-                <Card className="h-full border-slate-700/50 hover:border-slate-600 transition-all hover:shadow-xl hover:shadow-blue-500/10 group">
-                  <CardContent padding="lg">
-                    <div className="flex items-start justify-between mb-4">
-                      <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-blue-500 to-cyan-400 flex items-center justify-center group-hover:scale-110 transition-transform shadow-lg">
-                        <feature.icon className="w-6 h-6 text-white" />
-                      </div>
-                      <Badge className="bg-cyan-500/10 text-cyan-400 border-cyan-500/20 text-xs">
-                        {feature.badge}
-                      </Badge>
-                    </div>
-                    <h3 className="text-lg font-bold mb-2">{feature.title}</h3>
-                    <p className="text-sm text-slate-400 leading-relaxed">{feature.description}</p>
-                  </CardContent>
-                </Card>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* Target Audience Section */}
-      <section className="relative z-10 py-20 px-4 sm:px-6 lg:px-8 bg-slate-900/50">
-        <div className="max-w-5xl mx-auto">
-          <div className="text-center mb-12">
-            <h2 className="text-4xl font-bold mb-4">
-              Per Chi è Pensato?
-            </h2>
-            <p className="text-xl text-slate-400">
-              Professionisti che gestiscono analisi competitive di mercato
-            </p>
-          </div>
-
-          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {[
-              { icon: TrendingUp, label: 'Consulenti Finanziari', description: 'Analisi settoriali e benchmarking' },
-              { icon: BarChart3, label: 'Business Analyst', description: 'Intelligence competitiva' },
-              { icon: Users, label: 'Studi di Consulenza', description: 'Report per clienti corporate' },
-              { icon: Target, label: 'Advisor M&A', description: 'Due diligence di mercato' },
-              { icon: Database, label: 'Agenzie Dati', description: 'Raccolta e benchmarking dati' },
-              { icon: Shield, label: 'Market Intelligence', description: 'Valutazione nuovi mercati' }
-            ].map((item, i) => (
-              <div key={i}>
-                <Card className="h-full border-slate-700/50 hover:border-cyan-500/30 transition-all group">
-                  <CardContent padding="md">
-                    <div className="flex items-start gap-4">
-                      <div className="w-10 h-10 rounded-lg bg-gradient-to-br from-blue-500 to-cyan-400 flex items-center justify-center flex-shrink-0 shadow-lg group-hover:scale-110 transition-transform">
-                        <item.icon className="w-5 h-5 text-white" />
-                      </div>
-                      <div>
-                        <h3 className="font-bold text-slate-200 mb-1">{item.label}</h3>
-                        <p className="text-sm text-slate-400">{item.description}</p>
-                      </div>
-                    </div>
-                  </CardContent>
-                </Card>
-              </div>
+              <Card key={i} className="h-full border-slate-700/50 hover:border-cyan-500/30 transition-all">
+                <CardContent padding="lg">
+                  <div className={`w-12 h-12 mb-4 rounded-xl bg-gradient-to-br ${item.gradient} flex items-center justify-center shadow-lg`}>
+                    <item.icon className="w-6 h-6 text-white" />
+                  </div>
+                  <h3 className="text-lg font-bold mb-2">{item.title}</h3>
+                  <p className="text-sm text-slate-400 leading-relaxed mb-4">{item.description}</p>
+                  <div className="flex items-center gap-2 text-xs text-cyan-400 bg-cyan-500/10 border border-cyan-500/20 rounded-lg px-3 py-2">
+                    <Zap className="w-3 h-3 flex-shrink-0" />
+                    {item.highlight}
+                  </div>
+                </CardContent>
+              </Card>
             ))}
           </div>
         </div>
@@ -799,12 +693,13 @@ export default function LandingPage() {
               
               <CardContent padding="lg">
                 <div className="relative text-center">
-                  <h2 className="text-4xl font-bold mb-4">
-                    Pronto a Iniziare?
+                  <div className="text-5xl mb-4">🎯</div>
+                  <h2 className="text-4xl font-bold mb-3">
+                    Quanti competitor stai perdendo di vista?
                   </h2>
-                  <p className="text-xl text-slate-400 mb-8 max-w-2xl mx-auto">
-                    Accedi ora e scopri chi sono i tuoi veri competitor. 
-                    Primo report pronto in meno di 5 minuti.
+                  <p className="text-lg text-slate-400 mb-8 max-w-2xl mx-auto">
+                    Carica la tua lista di URL, incolla il sito del cliente e ricevi un report Excel in 5 minuti.
+                    Nessun abbonamento. Nessun setup.
                   </p>
 
                   <div className="flex flex-col sm:flex-row gap-4 justify-center mb-8">
@@ -812,9 +707,9 @@ export default function LandingPage() {
                       variant="primary" 
                       size="lg"
                       onClick={handleCTA}
-                      className="shadow-2xl shadow-blue-500/25 hover:shadow-blue-500/40 transition-all"
+                      className="shadow-2xl shadow-blue-500/25 hover:shadow-blue-500/40 transition-all text-lg px-8"
                     >
-                      Accedi Subito
+                      Prova Subito — È Gratis
                       <ChevronRight className="w-5 h-5 ml-2" />
                     </Button>
                   </div>
@@ -826,11 +721,11 @@ export default function LandingPage() {
                     </div>
                     <div className="flex items-center gap-2">
                       <CheckCircle2 className="w-4 h-4 text-green-400" />
-                      Risultati immediati
+                      Report in 5 minuti
                     </div>
                     <div className="flex items-center gap-2">
                       <CheckCircle2 className="w-4 h-4 text-green-400" />
-                      Supporto incluso
+                      Export Excel incluso
                     </div>
                   </div>
                 </div>
