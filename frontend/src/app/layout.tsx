@@ -9,7 +9,7 @@ const inter = Inter({
 
 export const metadata: Metadata = {
   title: "Smart Competitor Finder",
-  description: "Piattaforma AI per analisi competitiva aziendale",
+  description: "Carica un Excel, l'AI trova i tuoi competitor. Analisi competitiva automatica in 5 minuti.",
   icons: {
     icon: [
       { url: '/icon.svg', type: 'image/svg+xml' },
