@@ -119,3 +119,4 @@ Thumbs.db
 playwright-report/
 test-results/
 playwright/.cache/
+backend/.env.railway
