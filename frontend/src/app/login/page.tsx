@@ -40,7 +40,7 @@ const LoginPage: React.FC = () => {
       } else {
         setError('root', {
           type: 'manual',
-          message: 'Credenziali non valide. Usa federico@smartcompetitor.com / federico999!'
+          message: 'Credenziali non valide. Riprova.'
         });
       }
     } catch (error) {
