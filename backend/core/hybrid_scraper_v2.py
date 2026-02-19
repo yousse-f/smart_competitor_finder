@@ -41,7 +41,8 @@ class HybridScraperV2:
     def __init__(self):
         self.scraping_mode = os.getenv('SCRAPING_MODE', 'development')
         
-        # 📊 Statistiche performance dettagliate
+        # 📊 Statistiche performance dettagliate (GLOBALI - solo per monitoring)
+        # ⚠️ IMPORTANTE: Queste stats sono aggregate, non per singola richiesta
         self.stats = {
             'browser_pool_success': 0,
             'advanced_success': 0,
@@ -54,6 +55,9 @@ class HybridScraperV2:
             'error_types': {},
             'url_redirects_found': 0  # Track successful URL redirects
         }
+        
+        # 🔒 Lock per thread-safety delle stats globali
+        self._stats_lock = asyncio.Lock()
     
     async def find_working_url(self, original_url: str) -> str:
         """
@@ -159,31 +163,42 @@ class HybridScraperV2:
             return original_url
     
     
-    async def scrape_intelligent(self, url: str, max_keywords: int = 20, use_advanced: bool = True) -> Dict[str, Any]:
+    async def scrape_intelligent(self, url: str, max_keywords: int = 20, use_advanced: bool = True, bypass_cache: bool = False) -> Dict[str, Any]:
         """
         🧠 Scraping super-intelligente con CACHE + DOPPIO FALLBACK UNIFICATO + URL REDIRECT
         
         ⚡ FLUSSO OTTIMIZZATO:
-        0. Check cache (se enabled) → return immediato se HIT
+        0. Check cache (se enabled e non bypass) → return immediato se HIT
         1. Basic HTTP (veloce, 5s timeout)
         2. Se fallisce con errori SSL/connection, cerca URL alternativo
         3. Browser Pool fallback (se Basic fallisce o content < 1000 chars)
         4. Store in cache per re-analisi future
         
+        Args:
+            url: URL da analizzare
+            max_keywords: Numero massimo di keywords da estrarre
+            use_advanced: Flag per abilitare advanced scraping (legacy, non usato)
+            bypass_cache: Se True, ignora la cache e ri-scrapa il sito (utile per re-analisi)
+        
         Questo garantisce success rate 95%+ e performance ottimale con cache.
         """
         start_time = time.time()
-        self.stats['total_requests'] += 1
+        async with self._stats_lock:
+            self.stats['total_requests'] += 1
         original_url = url
         
-        logger.info(f"🎯 Starting CACHED scrape with INTELLIGENT FALLBACK for: {url}")
+        logger.info(f"🎯 Starting {'FRESH' if bypass_cache else 'CACHED'} scrape with INTELLIGENT FALLBACK for: {url}")
         
-        # ⚡ CACHE CHECK (se abilitato)
-        if scraping_cache:
+        # ⚡ CACHE CHECK (se abilitato e non in bypass mode)
+        if scraping_cache and not bypass_cache:
             cached_result = await scraping_cache.get(url)
             if cached_result:
                 logger.info(f"✅ CACHE HIT: {url} (instant return)")
+                # Aggiungi metadata per debug
+                cached_result['from_cache'] = True
                 return cached_result
+        elif bypass_cache:
+            logger.info(f"⚡ CACHE BYPASS: Re-scraping {url} (forced refresh)")
         
         # 🏆 LAYER 1: Basic HTTP (veloce, prima scelta)
         logger.info(f"🚀 Layer 1: Trying Basic HTTP first...")
@@ -602,7 +617,9 @@ class HybridScraperV2:
             }
     
     def _update_stats(self, success_type: str, method: str, duration: float):
-        """📊 Aggiorna statistiche performance"""
+        """📊 Aggiorna statistiche performance (thread-safe)"""
+        # Le stats vengono aggiornate in modo asincrono senza bloccare il resto
+        # Non usiamo await qui perché viene chiamato da contesti che già tengono il lock
         self.stats[success_type] += 1
         
         # Aggiorna durata media

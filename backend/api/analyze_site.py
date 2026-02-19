@@ -76,6 +76,7 @@ class AnalyzeSiteRequest(BaseModel):
     url: HttpUrl
     max_keywords: Optional[int] = 50  # 🔄 Aumentato per settore HVAC tecnico
     use_advanced_scraping: Optional[bool] = True
+    bypass_cache: Optional[bool] = False  # 🆕 Forza re-scraping ignorando cache
 
 class KeywordData(BaseModel):
     keyword: str
@@ -93,6 +94,7 @@ class AnalyzeSiteResponse(BaseModel):
     content_length: Optional[int] = 0
     scraping_method: Optional[str] = "basic"
     performance_stats: Optional[dict] = None
+    from_cache: Optional[bool] = False  # 🆕 Indica se proviene da cache
 
 @router.post("/analyze-site", response_model=AnalyzeSiteResponse)
 async def analyze_site(request: AnalyzeSiteRequest):
@@ -114,8 +116,13 @@ async def analyze_site(request: AnalyzeSiteRequest):
         logging.info(f"🌐 Scraping mode: {os.getenv('SCRAPING_MODE', 'development')}")
         
         if request.use_advanced_scraping:
-            # 🚀 Use hybrid V2 ultra-stable scraper
-            result = await hybrid_scraper_v2.scrape_intelligent(url_str, max_keywords, use_advanced=True)
+            # 🚀 Use hybrid V2 ultra-stable scraper (con possibile bypass cache)
+            result = await hybrid_scraper_v2.scrape_intelligent(
+                url_str, 
+                max_keywords, 
+                use_advanced=True,
+                bypass_cache=request.bypass_cache  # 🆕 Forza refresh se richiesto
+            )
             
             # 🎯 Check if scraping failed and provide user-friendly message
             if result.get('status') == 'failed':
@@ -142,7 +149,8 @@ async def analyze_site(request: AnalyzeSiteRequest):
                 description=result.get('description', ''),
                 content_length=result.get('content_length', 0),
                 scraping_method=result.get('scraping_method', 'hybrid_v2'),
-                performance_stats=await hybrid_scraper_v2.get_enhanced_stats()
+                performance_stats=await hybrid_scraper_v2.get_enhanced_stats(),
+                from_cache=result.get('from_cache', False)  # 🆕 Debug cache status
             )
         else:
             # 📡 Use basic extraction (backwards compatibility)

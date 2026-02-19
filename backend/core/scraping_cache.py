@@ -129,6 +129,18 @@ class ScrapingCache:
                 return True
             return False
     
+    async def invalidate(self, url: str) -> bool:
+        """
+        Invalidate (alias for remove) specific URL from cache.
+        
+        Args:
+            url: Site URL to invalidate
+            
+        Returns:
+            True if invalidated, False if not found
+        """
+        return await self.remove(url)
+    
     def get_stats(self) -> Dict[str, Any]:
         """Get cache statistics."""
         total_requests = self.hits + self.misses

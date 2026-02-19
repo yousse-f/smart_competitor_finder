@@ -91,6 +91,45 @@ async def cache_stats():
             "status": "disabled"
         }
 
+@app.post("/api/cache-invalidate")
+async def cache_invalidate(url: str = None):
+    """
+    Invalidate scraping cache (manually force re-scraping).
+    
+    Args:
+        url: Specific URL to invalidate (optional). If not provided, clears entire cache.
+    """
+    from core.scraping_cache import scraping_cache
+    
+    if not scraping_cache:
+        return {
+            "success": False,
+            "message": "Cache is disabled (set SCRAPING_CACHE_ENABLED=true to enable)"
+        }
+    
+    try:
+        if url:
+            # Invalida URL specifico
+            await scraping_cache.invalidate(url)
+            return {
+                "success": True,
+                "message": f"Cache invalidated for: {url}",
+                "action": "single_url"
+            }
+        else:
+            # Invalida tutta la cache
+            await scraping_cache.clear()
+            return {
+                "success": True,
+                "message": "Entire cache cleared",
+                "action": "full_clear"
+            }
+    except Exception as e:
+        return {
+            "success": False,
+            "message": f"Failed to invalidate cache: {str(e)}"
+        }
+
 if __name__ == "__main__":
     # Get port from environment variable (Railway uses $PORT)
     port = int(os.getenv("PORT", 8000))
